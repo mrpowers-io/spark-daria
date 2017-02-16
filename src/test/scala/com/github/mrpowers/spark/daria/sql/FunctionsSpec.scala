@@ -17,7 +17,8 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
       val testDf = Seq(
         ("2016-09-10", "2001-08-10"),
         ("2016-04-18", "2010-05-18"),
-        ("2016-01-10", "2013-08-10")
+        ("2016-01-10", "2013-08-10"),
+        (null, null)
       )
       .toDF("first_datetime", "second_datetime")
       .withColumn("first_datetime", $"first_datetime".cast("timestamp"))
@@ -33,7 +34,8 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
       val expectedData = Seq(
         Row(15.1),
         Row(5.9),
-        Row(2.4)
+        Row(2.4),
+        Row(null)
       )
 
       val expectedDf = spark.createDataFrame(
