@@ -71,7 +71,7 @@ val sourceDf = Seq(
   ("funny", "joke")
 ).toDF("A b C", "de F")
 
-val actualDf = sourceDf.transform(transformations.snakeCaseColumns)
+val actualDf = sourceDf.transform(snakeCaseColumns)
 
 actualDf.show()
 ```
