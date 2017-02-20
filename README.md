@@ -4,6 +4,12 @@ Open source Spark functions and transformations.
 
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
+# Representative Examples
+
+The [https://github.com/MrPowers/spark-daria/wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation for the public methods provided by Daria.
+
+The README contains a subset of examples to familiarize new visitors with the project.
+
 ## sql.functions
 
 Spark has a ton of SQL functions, but some use cases are not covered.
