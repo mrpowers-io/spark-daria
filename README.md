@@ -6,9 +6,9 @@ Open source Spark functions and transformations.
 
 ## Representative Examples
 
-The [https://github.com/MrPowers/spark-daria/wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation for the public methods provided by Daria.
+The [wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation for the public methods provided by Daria.
 
-The README contains a subset of examples to familiarize new visitors with the project.
+This README contains a subset of examples to familiarize new visitors with the project.
 
 ### sql.functions
 
@@ -85,4 +85,14 @@ Console output:
 |funny|joke|
 +-----+----+
 ```
+
+## Contribution Criteria
+
+We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
+
+To get started, fork the project and submit a pull request.
+
+After submitting a couple of good pull requests, you'll be added as a contributor to the project.
+
+Continued excellence will be rewarded with push access to the master branch.
 
