@@ -90,7 +90,7 @@ Console output:
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
 
-To get started, fork the project and submit a pull request.
+To get started, fork the project and submit a pull request.  Please write tests!
 
 After submitting a couple of good pull requests, you'll be added as a contributor to the project.
 
