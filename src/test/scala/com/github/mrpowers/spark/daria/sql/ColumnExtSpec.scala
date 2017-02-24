@@ -21,7 +21,10 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         (" pikachu ")
       ).toDF("word")
 
-      val actualDf = wordsDf.withColumn("cleaned_word", col("word").chain(lower).chain(trim))
+      val actualDf = wordsDf.withColumn(
+        "cleaned_word",
+        col("word").chain(lower).chain(trim)
+      )
 
       val expectedDf = Seq(
         ("Batman  ", "batman"),
@@ -49,14 +52,17 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         s"A${s}"
       }
 
-      spark.udf.register("prependA", prependA _)
+      spark.udf.register("prependAUdf", prependA _)
 
       val hobbiesDf = Seq(
         ("dance"),
         ("sing")
       ).toDF("word")
 
-      val actualDf = hobbiesDf.withColumn("fun", col("word").chainUDF("appendZUdf").chainUDF("prependA"))
+      val actualDf = hobbiesDf.withColumn(
+        "fun",
+        col("word").chainUDF("appendZUdf").chainUDF("prependAUdf")
+      )
 
       val expectedDf = Seq(
         ("dance", "AdanceZ"),
