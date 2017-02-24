@@ -69,4 +69,37 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
   }
 
+  describe("#chain and #chainUDF") {
+
+   it("works with both chain and chainUDF") {
+
+     def appendZ(s: String): String = {
+       s"${s}Z"
+     }
+
+     spark.udf.register("appendZUdf", appendZ _)
+
+     val wordsDf = Seq(
+       ("Batman  "),
+       ("  CATWOMAN"),
+       (" pikachu ")
+     ).toDF("word")
+
+     val actualDf = wordsDf.withColumn(
+       "cleaned_word",
+       col("word").chain(lower).chain(trim).chainUDF("appendZUdf")
+     )
+
+     val expectedDf = Seq(
+       ("Batman  ", "batmanZ"),
+       ("  CATWOMAN", "catwomanZ"),
+       (" pikachu ", "pikachuZ")
+     ).toDF("word", "cleaned_word")
+
+     assertDataFrameEquals(actualDf, expectedDf)
+
+   }
+
+  }
+
 }
