@@ -36,6 +36,27 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
     }
 
+    it("chains SQL functions with updated method signatures") {
+
+      val wordsDf = Seq(
+        ("hi  "),
+        ("  ok")
+      ).toDF("word")
+
+      val actualDf = wordsDf.withColumn(
+        "diff_word",
+        col("word").chain(trim).chain(functions.rpadDaria(5, "x"))
+      )
+
+      val expectedDf = Seq(
+        ("hi  ", "hixxx"),
+        ("  ok", "okxxx")
+      ).toDF("word", "diff_word")
+
+      assertDataFrameEquals(actualDf, expectedDf)
+
+    }
+
   }
 
   describe("#chainUDF") {

@@ -13,4 +13,8 @@ package object functions {
     c.geq(min) && c.leq(max)
   }
 
+  def rpadDaria(len: Integer, pad: String)(c: Column): Column = {
+    rpad(c, len, pad)
+  }
+
 }
