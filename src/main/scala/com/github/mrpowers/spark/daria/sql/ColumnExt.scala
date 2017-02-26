@@ -11,8 +11,8 @@ object ColumnExt {
       t(c)
     }
 
-    def chainUDF(udfName: String): Column = {
-      callUDF(udfName, c)
+    def chainUDF(udfName: String, cols: Column*): Column = {
+      callUDF(udfName, c +: cols: _*)
     }
 
   }

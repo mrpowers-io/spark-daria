@@ -2,9 +2,7 @@ package com.github.mrpowers.spark.daria.sql
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSpec
-
 import org.apache.spark.sql.functions._
-
 import ColumnExt._
 
 class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
@@ -88,6 +86,39 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
       val expectedDf = Seq(
         ("dance", "AdanceZ"),
         ("sing", "AsingZ")
+      ).toDF("word", "fun")
+
+      assertDataFrameEquals(actualDf, expectedDf)
+
+    }
+
+    it("works with udfs that take arguments too") {
+
+      def appendZ(s: String): String = {
+        s"${s}Z"
+      }
+
+      spark.udf.register("appendZUdf", appendZ _)
+
+      def appendWord(s: String, word: String): String = {
+        s"${s}${word}"
+      }
+
+      spark.udf.register("appendWordUdf", appendWord _)
+
+      val hobbiesDf = Seq(
+        ("dance"),
+        ("sing")
+      ).toDF("word")
+
+      val actualDf = hobbiesDf.withColumn(
+        "fun",
+        col("word").chainUDF("appendZUdf").chainUDF("appendWordUdf", lit("cool"))
+      )
+
+      val expectedDf = Seq(
+        ("dance", "danceZcool"),
+        ("sing", "singZcool")
       ).toDF("word", "fun")
 
       assertDataFrameEquals(actualDf, expectedDf)
