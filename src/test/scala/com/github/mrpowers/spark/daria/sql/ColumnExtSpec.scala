@@ -92,7 +92,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
     }
 
-    it("works with udfs that take arguments too") {
+    it("also works with udfs that take arguments") {
 
       def appendZ(s: String): String = {
         s"${s}Z"
