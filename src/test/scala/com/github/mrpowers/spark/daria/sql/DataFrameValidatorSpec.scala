@@ -52,7 +52,7 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
-      intercept[MissingDataFrameColumnsException] { // Result type: Assertion
+      intercept[MissingDataFrameColumnsException] {
         DataFrameValidator.validatePresenceOfColumns(sourceDf, requiredColNames)
       }
 

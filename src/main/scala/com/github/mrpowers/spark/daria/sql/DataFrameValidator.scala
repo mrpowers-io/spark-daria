@@ -13,7 +13,7 @@ object DataFrameValidator {
   def validatePresenceOfColumns(df: DataFrame, colNames: Seq[String]): Unit = {
     val m = missingColumns(df, colNames)
     if (m.nonEmpty) {
-      throw new MissingDataFrameColumnsException(s"Missing columns: ${m.mkString(", ")}")
+      throw new MissingDataFrameColumnsException(s"DataFrame must contain the following columns: ${m.mkString(", ")}")
     }
   }
 
