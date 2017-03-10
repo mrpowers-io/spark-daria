@@ -4,16 +4,17 @@ import org.apache.spark.sql.DataFrame
 
 case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
 
-object DataFrameValidator {
+class DataFrameValidator(df: DataFrame, requiredColNames: Seq[String]) {
 
-  def missingColumns(df: DataFrame, requiredColNames: Seq[String]) = {
-    requiredColNames diff df.columns.toSeq
+  val missingColumns = requiredColNames.diff(df.columns.toSeq)
+
+  def missingColumnsMessage(): String = {
+    s"The [${missingColumns.mkString(", ")}] columns are not included in the DataFrame with the following columns [${df.columns.mkString(", ")}]"
   }
 
-  def validatePresenceOfColumns(df: DataFrame, colNames: Seq[String]): Unit = {
-    val m = missingColumns(df, colNames)
-    if (m.nonEmpty) {
-      throw new MissingDataFrameColumnsException(s"DataFrame must contain the following columns: ${m.mkString(", ")}")
+  def validatePresenceOfColumns(): Unit = {
+    if (missingColumns.nonEmpty) {
+      throw new MissingDataFrameColumnsException(missingColumnsMessage())
     }
   }
 

@@ -7,7 +7,7 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
   import spark.implicits._
 
-  describe("#missingColumns") {
+  describe("missingColumns") {
 
     it("returns the columns missing from a DataFrame") {
 
@@ -18,9 +18,9 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
-      val c = DataFrameValidator.missingColumns(sourceDf, requiredColNames)
+      val c = new DataFrameValidator(sourceDf, requiredColNames)
 
-      assert(c === List("country", "city"))
+      assert(c.missingColumns === List("country", "city"))
 
     }
 
@@ -33,9 +33,30 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team")
 
-      val c = DataFrameValidator.missingColumns(sourceDf, requiredColNames)
+      val c = new DataFrameValidator(sourceDf, requiredColNames)
 
-      assert(c === List())
+      assert(c.missingColumns === List())
+
+    }
+
+  }
+
+  describe("#missingColumnsMessage") {
+
+    it("provides a descriptive message when columns are missing") {
+
+      val sourceDf = Seq(
+        ("jets", "football"),
+        ("nacional", "soccer")
+      ).toDF("team", "sport")
+
+      val requiredColNames = Seq("team", "sport", "country", "city")
+
+      val v = new DataFrameValidator(sourceDf, requiredColNames)
+
+      val expected = "The [country, city] columns are not included in the DataFrame with the following columns [team, sport]"
+
+      assert(v.missingColumnsMessage() === expected)
 
     }
 
@@ -52,8 +73,10 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
+      val v = new DataFrameValidator(sourceDf, requiredColNames)
+
       intercept[MissingDataFrameColumnsException] {
-        DataFrameValidator.validatePresenceOfColumns(sourceDf, requiredColNames)
+        v.validatePresenceOfColumns()
       }
 
 
@@ -68,7 +91,8 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team")
 
-      DataFrameValidator.validatePresenceOfColumns(sourceDf, requiredColNames)
+      val v = new DataFrameValidator(sourceDf, requiredColNames)
+      v.validatePresenceOfColumns()
 
     }
 
