@@ -13,45 +13,45 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
     it("chains sql functions") {
 
-      val wordsDf = Seq(
+      val wordsDF = Seq(
         ("Batman  "),
         ("  CATWOMAN"),
         (" pikachu ")
       ).toDF("word")
 
-      val actualDf = wordsDf.withColumn(
+      val actualDF = wordsDF.withColumn(
         "cleaned_word",
         col("word").chain(lower).chain(trim)
       )
 
-      val expectedDf = Seq(
+      val expectedDF = Seq(
         ("Batman  ", "batman"),
         ("  CATWOMAN", "catwoman"),
         (" pikachu ", "pikachu")
       ).toDF("word", "cleaned_word")
 
-      assertDataFrameEquals(actualDf, expectedDf)
+      assertDataFrameEquals(actualDF, expectedDF)
 
     }
 
     it("chains SQL functions with updated method signatures") {
 
-      val wordsDf = Seq(
+      val wordsDF = Seq(
         ("hi  "),
         ("  ok")
       ).toDF("word")
 
-      val actualDf = wordsDf.withColumn(
+      val actualDF = wordsDF.withColumn(
         "diff_word",
         col("word").chain(trim).chain(functions.rpadDaria(5, "x"))
       )
 
-      val expectedDf = Seq(
+      val expectedDF = Seq(
         ("hi  ", "hixxx"),
         ("  ok", "okxxx")
       ).toDF("word", "diff_word")
 
-      assertDataFrameEquals(actualDf, expectedDf)
+      assertDataFrameEquals(actualDF, expectedDF)
 
     }
 
@@ -73,22 +73,22 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
       spark.udf.register("prependAUdf", prependA _)
 
-      val hobbiesDf = Seq(
+      val hobbiesDF = Seq(
         ("dance"),
         ("sing")
       ).toDF("word")
 
-      val actualDf = hobbiesDf.withColumn(
+      val actualDF = hobbiesDF.withColumn(
         "fun",
         col("word").chainUDF("appendZUdf").chainUDF("prependAUdf")
       )
 
-      val expectedDf = Seq(
+      val expectedDF = Seq(
         ("dance", "AdanceZ"),
         ("sing", "AsingZ")
       ).toDF("word", "fun")
 
-      assertDataFrameEquals(actualDf, expectedDf)
+      assertDataFrameEquals(actualDF, expectedDF)
 
     }
 
@@ -106,22 +106,22 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
       spark.udf.register("appendWordUdf", appendWord _)
 
-      val hobbiesDf = Seq(
+      val hobbiesDF = Seq(
         ("dance"),
         ("sing")
       ).toDF("word")
 
-      val actualDf = hobbiesDf.withColumn(
+      val actualDF = hobbiesDF.withColumn(
         "fun",
         col("word").chainUDF("appendZUdf").chainUDF("appendWordUdf", lit("cool"))
       )
 
-      val expectedDf = Seq(
+      val expectedDF = Seq(
         ("dance", "danceZcool"),
         ("sing", "singZcool")
       ).toDF("word", "fun")
 
-      assertDataFrameEquals(actualDf, expectedDf)
+      assertDataFrameEquals(actualDF, expectedDF)
 
     }
 
@@ -137,24 +137,24 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
 
      spark.udf.register("appendZUdf", appendZ _)
 
-     val wordsDf = Seq(
+     val wordsDF = Seq(
        ("Batman  "),
        ("  CATWOMAN"),
        (" pikachu ")
      ).toDF("word")
 
-     val actualDf = wordsDf.withColumn(
+     val actualDF = wordsDF.withColumn(
        "cleaned_word",
        col("word").chain(lower).chain(trim).chainUDF("appendZUdf")
      )
 
-     val expectedDf = Seq(
+     val expectedDF = Seq(
        ("Batman  ", "batmanZ"),
        ("  CATWOMAN", "catwomanZ"),
        (" pikachu ", "pikachuZ")
      ).toDF("word", "cleaned_word")
 
-     assertDataFrameEquals(actualDf, expectedDf)
+     assertDataFrameEquals(actualDF, expectedDF)
 
    }
 

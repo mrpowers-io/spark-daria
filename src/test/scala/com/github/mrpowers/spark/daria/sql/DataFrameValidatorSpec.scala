@@ -11,7 +11,7 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFr
 
     it("throws an exception if columns are missing from a DataFrame") {
 
-      val sourceDf = Seq(
+      val sourceDF = Seq(
         ("jets", "football"),
         ("nacional", "soccer")
       ).toDF("team", "sport")
@@ -19,7 +19,7 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFr
       val requiredColNames = Seq("team", "sport", "country", "city")
 
       intercept[MissingDataFrameColumnsException] {
-        validatePresenceOfColumns(sourceDf, requiredColNames)
+        validatePresenceOfColumns(sourceDF, requiredColNames)
       }
 
 
@@ -27,14 +27,14 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFr
 
     it("does nothing if columns aren't missing") {
 
-      val sourceDf = Seq(
+      val sourceDF = Seq(
         ("jets", "football"),
         ("nacional", "soccer")
       ).toDF("team", "sport")
 
       val requiredColNames = Seq("team")
 
-      validatePresenceOfColumns(sourceDf, requiredColNames)
+      validatePresenceOfColumns(sourceDF, requiredColNames)
 
     }
 

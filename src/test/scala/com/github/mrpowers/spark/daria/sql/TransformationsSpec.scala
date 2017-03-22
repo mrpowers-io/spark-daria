@@ -11,17 +11,17 @@ class TransformationsSpec extends FunSpec with DataFrameSuiteBase {
 
     it("snake_cases the columns of a DataFrame") {
 
-      val sourceDf = Seq(
+      val sourceDF = Seq(
         ("funny", "joke")
       ).toDF("A b C", "de F")
 
-      val actualDf = sourceDf.transform(transformations.snakeCaseColumns)
+      val actualDF = sourceDF.transform(transformations.snakeCaseColumns)
 
-      val expectedDf = Seq(
+      val expectedDF = Seq(
         ("funny", "joke")
       ).toDF("a_b_c", "de_f")
 
-      assertDataFrameEquals(actualDf, expectedDf)
+      assertDataFrameEquals(actualDF, expectedDF)
 
     }
 
