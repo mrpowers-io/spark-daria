@@ -19,10 +19,9 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
         ("2016-04-18", "2010-05-18"),
         ("2016-01-10", "2013-08-10"),
         (null, null)
-      )
-      .toDF("first_datetime", "second_datetime")
-      .withColumn("first_datetime", $"first_datetime".cast("timestamp"))
-      .withColumn("second_datetime", $"second_datetime".cast("timestamp"))
+      ).toDF("first_datetime", "second_datetime")
+        .withColumn("first_datetime", $"first_datetime".cast("timestamp"))
+        .withColumn("second_datetime", $"second_datetime".cast("timestamp"))
 
       val actualDF = testDF
         .withColumn("num_years", functions.yeardiff(col("first_datetime"), col("second_datetime")))

@@ -79,7 +79,6 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
         v.validatePresenceOfColumns()
       }
 
-
     }
 
     it("does nothing if columns aren't missing") {

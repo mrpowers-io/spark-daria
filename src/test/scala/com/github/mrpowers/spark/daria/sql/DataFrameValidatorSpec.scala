@@ -22,7 +22,6 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFr
         validatePresenceOfColumns(sourceDF, requiredColNames)
       }
 
-
     }
 
     it("does nothing if columns aren't missing") {
