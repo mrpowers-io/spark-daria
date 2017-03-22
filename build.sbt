@@ -11,7 +11,7 @@ version := "0.0.1"
 scalaVersion := "2.11.7"
 sparkVersion := "2.1.0"
 
-sparkComponents ++= Seq("sql","hive")
+sparkComponents ++= Seq("sql", "hive")
 
 libraryDependencies ++= Seq(
   "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
