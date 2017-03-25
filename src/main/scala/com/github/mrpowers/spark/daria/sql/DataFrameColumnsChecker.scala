@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 
 case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
 
-class DataFrameChecker(df: DataFrame, requiredColNames: Seq[String]) {
+class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[String]) {
 
   val missingColumns = requiredColNames.diff(df.columns.toSeq)
 

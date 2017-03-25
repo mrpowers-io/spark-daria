@@ -18,7 +18,7 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
-      val c = new DataFrameChecker(sourceDF, requiredColNames)
+      val c = new DataFrameColumnsChecker(sourceDF, requiredColNames)
 
       assert(c.missingColumns === List("country", "city"))
 
@@ -33,7 +33,7 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team")
 
-      val c = new DataFrameChecker(sourceDF, requiredColNames)
+      val c = new DataFrameColumnsChecker(sourceDF, requiredColNames)
 
       assert(c.missingColumns === List())
 
@@ -52,7 +52,7 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
-      val v = new DataFrameChecker(sourceDF, requiredColNames)
+      val v = new DataFrameColumnsChecker(sourceDF, requiredColNames)
 
       val expected = "The [country, city] columns are not included in the DataFrame with the following columns [team, sport]"
 
@@ -73,7 +73,7 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
-      val v = new DataFrameChecker(sourceDF, requiredColNames)
+      val v = new DataFrameColumnsChecker(sourceDF, requiredColNames)
 
       intercept[MissingDataFrameColumnsException] {
         v.validatePresenceOfColumns()
@@ -90,7 +90,7 @@ class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
       val requiredColNames = Seq("team")
 
-      val v = new DataFrameChecker(sourceDF, requiredColNames)
+      val v = new DataFrameColumnsChecker(sourceDF, requiredColNames)
       v.validatePresenceOfColumns()
 
     }
