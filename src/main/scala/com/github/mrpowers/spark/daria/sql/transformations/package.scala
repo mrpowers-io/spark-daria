@@ -5,13 +5,13 @@ import org.apache.spark.sql.DataFrame
 package object transformations {
 
   def snakeCaseColumns(df: DataFrame): DataFrame = {
-    df.columns.foldLeft(df) { (acc, cn) =>
-      acc.withColumnRenamed(cn, toSnakeCase(cn))
+    df.columns.foldLeft(df) { (memoDF, colName) =>
+      memoDF.withColumnRenamed(colName, toSnakeCase(colName))
     }
   }
 
-  private def toSnakeCase(s: String): String = {
-    s.toLowerCase().replace(" ", "_")
+  private def toSnakeCase(str: String): String = {
+    str.toLowerCase().replace(" ", "_")
   }
 
 }

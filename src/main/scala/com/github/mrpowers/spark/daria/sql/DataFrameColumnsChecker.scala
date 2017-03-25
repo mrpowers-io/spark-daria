@@ -9,7 +9,9 @@ class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[String]) {
   val missingColumns = requiredColNames.diff(df.columns.toSeq)
 
   def missingColumnsMessage(): String = {
-    s"The [${missingColumns.mkString(", ")}] columns are not included in the DataFrame with the following columns [${df.columns.mkString(", ")}]"
+    val missingColNames = missingColumns.mkString(", ")
+    val allColNames = df.columns.mkString(", ")
+    s"The [${missingColNames}] columns are not included in the DataFrame with the following columns [${allColNames}]"
   }
 
   def validatePresenceOfColumns(): Unit = {

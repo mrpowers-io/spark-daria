@@ -5,14 +5,14 @@ import org.apache.spark.sql.functions._
 
 object ColumnExt {
 
-  implicit class ColumnMethods(c: Column) {
+  implicit class ColumnMethods(col: Column) {
 
-    def chain(t: (Column => Column)): Column = {
-      t(c)
+    def chain(colMethod: (Column => Column)): Column = {
+      colMethod(col)
     }
 
     def chainUDF(udfName: String, cols: Column*): Column = {
-      callUDF(udfName, c +: cols: _*)
+      callUDF(udfName, col +: cols: _*)
     }
 
   }
