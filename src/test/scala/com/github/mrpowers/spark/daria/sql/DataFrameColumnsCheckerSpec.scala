@@ -3,7 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSpec
 
-class DataFrameCheckerSpec extends FunSpec with DataFrameSuiteBase {
+class DataFrameColumnsCheckerSpec extends FunSpec with DataFrameSuiteBase {
 
   import spark.implicits._
 
