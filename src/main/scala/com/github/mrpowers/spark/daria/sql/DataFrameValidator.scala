@@ -1,6 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql._
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
 trait DataFrameValidator {
