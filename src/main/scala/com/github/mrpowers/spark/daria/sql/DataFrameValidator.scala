@@ -15,4 +15,9 @@ trait DataFrameValidator {
     c.validateSchema()
   }
 
+  def validateAbsenceOfColumns(df: DataFrame, prohibitedColNames: Seq[String]): Unit = {
+    val c = new DataFrameColumnsAbsence(df, prohibitedColNames)
+    c.validateAbsenceOfColumns()
+  }
+
 }

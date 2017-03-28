@@ -107,4 +107,36 @@ class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFr
 
   }
 
+  describe("#validateAbsenceOfColumns") {
+
+    it("throws an exception if prohibited columns are included in the DataFrame") {
+
+      val sourceDF = Seq(
+        ("jets", "football"),
+        ("nacional", "soccer")
+      ).toDF("team", "sport")
+
+      val prohibitedColNames = Seq("team", "sport", "country", "city")
+
+      intercept[ProhibitedDataFrameColumnsException] {
+        validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+      }
+
+    }
+
+    it("does nothing if columns aren't missing") {
+
+      val sourceDF = Seq(
+        ("jets", "football"),
+        ("nacional", "soccer")
+      ).toDF("team", "sport")
+
+      val prohibitedColNames = Seq("ttt", "zzz")
+
+      validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+
+    }
+
+  }
+
 }
