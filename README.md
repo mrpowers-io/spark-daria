@@ -10,6 +10,30 @@ The [wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation 
 
 This README contains a subset of examples to familiarize new visitors with the project.
 
+### DataFrameValidator
+
+Custom transformations often make assumptions about the presence or absence of columns in the DataFrame. It's important to document these dependencies in the code and provide users with descriptive error messages if assumptions are not met.
+
+Here's an example of a custom transformation that uses the validatePresenceOfColumns validation.
+
+```scala
+import com.github.mrpowers.spark.daria.sql.DataFrameValidator
+
+object MyTransformations extends DataFrameValidator {
+
+  def withStandardizedPersonInfo(df: DataFrame): DataFrame = {
+    val requiredColNames = Seq("name", "age")
+    validatePresenceOfColumns(df, requiredColNames)
+    // some transformation code
+  }
+
+}
+```
+
+### SQL Column Extensions
+
+The ColumnExt class monkey patches the org.apache.spark.sql.Column class, so SQL functions and user defined functions can be chained ([relevant blog post](https://medium.com/@mrpowers/chaining-spark-sql-functions-and-user-defined-functions-2e98534b6885)).
+
 ### sql.functions
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
