@@ -10,26 +10,26 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 
 name := "spark-daria"
 
-spName := "mrpowers/spark-daria"
+version := "0.4.0"
 
-spShortDescription := "Open source Spark transformations and functions"
+scalaVersion := "2.11.8"
 
-spDescription := "When the Spark source code doesn't provide functionality, turn to this library"
-
-version := "0.3.0"
-
-scalaVersion := "2.11.7"
-sparkVersion := "2.1.0"
-
-sparkComponents ++= Seq("sql", "hive")
+resolvers += "mvnrepository" at "http://mvnrepository.com/artifact/"
 
 libraryDependencies ++= Seq(
-  "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
+  "org.apache.spark" %% "spark-core" % "2.1.0" % "provided",
+  "org.apache.spark" %% "spark-sql" % "2.1.0" % "provided",
+  "org.apache.spark" %% "spark-hive" % "2.1.0" % Test,
+  "com.holdenkarau" %% "spark-testing-base" % "2.1.0_0.6.0" % Test
 )
 
 parallelExecution in Test := false
+fork := true
 
-// All Spark Packages need a license
-licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
+javaOptions ++= Seq(
+  "-Xms512M",
+  "-Xmx2048M",
+  "-XX:MaxPermSize=2048M",
+  "-XX:+CMSClassUnloadingEnabled"
+)
 
-credentials += Credentials(Path.userHome / ".ivy2" / ".sbtcredentials")
