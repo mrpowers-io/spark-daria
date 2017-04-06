@@ -16,15 +16,15 @@ spShortDescription := "Open source Spark transformations and functions"
 
 spDescription := "When the Spark source code doesn't provide functionality, turn to this library"
 
-version := "0.3.0"
+version := "0.4.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 sparkVersion := "2.1.0"
 
 sparkComponents ++= Seq("sql", "hive")
 
 libraryDependencies ++= Seq(
-  "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
+  "com.holdenkarau" %% "spark-testing-base" % "2.1.0_0.6.0" % "test"
 )
 
 parallelExecution in Test := false
