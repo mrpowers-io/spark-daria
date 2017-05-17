@@ -72,36 +72,6 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
 
       }
 
-    it("creates a DataFrame with lists of tuples for data and StructFields") {
-
-      val actualDF = spark.createDF(
-        List(
-          (1, 2)
-        ),
-        List(
-          StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
-      )
-
-      val expectedData = List(
-        Row(1, 2)
-      )
-
-      val expectedSchema = List(
-        StructField("num1", IntegerType, true),
-        StructField("num2", IntegerType, true)
-      )
-
-      val expectedDF = spark.createDataFrame(
-        spark.sparkContext.parallelize(expectedData),
-        StructType(expectedSchema)
-      )
-
-      assertDataFrameEquals(actualDF, expectedDF)
-
-    }
-
     it("creates a Dataframe with a list of tuples for both values and StructFields") {
 
       val actualDF = spark.createDF(
@@ -161,6 +131,7 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
       assertDataFrameEquals(actualDF, expectedDF)
 
     }
+
   }
 
 }
