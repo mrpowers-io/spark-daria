@@ -8,43 +8,28 @@ object SparkSessionExt {
 
   implicit class SparkSessionMethods(spark: SparkSession) {
 
-    def createDF(rowData: List[Row], schema: List[StructField]): DataFrame = {
+    // double definition error due to Type Erasure: http://stackoverflow.com/a/4982668/1125159
+
+    private def asRows[U](values: List[U]): List[Row] = {
+      values map {
+        case x: Row => x.asInstanceOf[Row]
+        case y: Product => Row(y.productIterator.toList: _*)
+        case a => Row(a)
+      }
+    }
+
+    def createDF[U](rowData: List[U], fields: List[(String, DataType, Boolean)]): DataFrame = {
+      val structFields = fields.map(field => {
+        StructField(field._1, field._2, field._3)
+      })
+      spark.createDF(asRows(rowData), structFields)
+    }
+
+    def createDF[U](rowData: List[U], schema: List[StructField])(implicit i1: DummyImplicit): DataFrame = {
       spark.createDataFrame(
-        spark.sparkContext.parallelize(rowData),
+        spark.sparkContext.parallelize(asRows(rowData)),
         StructType(schema)
       )
     }
-
-    // weird method signature per this Stackoverflow thread: http://stackoverflow.com/a/4982668/1125159
-    def createDF(
-      rowData: List[Row],
-      fields: List[(String, DataType, Boolean)]
-    )(implicit i1: DummyImplicit): DataFrame = {
-      val structFields = fields.map(field => {
-        StructField(field._1, field._2, field._3)
-      })
-      spark.createDataFrame(
-        spark.sparkContext.parallelize(rowData),
-        StructType(structFields)
-      )
-    }
-
-    implicit def value2tuple[T](x: T): Tuple1[T] = Tuple1(x)
-
-    def createDF(
-      values: List[Product],
-      fields: List[(String, DataType, Boolean)]
-    )(implicit i1: DummyImplicit, i2: DummyImplicit): DataFrame = {
-      val rows = values.map(value => {
-        Row(value.productIterator.toList: _*)
-      })
-      val structFields = fields.map(field => {
-        StructField(field._1, field._2, field._3)
-      })
-      spark.createDF(rows, structFields)
-    }
-
   }
-
 }
-
