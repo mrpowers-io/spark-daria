@@ -18,14 +18,22 @@ object SparkSessionExt {
       }
     }
 
-    def createDF[U](rowData: List[U], fields: List[(String, DataType, Boolean)]): DataFrame = {
+    def createDF[U](
+      rowData: List[U],
+      fields: List[(String, DataType, Boolean)]
+    ): DataFrame = {
       val structFields = fields.map(field => {
         StructField(field._1, field._2, field._3)
       })
       spark.createDF(asRows(rowData), structFields)
     }
 
-    def createDF[U](rowData: List[U], schema: List[StructField])(implicit i1: DummyImplicit): DataFrame = {
+    // weird method signature per this Stackoverflow thread: http://stackoverflow.com/a/4982668/1125159
+
+    def createDF[U](
+      rowData: List[U],
+      schema: List[StructField]
+    )(implicit i1: DummyImplicit): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.parallelize(asRows(rowData)),
         StructType(schema)
