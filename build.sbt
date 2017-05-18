@@ -16,7 +16,7 @@ spShortDescription := "Open source Spark transformations and functions"
 
 spDescription := "When the Spark source code doesn't provide functionality, turn to this library"
 
-version := "0.4.0"
+version := "0.5.0"
 
 scalaVersion := "2.11.7"
 sparkVersion := "2.1.0"
@@ -26,6 +26,10 @@ sparkComponents ++= Seq("sql", "hive")
 libraryDependencies ++= Seq(
   "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
 )
+
+artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+  artifact.name + "_2.11" + "-" + sparkVersion.value + "_" + module.revision + "." + artifact.extension
+}
 
 parallelExecution in Test := false
 
