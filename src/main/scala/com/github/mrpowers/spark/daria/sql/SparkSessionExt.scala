@@ -8,8 +8,6 @@ object SparkSessionExt {
 
   implicit class SparkSessionMethods(spark: SparkSession) {
 
-    // double definition error due to Type Erasure: http://stackoverflow.com/a/4982668/1125159
-
     private def asRows[U](values: List[U]): List[Row] = {
       values map {
         case x: Row => x.asInstanceOf[Row]
@@ -18,26 +16,20 @@ object SparkSessionExt {
       }
     }
 
-    def createDF[U](
-      rowData: List[U],
-      fields: List[(String, DataType, Boolean)]
-    ): DataFrame = {
-      val structFields = fields.map(field => {
-        StructField(field._1, field._2, field._3)
-      })
-      spark.createDF(asRows(rowData), structFields)
+    private def asSchema[U](fields: List[U]): List[StructField] = {
+      fields map {
+        case x: StructField => x.asInstanceOf[StructField]
+        case (name: String, dataType: DataType, nullable: Boolean) =>
+          StructField(name, dataType, nullable)
+      }
     }
 
-    // weird method signature per this Stackoverflow thread: http://stackoverflow.com/a/4982668/1125159
-
-    def createDF[U](
-      rowData: List[U],
-      schema: List[StructField]
-    )(implicit i1: DummyImplicit): DataFrame = {
+    def createDF[U, T](rowData: List[U], fields: List[T]): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.parallelize(asRows(rowData)),
-        StructType(schema)
+        StructType(asSchema(fields))
       )
     }
   }
+
 }
