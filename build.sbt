@@ -27,10 +27,6 @@ libraryDependencies ++= Seq(
   "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
 )
 
-artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-  artifact.name + "_2.11" + "-" + sparkVersion.value + "_" + module.revision + "." + artifact.extension
-}
-
 parallelExecution in Test := false
 
 // All Spark Packages need a license
