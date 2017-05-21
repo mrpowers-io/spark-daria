@@ -1,12 +1,15 @@
 package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
 import org.scalatest.FunSpec
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
-class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
+class SparkSessionExtSpec
+    extends FunSpec
+    with DataFrameComparer
+    with SparkSessionTestWrapper {
 
   describe("#createDF") {
 
@@ -36,7 +39,7 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
         StructType(expectedSchema)
       )
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -68,7 +71,7 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
           StructType(expectedSchema)
         )
 
-        assertDataFrameEquals(actualDF, expectedDF)
+        assertSmallDataFrameEquality(actualDF, expectedDF)
 
       }
 
@@ -98,7 +101,7 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
         StructType(expectedSchema)
       )
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -128,7 +131,7 @@ class SparkSessionExtSpec extends FunSpec with DataFrameSuiteBase {
         StructType(expectedSchema)
       )
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 

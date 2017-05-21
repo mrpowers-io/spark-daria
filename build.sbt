@@ -23,9 +23,7 @@ sparkVersion := "2.1.0"
 
 sparkComponents ++= Seq("sql", "hive")
 
-libraryDependencies ++= Seq(
-  "com.holdenkarau" % "spark-testing-base_2.11" % "2.0.1_0.4.7"
-)
+spDependencies += "MrPowers/spark-fast-tests:0.2.0"
 
 parallelExecution in Test := false
 

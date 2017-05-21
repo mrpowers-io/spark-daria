@@ -1,11 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.scalatest.FunSpec
 
-class DataFrameSchemaCheckerSpec extends FunSpec with DataFrameSuiteBase {
+class DataFrameSchemaCheckerSpec
+    extends FunSpec
+    with SparkSessionTestWrapper {
 
   describe("missingStructFields") {
 

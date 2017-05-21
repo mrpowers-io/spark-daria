@@ -1,9 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSpec
 
-class DataFrameColumnsAbsenceSpec extends FunSpec with DataFrameSuiteBase {
+class DataFrameColumnsAbsenceSpec
+    extends FunSpec
+    with SparkSessionTestWrapper {
 
   import spark.implicits._
 

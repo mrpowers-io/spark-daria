@@ -1,11 +1,14 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSpec
 import org.apache.spark.sql.functions._
 import ColumnExt._
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
-class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
+class ColumnExtSpec
+    extends FunSpec
+    with DataFrameComparer
+    with SparkSessionTestWrapper {
 
   import spark.implicits._
 
@@ -30,7 +33,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         (" pikachu ", "pikachu")
       ).toDF("word", "cleaned_word")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -51,7 +54,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         ("  ok", "okxxx")
       ).toDF("word", "diff_word")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -88,7 +91,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         ("sing", "AsingZ")
       ).toDF("word", "fun")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -121,7 +124,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         ("sing", "singZcool")
       ).toDF("word", "fun")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -154,7 +157,7 @@ class ColumnExtSpec extends FunSpec with DataFrameSuiteBase {
         (" pikachu ", "pikachuZ")
       ).toDF("word", "cleaned_word")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 

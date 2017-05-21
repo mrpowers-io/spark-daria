@@ -1,9 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.scalatest.FunSpec
 
-class TransformationsSpec extends FunSpec with DataFrameSuiteBase {
+class TransformationsSpec
+    extends FunSpec
+    with DataFrameComparer
+    with SparkSessionTestWrapper {
 
   import spark.implicits._
 
@@ -21,7 +24,7 @@ class TransformationsSpec extends FunSpec with DataFrameSuiteBase {
         ("funny", "joke")
       ).toDF("a_b_c", "de_f")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 

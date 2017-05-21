@@ -1,11 +1,13 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.scalatest.FunSpec
 
-class DataFrameValidatorSpec extends FunSpec with DataFrameSuiteBase with DataFrameValidator {
+class DataFrameValidatorSpec
+    extends FunSpec
+    with SparkSessionTestWrapper
+    with DataFrameValidator {
 
   import spark.implicits._
 

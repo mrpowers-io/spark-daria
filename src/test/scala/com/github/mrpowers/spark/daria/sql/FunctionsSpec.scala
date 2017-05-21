@@ -1,12 +1,15 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
 import org.scalatest.FunSpec
 
-class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
+class FunctionsSpec
+    extends FunSpec
+    with DataFrameComparer
+    with SparkSessionTestWrapper {
 
   import spark.implicits._
 
@@ -31,9 +34,9 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
       )
 
       val expectedData = Seq(
-        Row(15.1),
-        Row(5.9),
-        Row(2.4),
+        Row(15.095890410958905),
+        Row(5.923287671232877),
+        Row(2.419178082191781),
         Row(null)
       )
 
@@ -42,7 +45,7 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
         StructType(expectedSchema)
       )
 
-      assertDataFrameApproximateEquals(actualDF.select("num_years"), expectedDF, 0.1)
+      assertSmallDataFrameEquality(actualDF.select("num_years"), expectedDF)
 
     }
 
@@ -69,7 +72,7 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
         (39)
       ).toDF("number")
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
@@ -84,7 +87,13 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
       ).toDF("some_date")
         .withColumn("some_date", $"some_date".cast("timestamp"))
 
-      val actualDF = sourceDF.where(functions.between(col("some_date"), "1999-04-18", "2011-04-18"))
+      val actualDF = sourceDF.where(
+        functions.between(
+          col("some_date"),
+          "1999-04-18",
+          "2011-04-18"
+        )
+      )
 
       val expectedDF = Seq(
         ("2000-04-18"),
@@ -92,7 +101,7 @@ class FunctionsSpec extends FunSpec with DataFrameSuiteBase {
       ).toDF("some_date")
         .withColumn("some_date", $"some_date".cast("timestamp"))
 
-      assertDataFrameEquals(actualDF, expectedDF)
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 
