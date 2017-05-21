@@ -14,7 +14,7 @@ The [wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation 
 
 This README contains a subset of examples to familiarize new visitors with the project.
 
-### DataFrameValidator
+### :white_check_mark: DataFrameValidator
 
 Custom transformations often make assumptions about the presence or absence of columns in the DataFrame. It's important to document these dependencies in the code and provide users with descriptive error messages if assumptions are not met.
 
