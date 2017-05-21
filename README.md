@@ -1,6 +1,6 @@
 # spark-daria
 
-Open source Spark functions and transformations.
+Spark helper methods to maximize efficiency and developer happiness.
 
 [![Build Status](https://travis-ci.org/MrPowers/spark-daria.svg?branch=master)](https://travis-ci.org/MrPowers/spark-daria)
 
@@ -8,13 +8,7 @@ Open source Spark functions and transformations.
 
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
-## Representative Examples
-
-The [wiki](https://github.com/MrPowers/spark-daria/wiki) contains documentation for the public methods provided by Daria.
-
-This README contains a subset of examples to familiarize new visitors with the project.
-
-### :white_check_mark: DataFrameValidator
+## :white_check_mark: DataFrameValidator
 
 Custom transformations often make assumptions about the presence or absence of columns in the DataFrame. It's important to document these dependencies in the code and provide users with descriptive error messages if assumptions are not met.
 
@@ -34,7 +28,83 @@ object MyTransformations extends DataFrameValidator {
 }
 ```
 
-### Helpers for Creating DataFrames
+### `validatePresenceOfColumns()`
+
+Validates if columns are included in a DataFrame. This code will error out:
+
+```scala
+val sourceDF = Seq(
+  ("jets", "football"),
+  ("nacional", "soccer")
+).toDF("team", "sport")
+
+val requiredColNames = Seq("team", "sport", "country", "city")
+
+validatePresenceOfColumns(sourceDF, requiredColNames)
+```
+
+This is the error message:
+
+> com.github.mrpowers.spark.daria.sql.MissingDataFrameColumnsException: The [country, city] columns are not included in the DataFrame with the following columns [team, sport]
+
+
+### `validateSchema()`
+
+Validates the schema of a DataFrame. This code will error out:
+
+```scala
+val sourceData = List(
+  Row(1, 1),
+  Row(-8, 8),
+  Row(-5, 5),
+  Row(null, null)
+)
+
+val sourceSchema = List(
+  StructField("num1", IntegerType, true),
+  StructField("num2", IntegerType, true)
+)
+
+val sourceDF = spark.createDataFrame(
+  spark.sparkContext.parallelize(sourceData),
+  StructType(sourceSchema)
+)
+
+val requiredSchema = StructType(
+  List(
+    StructField("num1", IntegerType, true),
+    StructField("num2", IntegerType, true),
+    StructField("name", StringType, true)
+  )
+)
+
+validateSchema(sourceDF, requiredSchema)
+```
+
+This is the error message:
+
+> com.github.mrpowers.spark.daria.sql.InvalidDataFrameSchemaException: The [StructField(name,StringType,true)] StructFields are not included in the DataFrame with the following StructFields [StructType(StructField(num1,IntegerType,true), StructField(num2,IntegerType,true))]
+
+### `validateAbsenceOfColumns()`
+
+Validates columns are not included in a DataFrame. This code will error out:
+
+```scala
+val sourceDF = Seq(
+  ("jets", "football"),
+  ("nacional", "soccer")
+).toDF("team", "sport")
+
+val prohibitedColNames = Seq("team", "sport", "country", "city")
+
+validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+```
+
+This is the error message:
+
+> com.github.mrpowers.spark.daria.sql.ProhibitedDataFrameColumnsException: The [team, sport] columns are not allowed to be included in the DataFrame with the following columns [team, sport]
+
+## :heart_eyes: Creating DataFrames
 
 Spark provides two methods for creating DataFrames:
 
@@ -71,11 +141,114 @@ spark.createDF(
 )
 ```
 
-### SQL Column Extensions
+## Chaining UDFs and SQL functions
 
 The ColumnExt class monkey patches the org.apache.spark.sql.Column class, so SQL functions and user defined functions can be chained ([relevant blog post](https://medium.com/@mrpowers/chaining-spark-sql-functions-and-user-defined-functions-2e98534b6885)).
 
-### sql.functions
+### `chain()`
+
+The chain method takes a org.apache.spark.sql.functions function as an argument and can be used as follows:
+
+```scala
+val wordsDf = Seq(
+  ("Batman  "),
+  ("  CATWOMAN"),
+  (" pikachu ")
+).toDF("word")
+
+val actualDf = wordsDf.withColumn(
+  "cleaned_word",
+  col("word").chain(lower).chain(trim)
+)
+
+actualDf.show()
+```
+
+```
++----------+------------+
+|      word|cleaned_word|
++----------+------------+
+|  Batman  |      batman|
+|  CATWOMAN|    catwoman|
+|  pikachu |     pikachu|
++----------+------------+
+```
+
+### `chainUDF()`
+
+The chainUDF method takes the name of a user defined function as an argument and can be used as follows:
+
+```scala
+def appendZ(s: String): String = {
+  s"${s}Z"
+}
+
+spark.udf.register("appendZUdf", appendZ _)
+
+def prependA(s: String): String = {
+  s"A${s}"
+}
+
+spark.udf.register("prependAUdf", prependA _)
+
+val hobbiesDf = Seq(
+  ("dance"),
+  ("sing")
+).toDF("word")
+
+val actualDf = hobbiesDf.withColumn(
+  "fun",
+  col("word").chainUDF("appendZUdf").chainUDF("prependAUdf")
+)
+
+actualDf.show()
+```
+
+```
++-----+-------+
+| word|    fun|
++-----+-------+
+|dance|AdanceZ|
+| sing| AsingZ|
++-----+-------+
+```
+
+### Using `chain()` and `chainUDF()` together
+
+The chain and chainUDF methods can be used together as follows:
+
+```scala
+def appendZ(s: String): String = {
+  s"${s}Z"
+}
+
+spark.udf.register("appendZUdf", appendZ _)
+
+val wordsDf = Seq(
+  ("Batman  "),
+  ("  CATWOMAN"),
+  (" pikachu ")
+).toDF("word")
+
+val actualDf = wordsDf.withColumn(
+  "cleaned_word",
+  col("word").chain(lower).chain(trim).chainUDF("appendZUdf")
+)
+
+actualDf.show()
+```
+
+```
++----------+------------+
+|      word|cleaned_word|
++----------+------------+
+|  Batman  |     batmanZ|
+|  CATWOMAN|   catwomanZ|
+|  pikachu |    pikachuZ|
++----------+------------+
+```
+
+## sql.functions
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
 
@@ -120,8 +293,7 @@ Console output:
 +--------------------+--------------------+------------------+
 ```
 
-
-### sql.transformations
+## sql.transformations
 
 SQL transformations take a DataFrame as an argument and return a DataFrame.  They are suitable arguments for the `Dataset#transform` method.
 
