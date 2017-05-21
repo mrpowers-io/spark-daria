@@ -2,6 +2,8 @@
 
 Open source Spark functions and transformations.
 
+[![Build Status](https://travis-ci.org/MrPowers/spark-daria.svg?branch=master)](https://travis-ci.org/MrPowers/spark-daria)
+
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
 ## Representative Examples
