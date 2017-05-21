@@ -141,7 +141,7 @@ spark.createDF(
 )
 ```
 
-## Chaining UDFs and SQL functions
+## :link: Chaining UDFs and SQL functions
 
 The ColumnExt class monkey patches the org.apache.spark.sql.Column class, so SQL functions and user defined functions can be chained ([relevant blog post](https://medium.com/@mrpowers/chaining-spark-sql-functions-and-user-defined-functions-2e98534b6885)).
 
@@ -248,7 +248,7 @@ actualDf.show()
 +----------+------------+
 ```
 
-## sql.functions
+## :zap: sql.functions
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
 
@@ -293,7 +293,7 @@ Console output:
 +--------------------+--------------------+------------------+
 ```
 
-## sql.transformations
+## :trident: sql.transformations
 
 SQL transformations take a DataFrame as an argument and return a DataFrame.  They are suitable arguments for the `Dataset#transform` method.
 
@@ -323,7 +323,7 @@ Console output:
 +-----+----+
 ```
 
-## Contribution Criteria
+## :two_women_holding_hands: Contribution Criteria
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
 
