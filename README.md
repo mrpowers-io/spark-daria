@@ -4,6 +4,8 @@ Open source Spark functions and transformations.
 
 [![Build Status](https://travis-ci.org/MrPowers/spark-daria.svg?branch=master)](https://travis-ci.org/MrPowers/spark-daria)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c0624682b4487a3b3e5c8330f1fbe)](https://www.codacy.com/app/MrPowers/spark-daria?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrPowers/spark-daria&amp;utm_campaign=Badge_Grade)
+
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
 ## Representative Examples
