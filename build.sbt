@@ -18,7 +18,7 @@ spDescription := "When the Spark source code doesn't provide functionality, turn
 
 version := "0.5.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 sparkVersion := "2.1.0"
 
 sparkComponents ++= Seq("sql", "hive")
