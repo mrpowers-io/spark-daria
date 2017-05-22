@@ -3,6 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.scalatest.FunSpec
+import SparkSessionExt._
 
 class DataFrameValidatorSpec
     extends FunSpec
@@ -15,10 +16,15 @@ class DataFrameValidatorSpec
 
     it("throws an exception if columns are missing from a DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -30,10 +36,15 @@ class DataFrameValidatorSpec
 
     it("does nothing if columns aren't missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team")
 
@@ -47,21 +58,16 @@ class DataFrameValidatorSpec
 
     it("throws an exceptions if a required StructField is missing") {
 
-      val sourceData = List(
-        Row(1, 1),
-        Row(-8, 8),
-        Row(-5, 5),
-        Row(null, null)
-      )
-
-      val sourceSchema = List(
-        StructField("num1", IntegerType, true),
-        StructField("num2", IntegerType, true)
-      )
-
-      val sourceDF = spark.createDataFrame(
-        spark.sparkContext.parallelize(sourceData),
-        StructType(sourceSchema)
+      val sourceDF = spark.createDF(
+        List(
+          Row(1, 1),
+          Row(-8, 8),
+          Row(-5, 5),
+          Row(null, null)
+        ), List(
+          ("num1", IntegerType, true),
+          ("num2", IntegerType, true)
+        )
       )
 
       val requiredSchema = StructType(
@@ -80,21 +86,16 @@ class DataFrameValidatorSpec
 
     it("does nothing if there aren't any StructFields missing") {
 
-      val sourceData = List(
-        Row(1, 1),
-        Row(-8, 8),
-        Row(-5, 5),
-        Row(null, null)
-      )
-
-      val sourceSchema = List(
-        StructField("num1", IntegerType, true),
-        StructField("num2", IntegerType, true)
-      )
-
-      val sourceDF = spark.createDataFrame(
-        spark.sparkContext.parallelize(sourceData),
-        StructType(sourceSchema)
+      val sourceDF = spark.createDF(
+        List(
+          Row(1, 1),
+          Row(-8, 8),
+          Row(-5, 5),
+          Row(null, null)
+        ), List(
+          ("num1", IntegerType, true),
+          ("num2", IntegerType, true)
+        )
       )
 
       val requiredSchema = StructType(
@@ -113,10 +114,15 @@ class DataFrameValidatorSpec
 
     it("throws an exception if prohibited columns are included in the DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -128,10 +134,15 @@ class DataFrameValidatorSpec
 
     it("does nothing if columns aren't missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("ttt", "zzz")
 
