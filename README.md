@@ -8,6 +8,18 @@ Spark helper methods to maximize developer productivity.
 
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
+## Setup
+
+1. Add the [sbt-spark-package plugin](https://github.com/databricks/sbt-spark-package) to your application.  The spark-daria releases are maintained in [Spark Packages](https://spark-packages.org/package/mrpowers/spark-daria).
+
+2. Update your build.sbt file: `spDependencies += "mrpowers/spark-daria:0.5.0"`
+
+3. Import the spark-daria code into your project, for example:
+
+```scala
+import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
+```
+
 ## :white_check_mark: DataFrameValidator
 
 Custom transformations often make assumptions about the presence or absence of columns in the DataFrame. It's important to document these dependencies in the code and provide users with descriptive error messages if assumptions are not met.
