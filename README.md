@@ -323,7 +323,7 @@ Console output:
 +-----+----+
 ```
 
-## :two_women_holding_hands: Contribution Criteria
+## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
 
