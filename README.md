@@ -1,6 +1,6 @@
 # spark-daria
 
-Spark helper methods to maximize efficiency and developer happiness.
+Spark helper methods to maximize developer productivity.
 
 [![Build Status](https://travis-ci.org/MrPowers/spark-daria.svg?branch=master)](https://travis-ci.org/MrPowers/spark-daria)
 
