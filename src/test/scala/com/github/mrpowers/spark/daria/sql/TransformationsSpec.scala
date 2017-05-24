@@ -14,15 +14,25 @@ class TransformationsSpec
 
     it("snake_cases the columns of a DataFrame") {
 
-      val sourceDF = Seq(
-        ("funny", "joke")
-      ).toDF("A b C", "de F")
+      val sourceDF = spark.createDF(
+        List(
+          ("funny", "joke")
+        ), List(
+          ("A b C", StringType, true),
+          ("de F", StringType, true)
+        )
+      )
 
       val actualDF = sourceDF.transform(transformations.snakeCaseColumns)
 
-      val expectedDF = Seq(
-        ("funny", "joke")
-      ).toDF("a_b_c", "de_f")
+      val expectedDF = spark.createDF(
+        List(
+          ("funny", "joke")
+        ), List(
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true)
+        )
+      )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
 
