@@ -2,13 +2,13 @@ package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.scalatest.FunSpec
+import org.apache.spark.sql.types.StringType
+import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 
 class TransformationsSpec
     extends FunSpec
     with DataFrameComparer
     with SparkSessionTestWrapper {
-
-  import spark.implicits._
 
   describe("#snakeCaseColumns") {
 
