@@ -43,37 +43,35 @@ class SparkSessionExtSpec
 
     }
 
-    it(
-      "creates a DataFrame with an List of Row and Tuples instead of StructFields"
-    ) {
+    it("creates a DataFrame with an List of Row and Tuples instead of StructFields") {
 
-        val actualDF = spark.createDF(
-          List(
-            Row(1, 2)
-          ),
-          List(
-            ("num1", IntegerType, true),
-            ("num2", IntegerType, true)
-          )
-        )
-
-        val expectedData = List(
+      val actualDF = spark.createDF(
+        List(
           Row(1, 2)
+        ),
+        List(
+          ("num1", IntegerType, true),
+          ("num2", IntegerType, true)
         )
+      )
 
-        val expectedSchema = List(
-          StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+      val expectedData = List(
+        Row(1, 2)
+      )
 
-        val expectedDF = spark.createDataFrame(
-          spark.sparkContext.parallelize(expectedData),
-          StructType(expectedSchema)
-        )
+      val expectedSchema = List(
+        StructField("num1", IntegerType, true),
+        StructField("num2", IntegerType, true)
+      )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+      val expectedDF = spark.createDataFrame(
+        spark.sparkContext.parallelize(expectedData),
+        StructType(expectedSchema)
+      )
 
-      }
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
 
     it("creates a Dataframe with a list of tuples for both values and StructFields") {
 

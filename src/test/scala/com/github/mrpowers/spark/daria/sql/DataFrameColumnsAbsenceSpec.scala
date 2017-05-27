@@ -1,21 +1,26 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.scalatest.FunSpec
+import SparkSessionExt._
+import org.apache.spark.sql.types.StringType
 
 class DataFrameColumnsAbsenceSpec
     extends FunSpec
     with SparkSessionTestWrapper {
 
-  import spark.implicits._
-
   describe("extraColNames") {
 
     it("returns the prohibitied colNames in a DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -27,10 +32,15 @@ class DataFrameColumnsAbsenceSpec
 
     it("returns the empty list if there aren't any extra columns") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("ttt", "zzz")
 
@@ -46,10 +56,15 @@ class DataFrameColumnsAbsenceSpec
 
     it("provides a descriptive message when extra columns are provided") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -67,10 +82,15 @@ class DataFrameColumnsAbsenceSpec
 
     it("throws an exception if prohibited columns are included in the DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -84,10 +104,15 @@ class DataFrameColumnsAbsenceSpec
 
     it("does nothing if columns aren't missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val prohibitedColNames = Seq("ttt", "zzz")
 

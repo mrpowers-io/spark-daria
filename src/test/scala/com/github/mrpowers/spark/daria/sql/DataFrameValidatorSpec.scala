@@ -10,8 +10,6 @@ class DataFrameValidatorSpec
     with SparkSessionTestWrapper
     with DataFrameValidator {
 
-  import spark.implicits._
-
   describe("#validatePresenceOfColumns") {
 
     it("throws an exception if columns are missing from a DataFrame") {
