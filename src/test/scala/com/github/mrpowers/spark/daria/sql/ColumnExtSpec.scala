@@ -4,6 +4,8 @@ import org.scalatest.FunSpec
 import org.apache.spark.sql.functions._
 import ColumnExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
+import SparkSessionExt._
+import org.apache.spark.sql.types.StringType
 
 class ColumnExtSpec
     extends FunSpec
@@ -16,22 +18,31 @@ class ColumnExtSpec
 
     it("chains sql functions") {
 
-      val wordsDF = Seq(
-        ("Batman  "),
-        ("  CATWOMAN"),
-        (" pikachu ")
-      ).toDF("word")
+      val wordsDF = spark.createDF(
+        List(
+          ("Batman  "),
+          ("  CATWOMAN"),
+          (" pikachu ")
+        ), List(
+          ("word", StringType, true)
+        )
+      )
 
       val actualDF = wordsDF.withColumn(
         "cleaned_word",
         col("word").chain(lower).chain(trim)
       )
 
-      val expectedDF = Seq(
-        ("Batman  ", "batman"),
-        ("  CATWOMAN", "catwoman"),
-        (" pikachu ", "pikachu")
-      ).toDF("word", "cleaned_word")
+      val expectedDF = spark.createDF(
+        List(
+          ("Batman  ", "batman"),
+          ("  CATWOMAN", "catwoman"),
+          (" pikachu ", "pikachu")
+        ), List(
+          ("word", StringType, true),
+          ("cleaned_word", StringType, true)
+        )
+      )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -39,20 +50,29 @@ class ColumnExtSpec
 
     it("chains SQL functions with updated method signatures") {
 
-      val wordsDF = Seq(
-        ("hi  "),
-        ("  ok")
-      ).toDF("word")
+      val wordsDF = spark.createDF(
+        List(
+          ("hi  "),
+          ("  ok")
+        ), List(
+          ("word", StringType, true)
+        )
+      )
 
       val actualDF = wordsDF.withColumn(
         "diff_word",
         col("word").chain(trim).chain(functions.rpadDaria(5, "x"))
       )
 
-      val expectedDF = Seq(
-        ("hi  ", "hixxx"),
-        ("  ok", "okxxx")
-      ).toDF("word", "diff_word")
+      val expectedDF = spark.createDF(
+        List(
+          ("hi  ", "hixxx"),
+          ("  ok", "okxxx")
+        ), List(
+          ("word", StringType, true),
+          ("diff_word", StringType, true)
+        )
+      )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
 
