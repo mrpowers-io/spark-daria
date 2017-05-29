@@ -1,21 +1,26 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.scalatest.FunSpec
+import SparkSessionExt._
+import org.apache.spark.sql.types.StringType
 
 class DataFrameColumnsCheckerSpec
     extends FunSpec
     with SparkSessionTestWrapper {
 
-  import spark.implicits._
-
   describe("missingColumns") {
 
     it("returns the columns missing from a DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -27,10 +32,15 @@ class DataFrameColumnsCheckerSpec
 
     it("returns the empty list if columns aren't missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team")
 
@@ -46,10 +56,15 @@ class DataFrameColumnsCheckerSpec
 
     it("provides a descriptive message when columns are missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -67,10 +82,15 @@ class DataFrameColumnsCheckerSpec
 
     it("throws an exception if columns are missing from a DataFrame") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -84,10 +104,15 @@ class DataFrameColumnsCheckerSpec
 
     it("does nothing if columns aren't missing") {
 
-      val sourceDF = Seq(
-        ("jets", "football"),
-        ("nacional", "soccer")
-      ).toDF("team", "sport")
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "football"),
+          ("nacional", "soccer")
+        ), List(
+          ("team", StringType, true),
+          ("sport", StringType, true)
+        )
+      )
 
       val requiredColNames = Seq("team")
 
