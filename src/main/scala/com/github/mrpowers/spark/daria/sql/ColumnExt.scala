@@ -15,6 +15,18 @@ object ColumnExt {
       callUDF(udfName, col +: cols: _*)
     }
 
+    def nullBetween(lowerCol: Column, upperCol: Column): Column = {
+      when(lowerCol.isNull && upperCol.isNull, false).otherwise(
+        when(col.isNull, false).otherwise(
+          when(lowerCol.isNull && upperCol.isNotNull && col.leq(upperCol), true).otherwise(
+            when(lowerCol.isNotNull && upperCol.isNull && col.geq(lowerCol), true).otherwise(
+              col.between(lowerCol, upperCol)
+            )
+          )
+        )
+      )
+    }
+
   }
 
 }
