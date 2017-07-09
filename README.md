@@ -262,7 +262,7 @@ actualDf.show()
 
 ## Column Extensions
 
-The built in `between` doesn't work well when one of the bounds is undefined.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".
+The built in `between` doesn't work well when one of the bounds is undefined.  `nullBetween` is more useful when you have "less than or equal to" or "greater than or equal to" logic embedded in your upper and lower bounds.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".
 
 Let's compare the `between` and `nullBetween` methods with a code snipped and the outputted DataFrame.
 
