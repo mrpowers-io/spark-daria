@@ -260,6 +260,32 @@ actualDf.show()
 +----------+------------+
 ```
 
+## Column Extensions
+
+The built in `between` doesn't work well when one of the bounds is undefined.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".
+
+Let's compare the `between` and `nullBetween` methods with a code snipped and the outputted DataFrame.
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "between",
+  col("age").between(col("lower_bound"), col("upper_bound"))
+).withColumn(
+  "nullBetween",
+  col("age").nullBetween(col("lower_bound"), col("upper_bound"))
+)
+```
+
+```
++-----------+-----------+---+-------+-----------+
+|lower_bound|upper_bound|age|between|nullBetween|
++-----------+-----------+---+-------+-----------+
+|         10|         15| 11|   true|       true|
+|         17|       null| 94|   null|       true|
+|       null|         10|  5|   null|       true|
++-----------+-----------+---+-------+-----------+
+```
+
 ## :zap: sql.functions
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.

@@ -231,62 +231,102 @@ class ColumnExtSpec
 
     }
 
-  }
+    it("works with joins") {
 
-  it("works with joins") {
-
-    val playersDF = spark.createDF(
-      List(
-        ("lil", "tball", 5),
-        ("strawberry", "mets", 42),
-        ("maddux", "braves", 45),
-        ("frank", "noteam", null)
-      ), List(
-        ("last_name", StringType, true),
-        ("team", StringType, true),
-        ("age", IntegerType, true)
-      )
-    )
-
-    val rangesDF = spark.createDF(
-      List(
-        (null, 20, "too_young"),
-        (21, 40, "prime"),
-        (41, null, "retired")
-      ), List(
-        ("lower_age", IntegerType, true),
-        ("upper_age", IntegerType, true),
-        ("playing_status", StringType, true)
-      )
-    )
-
-    val actualDF = playersDF.join(
-      broadcast(rangesDF),
-      playersDF("age").nullBetween(
-        rangesDF("lower_age"),
-        rangesDF("upper_age")
-      ),
-      "leftouter"
-    ).drop(
-        "lower_age",
-        "upper_age"
+      val playersDF = spark.createDF(
+        List(
+          ("lil", "tball", 5),
+          ("strawberry", "mets", 42),
+          ("maddux", "braves", 45),
+          ("frank", "noteam", null)
+        ), List(
+          ("last_name", StringType, true),
+          ("team", StringType, true),
+          ("age", IntegerType, true)
+        )
       )
 
-    val expectedDF = spark.createDF(
-      List(
-        ("lil", "tball", 5, "too_young"),
-        ("strawberry", "mets", 42, "retired"),
-        ("maddux", "braves", 45, "retired"),
-        ("frank", "noteam", null, null)
-      ), List(
-        ("last_name", StringType, true),
-        ("team", StringType, true),
-        ("age", IntegerType, true),
-        ("playing_status", StringType, true)
+      val rangesDF = spark.createDF(
+        List(
+          (null, 20, "too_young"),
+          (21, 40, "prime"),
+          (41, null, "retired")
+        ), List(
+          ("lower_age", IntegerType, true),
+          ("upper_age", IntegerType, true),
+          ("playing_status", StringType, true)
+        )
       )
-    )
 
-    assertSmallDataFrameEquality(actualDF, expectedDF)
+      val actualDF = playersDF.join(
+        broadcast(rangesDF),
+        playersDF("age").nullBetween(
+          rangesDF("lower_age"),
+          rangesDF("upper_age")
+        ),
+        "leftouter"
+      ).drop(
+          "lower_age",
+          "upper_age"
+        )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("lil", "tball", 5, "too_young"),
+          ("strawberry", "mets", 42, "retired"),
+          ("maddux", "braves", 45, "retired"),
+          ("frank", "noteam", null, null)
+        ), List(
+          ("last_name", StringType, true),
+          ("team", StringType, true),
+          ("age", IntegerType, true),
+          ("playing_status", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("operates differently than the built-in between method") {
+
+      val sourceDF = spark.createDF(
+        List(
+          (10, 15, 11),
+          (17, null, 94),
+          (null, 10, 5)
+        ), List(
+          ("lower_bound", IntegerType, true),
+          ("upper_bound", IntegerType, true),
+          ("age", IntegerType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "between",
+        col("age").between(col("lower_bound"), col("upper_bound"))
+      ).withColumn(
+          "nullBetween",
+          col("age").nullBetween(col("lower_bound"), col("upper_bound"))
+        )
+
+      val expectedDF = spark.createDF(
+        List(
+          (10, 15, 11, true, true),
+          (17, null, 94, null, true),
+          (null, 10, 5, null, true)
+        ), List(
+          ("lower_bound", IntegerType, true),
+          ("upper_bound", IntegerType, true),
+          ("age", IntegerType, true),
+          ("between", BooleanType, true),
+          ("nullBetween", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
 
   }
 
