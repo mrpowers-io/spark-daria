@@ -262,6 +262,111 @@ actualDf.show()
 
 ## Column Extensions
 
+### `isFalsy`
+
+`isFalsy` returns `true` if a column is `null` or `false` and `false` otherwise.
+
+Suppose you start with the following `sourceDF`:
+
+```
++------+
+|is_fun|
++------+
+|  true|
+| false|
+|  null|
++------+
+```
+
+Run the `isFalsy` method:
+
+```scala
+val actualDF = sourceDF.withColumn("is_fun_falsy", col("is_fun").isFalsy)
+```
+
+Here are the contents of `actualDF`:
+
+```
++------+------------+
+|is_fun|is_fun_falsy|
++------+------------+
+|  true|       false|
+| false|        true|
+|  null|        true|
++------+------------+
+```
+
+`isFalsy` can also be used on `StringType` columns.
+
+Suppose you have the following `sourceDF` DataFrame.
+
+```
++-----------+
+|animal_type|
++-----------+
+|        dog|
+|        cat|
+|       null|
++-----------+
+```
+
+Run the `isFalsy` method:
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "animal_type_falsy",
+  col("animal_type").isFalsy
+)
+```
+
+Here are the contents of `actualDF`:
+
+```
++-----------+-----------------+
+|animal_type|animal_type_falsy|
++-----------+-----------------+
+|        dog|            false|
+|        cat|            false|
+|       null|             true|
++-----------+-----------------+
+```
+
+### `isTruthy`
+
+`isTruthy` returns `false` if a column is `null` or `false` and `true` otherwise.
+
+Suppose you start with the following `sourceDF`:
+
+```
++------+
+|is_fun|
++------+
+|  true|
+| false|
+|  null|
++------+
+```
+
+Run the `isTruthy` method:
+
+```scala
+val actualDF = sourceDF.withColumn("is_fun_truthy", col("is_fun").isTruthy)
+```
+
+Here are the contents of `actualDF`:
+
+```
++------+-------------+
+|is_fun|is_fun_truthy|
++------+-------------+
+|  true|         true|
+| false|        false|
+|  null|        false|
++------+-------------+
+```
+
+### `nullBetween`
+
 The built in `between` doesn't work well when one of the bounds is undefined.  `nullBetween` is more useful when you have "less than or equal to" or "greater than or equal to" logic embedded in your upper and lower bounds.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".
 
 Let's compare the `between` and `nullBetween` methods with a code snipped and the outputted DataFrame.
