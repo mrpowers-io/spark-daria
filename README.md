@@ -365,6 +365,45 @@ Here are the contents of `actualDF`:
 +------+-------------+
 ```
 
+### `isNullOrBlank`
+
+The `isNullOrBlank` method retuns `true` if a column is `null` or `blank` and `false` otherwise.
+
+Suppose you start with the following `sourceDF`:
+
+```
++-----------+
+|animal_type|
++-----------+
+|        dog|
+|       null|
+|         ""|
+|     "    "|
++-----------+
+```
+
+Run the `isNullOrBlank` method:
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "animal_type_is_null_or_blank",
+  col("animal_type").isNullOrBlank
+)
+```
+
+Here are the contents of `actualDF`:
+
+```
++-----------+----------------------------+
+|animal_type|animal_type_is_null_or_blank|
++-----------+----------------------------+
+|        dog|                       false|
+|       null|                        true|
+|         ""|                        true|
+|     "    "|                        true|
++-----------+----------------------------+
+```
+
 ### `nullBetween`
 
 The built in `between` doesn't work well when one of the bounds is undefined.  `nullBetween` is more useful when you have "less than or equal to" or "greater than or equal to" logic embedded in your upper and lower bounds.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".

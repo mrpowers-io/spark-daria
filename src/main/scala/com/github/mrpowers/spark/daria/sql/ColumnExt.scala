@@ -35,6 +35,10 @@ object ColumnExt {
       !col.isFalsy
     }
 
+    def isNullOrBlank: Column = {
+      col.isNull || trim(col) === ""
+    }
+
   }
 
 }

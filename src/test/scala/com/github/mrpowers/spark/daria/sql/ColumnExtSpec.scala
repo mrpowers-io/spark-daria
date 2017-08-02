@@ -457,4 +457,42 @@ class ColumnExtSpec
 
   }
 
+  describe("#isNullOrBlank") {
+
+    it("returns true if a column is null or blank and false otherwise") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("dog"),
+          (null),
+          (""),
+          ("   ")
+        ), List(
+          ("animal_type", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "animal_type_is_null_or_blank",
+        col("animal_type").isNullOrBlank
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("dog", false),
+          (null, true),
+          ("", true),
+          ("   ", true)
+        ), List(
+          ("animal_type", StringType, true),
+          ("animal_type_is_null_or_blank", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
