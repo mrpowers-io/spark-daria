@@ -404,6 +404,47 @@ Here are the contents of `actualDF`:
 +-----------+----------------------------+
 ```
 
+### `isNotIn`
+
+The `isNotIn` method returns `true` if a column element is not in a list and `false` otherwise.  It's the opposite of the `isin` method.
+
+Suppose you start with the following `sourceDF`:
+
+```
++-----+
+|stuff|
++-----+
+|  dog|
+|shoes|
+|laces|
+| null|
++-----+
+```
+
+Run the `isNotIn` method:
+
+```scala
+val footwearRelated = Seq("laces", "shoes")
+
+val actualDF = sourceDF.withColumn(
+  "is_not_footwear_related",
+  col("stuff").isNotIn(footwearRelated: _*)
+)
+```
+
+Here are the contents of `actualDF`:
+
+```
++-----+-----------------------+
+|stuff|is_not_footwear_related|
++-----+-----------------------+
+|  dog|                   true|
+|shoes|                  false|
+|laces|                  false|
+| null|                   null|
++-----+-----------------------+
+```
+
 ### `nullBetween`
 
 The built in `between` doesn't work well when one of the bounds is undefined.  `nullBetween` is more useful when you have "less than or equal to" or "greater than or equal to" logic embedded in your upper and lower bounds.  For example, if the lower bound is `null` and the upper bound is `15`, `nullBetween` will interpret that as "all values below 15".

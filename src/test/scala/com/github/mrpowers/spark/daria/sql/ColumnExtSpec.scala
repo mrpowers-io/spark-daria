@@ -495,4 +495,44 @@ class ColumnExtSpec
 
   }
 
+  describe("#isNotIn") {
+
+    it("returns true if the column element is not in the list") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("dog"),
+          ("shoes"),
+          ("laces"),
+          (null)
+        ), List(
+          ("stuff", StringType, true)
+        )
+      )
+
+      val footwearRelated = Seq("laces", "shoes")
+
+      val actualDF = sourceDF.withColumn(
+        "is_not_footwear_related",
+        col("stuff").isNotIn(footwearRelated: _*)
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("dog", true),
+          ("shoes", false),
+          ("laces", false),
+          (null, null)
+        ), List(
+          ("stuff", StringType, true),
+          ("is_not_footwear_related", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }

@@ -39,6 +39,10 @@ object ColumnExt {
       col.isNull || trim(col) === ""
     }
 
+    def isNotIn(list: Any*): Column = {
+      not(col.isin(list: _*))
+    }
+
   }
 
 }
