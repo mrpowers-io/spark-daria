@@ -330,4 +330,131 @@ class ColumnExtSpec
 
   }
 
+  describe("#isTruthy") {
+
+    it("returns true when the column is truthy and false otherwise") {
+
+      val sourceDF = spark.createDF(
+        List(
+          (true),
+          (false),
+          (null)
+        ), List(
+          ("is_fun", BooleanType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn("is_fun_truthy", col("is_fun").isTruthy)
+
+      val expectedDF = spark.createDF(
+        List(
+          (true, true),
+          (false, false),
+          (null, false)
+        ), List(
+          ("is_fun", BooleanType, true),
+          ("is_fun_truthy", BooleanType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("computes a truthy value for string columns") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("dog"),
+          ("cat"),
+          (null)
+        ), List(
+          ("animal_type", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn("animal_type_truthy", col("animal_type").isTruthy)
+
+      val expectedDF = spark.createDF(
+        List(
+          ("dog", true),
+          ("cat", true),
+          (null, false)
+        ), List(
+          ("animal_type", StringType, true),
+          ("animal_type_truthy", BooleanType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#isFalsy") {
+
+    it("returns true when the column is falsy and false otherwise") {
+
+      val sourceDF = spark.createDF(
+        List(
+          (true),
+          (false),
+          (null)
+        ), List(
+          ("is_fun", BooleanType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn("is_fun_falsy", col("is_fun").isFalsy)
+
+      val expectedDF = spark.createDF(
+        List(
+          (true, false),
+          (false, true),
+          (null, true)
+        ), List(
+          ("is_fun", BooleanType, true),
+          ("is_fun_falsy", BooleanType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("computes a falsy value for string columns") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("dog"),
+          ("cat"),
+          (null)
+        ), List(
+          ("animal_type", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "animal_type_falsy",
+        col("animal_type").isFalsy
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("dog", false),
+          ("cat", false),
+          (null, true)
+        ), List(
+          ("animal_type", StringType, true),
+          ("animal_type_falsy", BooleanType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
