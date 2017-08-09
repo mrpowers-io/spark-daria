@@ -4,7 +4,7 @@ import java.sql.{Date, Timestamp}
 
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{DateType, DoubleType, IntegerType, TimestampType}
+import org.apache.spark.sql.types.{StringType, DateType, DoubleType, IntegerType, TimestampType}
 import org.scalatest.FunSpec
 import SparkSessionExt._
 
@@ -113,6 +113,46 @@ class FunctionsSpec
           (Date.valueOf("2010-04-18"))
         ), List(
           ("some_date", DateType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#capitalizeFully") {
+
+    it("uses the supplied delimeter to identify word breaks with org.apache.commons WordUtils.capitalizeFully") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bruce,willis"),
+          ("Trump,donald"),
+          ("clinton,Hillary"),
+          ("Brack obama"),
+          ("george w. bush"),
+          (null)
+        ), List(
+          ("some_string", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.select(
+        functions.capitalizeFully(List(','))(col("some_string")).as("some_string_udf")
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bruce,Willis"),
+          ("Trump,Donald"),
+          ("Clinton,Hillary"),
+          ("Brack obama"),
+          ("George w. bush"),
+          (null)
+        ), List(
+          ("some_string_udf", StringType, true)
         )
       )
 

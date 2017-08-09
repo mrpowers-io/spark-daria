@@ -2,6 +2,7 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
+import org.apache.commons.text.WordUtils
 
 package object functions {
 
@@ -15,6 +16,10 @@ package object functions {
 
   def rpadDaria(len: Integer, pad: String)(col: Column): Column = {
     rpad(col, len, pad)
+  }
+
+  def capitalizeFully(delimiters: List[Char]) = {
+    udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
   }
 
 }
