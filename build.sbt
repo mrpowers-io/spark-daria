@@ -19,13 +19,14 @@ spDescription := "When the Spark source code doesn't provide functionality, turn
 version := "0.7.0"
 
 scalaVersion := "2.11.8"
-sparkVersion := "2.1.0"
+sparkVersion := "2.2.0"
 
 sparkComponents ++= Seq("sql", "hive")
 
 spDependencies += "MrPowers/spark-fast-tests:0.2.0"
 
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "provided"
 
 parallelExecution in Test := false
 
