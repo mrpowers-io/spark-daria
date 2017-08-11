@@ -25,6 +25,8 @@ sparkComponents ++= Seq("sql", "hive")
 
 spDependencies += "MrPowers/spark-fast-tests:0.2.0"
 
+libraryDependencies += "org.apache.commons" % "commons-text" % "1.1"
+
 parallelExecution in Test := false
 
 // All Spark Packages need a license
