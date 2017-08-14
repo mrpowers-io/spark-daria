@@ -21,14 +21,12 @@ version := "0.9.0"
 scalaVersion := "2.11.8"
 sparkVersion := "2.2.0"
 
-sparkComponents ++= Seq("sql", "hive")
+sparkComponents ++= Seq("sql")
 
-spDependencies += "MrPowers/spark-fast-tests:0.2.0"
+spDependencies += "MrPowers/spark-fast-tests:0.4.0"
 
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "provided"
-
-parallelExecution in Test := false
 
 // All Spark Packages need a license
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
