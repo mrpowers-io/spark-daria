@@ -471,6 +471,37 @@ val actualDF = sourceDF.withColumn(
 +-----------+-----------+---+-------+-----------+
 ```
 
+## DataFrame Extensions
+
+Spark has a `printSchema` method to print the schema of a DataFrame and a `schema` method that returns a `StructType` object.
+
+The `Dataset#schema` method can be easily converted into working code for small DataFrames, but it can be a lot of manual work for DataFrames with a lot of columns.
+
+The `printSchemaInCodeFormat` DataFrame extension prints the DataFrame schema as a valid `StructType` object.
+
+Suppose you have the following `sourceDF`:
+
+```
++--------+--------+---------+
+|    team|   sport|goals_for|
++--------+--------+---------+
+|    jets|football|       45|
+|nacional|  soccer|       10|
++--------+--------+---------+
+```
+
+`sourceDF.printSchemaInCodeFormat()` will output the following rows in the console:
+
+```
+StructType(
+  List(
+    StructField("team", StringType, true),
+    StructField("sport", StringType, true),
+    StructField("goals_for", IntegerType, true)
+  )
+)
+```
+
 ## :zap: sql.functions
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
