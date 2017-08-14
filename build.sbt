@@ -16,7 +16,7 @@ spShortDescription := "Open source Spark transformations and functions"
 
 spDescription := "When the Spark source code doesn't provide functionality, turn to this library"
 
-version := "0.7.0"
+version := "0.8.0"
 
 scalaVersion := "2.11.8"
 sparkVersion := "2.2.0"
