@@ -522,6 +522,38 @@ SQL transformations take a DataFrame as an argument and return a DataFrame.  The
 
 It's convenient to work with DataFrames that have snake\_case column names.  Column names with spaces make it harder to write SQL queries.
 
+### `sortColumns`
+
+The `sortColumns` transformation sorts the columns in a DataFrame alphabetically.
+
+Suppose you start with the following `sourceDF`:
+
+```
++-----+---+-----+
+| name|age|sport|
++-----+---+-----+
+|pablo|  3| polo|
++-----+---+-----+
+```
+
+Run the code:
+
+```
+val actualDF = sourceDF.transform(sortColumns())
+```
+
+Here’s the `actualDF`:
+
+```
++---+-----+-----+
+|age| name|sport|
++---+-----+-----+
+|  3|pablo| polo|
++---+-----+-----+
+```
+
+### `snakeCaseColumns`
+
 spark-daria defines a `com.github.mrpowers.spark.daria.sql.transformations.snakeCaseColumns` transformation to convert all the column names to snake\_case.
 
 ```scala
