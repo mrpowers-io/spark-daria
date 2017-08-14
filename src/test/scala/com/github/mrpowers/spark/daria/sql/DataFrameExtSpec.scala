@@ -24,8 +24,8 @@ class DataFrameExtSpec
         )
       )
 
-//      uncomment the next line if you want to check out the console output
-//      sourceDF.printSchemaInCodeFormat()
+      //      uncomment the next line if you want to check out the console output
+      //      sourceDF.printSchemaInCodeFormat()
 
     }
 
