@@ -4,7 +4,7 @@ import java.sql.{Date, Timestamp}
 
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{StringType, DateType, DoubleType, IntegerType, TimestampType}
+import org.apache.spark.sql.types._
 import org.scalatest.FunSpec
 import SparkSessionExt._
 
@@ -153,6 +153,40 @@ class FunctionsSpec
           (null)
         ), List(
           ("some_string_udf", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#exists") {
+
+    it("returns true if the array includes a value that makes the function return true") {
+
+      val sourceDF = spark.createDF(
+        List(
+          (Array(7, 4, 13)),
+          (Array(1, 3, 5))
+        ), List(
+          ("nums", ArrayType(IntegerType, true), true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "nums_has_even",
+        functions.exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          (Array(7, 4, 13), true),
+          (Array(1, 3, 5), false)
+        ), List(
+          ("nums", ArrayType(IntegerType, true), true),
+          ("nums_has_even", BooleanType, true)
         )
       )
 

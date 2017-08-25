@@ -3,6 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 import org.apache.commons.text.WordUtils
+import scala.reflect.runtime.universe._
 
 package object functions {
 
@@ -20,6 +21,10 @@ package object functions {
 
   def capitalizeFully(delimiters: List[Char]) = {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
+  }
+
+  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
+    (arr: Seq[T]) => arr.exists(f(_))
   }
 
 }
