@@ -7,6 +7,14 @@ import scala.reflect.runtime.universe._
 
 package object functions {
 
+  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
+    (arr: Seq[T]) => arr.exists(f(_))
+  }
+
+  def forall[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
+    (arr: Seq[T]) => arr.forall(f(_))
+  }
+
   def yeardiff(end: Column, start: Column): Column = {
     datediff(end, start) / 365
   }
@@ -21,10 +29,6 @@ package object functions {
 
   def capitalizeFully(delimiters: List[Char]) = {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
-  }
-
-  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
-    (arr: Seq[T]) => arr.exists(f(_))
   }
 
 }

@@ -530,7 +530,7 @@ We can use the spark-daria `exists` function to see if there are even numbers in
 ```scala
 val actualDF = sourceDF.withColumn(
   "nums_has_even",
-  functions.exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
+  exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
 )
 ```
 
@@ -543,6 +543,45 @@ actualDF.show()
 |[1, 4, 9]|         true|
 |[1, 3, 5]|        false|
 +---------+-------------+
+```
+
+### `forall`
+
+Scala has an Array#forall function that works like this:
+
+```scala
+Array("catdog", "crazy cat").forall(_.contains("cat")) // true
+```
+
+Suppose we have the following sourceDF:
+
+```
++------------+
+|       words|
++------------+
+|[snake, rat]|
+|[cat, crazy]|
++------------+
+```
+
+We can use the spark-daria `forall` function to see if all the strings in an array contain the string `"cat"`.
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "all_words_begin_with_c",
+  forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
+)
+```
+
+```
+actualDF.show()
+
++------------+----------------------+
+|       words|all_words_begin_with_c|
++------------+----------------------+
+|[snake, rat]|                 false|
+|[cat, crazy]|                  true|
++------------+----------------------+
 ```
 
 ### `yeardiff`

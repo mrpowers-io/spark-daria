@@ -196,4 +196,38 @@ class FunctionsSpec
 
   }
 
+  describe("#forall") {
+
+    it("works like the Scala forall method") {
+
+      val sourceDF = spark.createDF(
+        List(
+          (Array("snake", "rat")),
+          (Array("cat", "crazy"))
+        ), List(
+          ("words", ArrayType(StringType, true), true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "all_words_begin_with_c",
+        functions.forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          (Array("snake", "rat"), false),
+          (Array("cat", "crazy"), true)
+        ), List(
+          ("words", ArrayType(StringType, true), true),
+          ("all_words_begin_with_c", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
