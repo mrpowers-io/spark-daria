@@ -168,7 +168,7 @@ class FunctionsSpec
 
       val sourceDF = spark.createDF(
         List(
-          (Array(7, 4, 13)),
+          (Array(1, 4, 9)),
           (Array(1, 3, 5))
         ), List(
           ("nums", ArrayType(IntegerType, true), true)
@@ -182,7 +182,7 @@ class FunctionsSpec
 
       val expectedDF = spark.createDF(
         List(
-          (Array(7, 4, 13), true),
+          (Array(1, 4, 9), true),
           (Array(1, 3, 5), false)
         ), List(
           ("nums", ArrayType(IntegerType, true), true),

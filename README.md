@@ -506,7 +506,48 @@ StructType(
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
 
-For example, there is a `datediff` function that calculates the number of days between two dates, but there isn't a `yeardiff` function that calculates the number of years between two dates.
+### `exists`
+
+Scala has an Array#exists function that works like this:
+
+```scala
+Array(1, 2, 5).exists(_ % 2 == 0) // true
+```
+
+Suppose we have the following sourceDF:
+
+```
++---------+
+|     nums|
++---------+
+|[1, 4, 9]|
+|[1, 3, 5]|
++---------+
+```
+
+We can use the spark-daria `exists` function to see if there are even numbers in the arrays in the `nums` column.
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "nums_has_even",
+  functions.exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
+)
+```
+
+```
+actualDF.show()
+
++---------+-------------+
+|     nums|nums_has_even|
++---------+-------------+
+|[1, 4, 9]|         true|
+|[1, 3, 5]|        false|
++---------+-------------+
+```
+
+### `yeardiff`
+
+There is a `datediff` function that calculates the number of days between two dates, but there isn't a `yeardiff` function that calculates the number of years between two dates.
 
 The `com.github.mrpowers.spark.daria.sql.functions.yeardiff` function fills the gap.  Let's see how it works!
 
