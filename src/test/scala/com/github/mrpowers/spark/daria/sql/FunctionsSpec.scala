@@ -9,9 +9,9 @@ import org.scalatest.FunSpec
 import SparkSessionExt._
 
 class FunctionsSpec
-  extends FunSpec
-  with DataFrameComparer
-  with SparkSessionTestWrapper {
+    extends FunSpec
+    with DataFrameComparer
+    with SparkSessionTestWrapper {
 
   describe("#yeardiff") {
 
@@ -230,7 +230,8 @@ class FunctionsSpec
 
   }
 
-  describe("boolAnd") {
+  describe("multiAndEquals") {
+
     it("returns true if all specified input columns satisfy the And condition") {
 
       val sourceData = List(
@@ -250,8 +251,11 @@ class FunctionsSpec
 
       val sourceDF = spark.createDF(sourceData, sourceSchema)
 
-      val actualDF = sourceDF.withColumn("valid_flag", functions.boolAnd(true, col("c1"), col("c2")) &&
-        functions.boolAnd(false, col("c3"), col("c4")))
+      val actualDF = sourceDF.withColumn(
+        "valid_flag",
+        functions.multiAndEquals[Boolean](true, col("c1"), col("c2")) &&
+          functions.multiAndEquals[Boolean](false, col("c3"), col("c4"))
+      )
 
       val expectedData = List(
         (true, false, true, false, false),
@@ -264,6 +268,42 @@ class FunctionsSpec
       val expectedSchema = sourceSchema ::: List(("valid_flag", BooleanType, true))
 
       val expectedDF = spark.createDF(expectedData, expectedSchema)
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("works for strings too") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("cat", "cat"),
+          ("cat", "dog"),
+          ("pig", "pig")
+        ),
+        List(
+          ("s1", StringType, true),
+          ("s2", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "are_s1_and_s2_cat",
+        functions.multiAndEquals[String]("cat", col("s1"), col("s2"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("cat", "cat", true),
+          ("cat", "dog", false),
+          ("pig", "pig", false)
+        ),
+        List(
+          ("s1", StringType, true),
+          ("s2", StringType, true),
+          ("are_s1_and_s2_cat", BooleanType, true)
+        )
+      )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
 

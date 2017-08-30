@@ -31,8 +31,8 @@ package object functions {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
   }
 
-  def boolAnd(status: Boolean, cols: Column*) = {
-    cols.map(_.===(status)).reduceLeft(_.&&(_))
+  def multiAndEquals[T: TypeTag](value: T, cols: Column*) = {
+    cols.map(_.===(value)).reduceLeft(_.&&(_))
   }
 
 }
