@@ -9,9 +9,9 @@ import org.scalatest.FunSpec
 import SparkSessionExt._
 
 class FunctionsSpec
-    extends FunSpec
-    with DataFrameComparer
-    with SparkSessionTestWrapper {
+  extends FunSpec
+  with DataFrameComparer
+  with SparkSessionTestWrapper {
 
   describe("#yeardiff") {
 
@@ -223,6 +223,47 @@ class FunctionsSpec
           ("all_words_begin_with_c", BooleanType, true)
         )
       )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("boolAnd") {
+    it("returns true if all specified input columns satisfy the And condition") {
+
+      val sourceData = List(
+        (true, false, true, false),
+        (false, false, true, false),
+        (true, true, true, true),
+        (true, true, false, false),
+        (true, true, true, false)
+      )
+
+      val sourceSchema = List(
+        ("c1", BooleanType, true),
+        ("c2", BooleanType, true),
+        ("c3", BooleanType, true),
+        ("c4", BooleanType, true)
+      )
+
+      val sourceDF = spark.createDF(sourceData, sourceSchema)
+
+      val actualDF = sourceDF.withColumn("valid_flag", functions.boolAnd(true, col("c1"), col("c2")) &&
+        functions.boolAnd(false, col("c3"), col("c4")))
+
+      val expectedData = List(
+        (true, false, true, false, false),
+        (false, false, true, false, false),
+        (true, true, true, true, false),
+        (true, true, false, false, true),
+        (true, true, true, false, false)
+      )
+
+      val expectedSchema = sourceSchema ::: List(("valid_flag", BooleanType, true))
+
+      val expectedDF = spark.createDF(expectedData, expectedSchema)
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
 
