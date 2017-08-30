@@ -26,7 +26,8 @@ sparkComponents ++= Seq("sql")
 spDependencies += "MrPowers/spark-fast-tests:0.4.0"
 
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1"
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "provided"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   artifact.name + "-" + module.revision + "." + artifact.extension
