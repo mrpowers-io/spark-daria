@@ -15,6 +15,10 @@ package object functions {
     (arr: Seq[T]) => arr.forall(f(_))
   }
 
+  def multiEquals[T: TypeTag](value: T, cols: Column*) = {
+    cols.map(_.===(value)).reduceLeft(_.&&(_))
+  }
+
   def yeardiff(end: Column, start: Column): Column = {
     datediff(end, start) / 365
   }
@@ -29,10 +33,6 @@ package object functions {
 
   def capitalizeFully(delimiters: List[Char]) = {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
-  }
-
-  def multiAndEquals[T: TypeTag](value: T, cols: Column*) = {
-    cols.map(_.===(value)).reduceLeft(_.&&(_))
   }
 
 }

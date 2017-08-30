@@ -584,6 +584,43 @@ actualDF.show()
 +------------+----------------------+
 ```
 
+### `multiEquals`
+
+Returns `true` if multiple columns are equal to a value.
+
+Suppose we have the following sourceDF:
+
+```
++---+---+
+| s1| s2|
++---+---+
+|cat|cat|
+|cat|dog|
+|pig|pig|
++---+---+
+```
+
+We can use the `multiEquals` function to see if multiple columns are equal to a given value.
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "are_s1_and_s2_cat",
+  functions.multiEquals[String]("cat", col("s1"), col("s2"))
+)
+```
+
+```
+actualDF.show()
+
++---+---+-----------------+
+| s1| s2|are_s1_and_s2_cat|
++---+---+-----------------+
+|cat|cat|             true|
+|cat|dog|            false|
+|pig|pig|            false|
++---+---+-----------------+
+```
+
 ### `yeardiff`
 
 There is a `datediff` function that calculates the number of days between two dates, but there isn't a `yeardiff` function that calculates the number of years between two dates.

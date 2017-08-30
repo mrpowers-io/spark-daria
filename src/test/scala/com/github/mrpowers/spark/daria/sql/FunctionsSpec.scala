@@ -230,7 +230,7 @@ class FunctionsSpec
 
   }
 
-  describe("multiAndEquals") {
+  describe("multiEquals") {
 
     it("returns true if all specified input columns satisfy the And condition") {
 
@@ -253,8 +253,8 @@ class FunctionsSpec
 
       val actualDF = sourceDF.withColumn(
         "valid_flag",
-        functions.multiAndEquals[Boolean](true, col("c1"), col("c2")) &&
-          functions.multiAndEquals[Boolean](false, col("c3"), col("c4"))
+        functions.multiEquals[Boolean](true, col("c1"), col("c2")) &&
+          functions.multiEquals[Boolean](false, col("c3"), col("c4"))
       )
 
       val expectedData = List(
@@ -289,7 +289,7 @@ class FunctionsSpec
 
       val actualDF = sourceDF.withColumn(
         "are_s1_and_s2_cat",
-        functions.multiAndEquals[String]("cat", col("s1"), col("s2"))
+        functions.multiEquals[String]("cat", col("s1"), col("s2"))
       )
 
       val expectedDF = spark.createDF(
