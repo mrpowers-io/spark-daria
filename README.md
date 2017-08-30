@@ -600,12 +600,12 @@ Suppose we have the following sourceDF:
 +---+---+
 ```
 
-We can use the `multiEquals` function to see if multiple columns are equal to a given value.
+We can use the `multiEquals` function to see if multiple columns are equal to `"cat"`.
 
 ```scala
 val actualDF = sourceDF.withColumn(
   "are_s1_and_s2_cat",
-  functions.multiEquals[String]("cat", col("s1"), col("s2"))
+  multiEquals[String]("cat", col("s1"), col("s2"))
 )
 ```
 
