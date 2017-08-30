@@ -279,7 +279,9 @@ class FunctionsSpec
         List(
           ("cat", "cat"),
           ("cat", "dog"),
-          ("pig", "pig")
+          ("pig", "pig"),
+          ("", ""),
+          (null, null)
         ),
         List(
           ("s1", StringType, true),
@@ -296,7 +298,9 @@ class FunctionsSpec
         List(
           ("cat", "cat", true),
           ("cat", "dog", false),
-          ("pig", "pig", false)
+          ("pig", "pig", false),
+          ("", "", false),
+          (null, null, null)
         ),
         List(
           ("s1", StringType, true),
