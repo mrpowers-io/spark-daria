@@ -522,7 +522,7 @@ Suppose we have the following `sourceDF`:
 Let's convert this DataFrame to a Map with `island` as the key and `fun_level` as the value.
 
 ```
-val actual = twoColumnsToMap[String, Integer](
+val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
   sourceDF,
   "island",
   "fun_level"
