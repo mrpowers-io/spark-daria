@@ -8,6 +8,37 @@ class DataFrameHelpersSpec
     extends FunSpec
     with SparkSessionTestWrapper {
 
+  describe(".twoColumnsToMap") {
+
+    it("converts two columns of a DataFrame to a map") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("boracay", 7),
+          ("long island", 9)
+        ), List(
+          ("island", StringType, true),
+          ("fun_level", IntegerType, true)
+        )
+      )
+
+      val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
+        sourceDF,
+        "island",
+        "fun_level"
+      )
+
+      val expected = Map(
+        "boracay" -> 7,
+        "long island" -> 9
+      )
+
+      assert(actual === expected)
+
+    }
+
+  }
+
   describe(".toArrayOfMaps") {
 
     it("converts a DataFrame into an array of maps") {
