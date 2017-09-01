@@ -1,8 +1,11 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.DataFrame
+
 import scala.reflect.runtime.universe._
 import org.apache.spark.sql.functions._
+
+import scala.reflect.ClassTag
 
 object DataFrameHelpers extends DataFrameValidator {
 
@@ -18,6 +21,18 @@ object DataFrameHelpers extends DataFrameValidator {
       .foldLeft(collection.mutable.Map.empty[keyType, valueType]) { (memo, arr) =>
         memo += (arr(0).asInstanceOf[keyType] -> arr(1).asInstanceOf[valueType])
       }
+  }
+
+  def columnToArray[T: ClassTag](
+    df: DataFrame,
+    colName: String
+  ): Array[T] = {
+    df
+      .collect()
+      .foldLeft(collection.mutable.Buffer[T]()) { (memo, arr) =>
+        memo += arr(0).asInstanceOf[T]
+      }
+      .toArray
   }
 
   def toArrayOfMaps(df: DataFrame) = {

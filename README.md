@@ -538,6 +538,32 @@ Map(
 )
 ```
 
+### `columnToArray`
+
+This function converts a column to an array of items.
+
+Suppose we have the following `sourceDF`:
+
+```
++---+
+|num|
++---+
+|  1|
+|  2|
+|  3|
++---+
+```
+
+Let's convert the `num` column to an Array of values.  Let's run the code and view the results.
+
+```scala
+val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
+
+println(actual)
+
+Array(1, 2, 3)
+```
+
 ### `toArrayOfMaps`
 
 Converts a DataFrame to an array of Maps.

@@ -39,6 +39,28 @@ class DataFrameHelpersSpec
 
   }
 
+  describe(".columnToArray") {
+
+    it("converts a column to an array") {
+
+      val sourceDF = spark.createDF(
+        List(
+          1,
+          2,
+          3
+        ), List(
+          ("num", IntegerType, true)
+        )
+      )
+
+      val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
+
+      assert(actual === Array(1, 2, 3))
+
+    }
+
+  }
+
   describe(".toArrayOfMaps") {
 
     it("converts a DataFrame into an array of maps") {
