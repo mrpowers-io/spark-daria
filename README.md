@@ -367,7 +367,7 @@ Here are the contents of `actualDF`:
 
 ### `isNullOrBlank`
 
-The `isNullOrBlank` method retuns `true` if a column is `null` or `blank` and `false` otherwise.
+The `isNullOrBlank` method returns `true` if a column is `null` or `blank` and `false` otherwise.
 
 Suppose you start with the following `sourceDF`:
 
@@ -492,7 +492,7 @@ Suppose you have the following `sourceDF`:
 
 `sourceDF.printSchemaInCodeFormat()` will output the following rows in the console:
 
-```
+```scala
 StructType(
   List(
     StructField("team", StringType, true),
@@ -505,6 +505,8 @@ StructType(
 ## DataFrame Helpers
 
 ### `twoColumnsToMap`
+
+* N.B. This method uses `collect` and should only be called on small DataFrames.*
 
 Converts two columns in a DataFrame to a Map.
 
@@ -521,7 +523,7 @@ Suppose we have the following `sourceDF`:
 
 Let's convert this DataFrame to a Map with `island` as the key and `fun_level` as the value.
 
-```
+```scala
 val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
   sourceDF,
   "island",
@@ -529,16 +531,16 @@ val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
 )
 
 println(actual)
-```
 
-```
-Map(
-  "boracay" -> 7,
-  "long island" -> 9
-)
+// Map(
+//   "boracay" -> 7,
+//   "long island" -> 9
+// )
 ```
 
 ### `columnToArray`
+
+* N.B. This method uses `collect` and should only be called on small DataFrames.*
 
 This function converts a column to an array of items.
 
@@ -561,10 +563,12 @@ val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
 
 println(actual)
 
-Array(1, 2, 3)
+// Array(1, 2, 3)
 ```
 
 ### `toArrayOfMaps`
+
+* N.B. This method uses `collect` and should only be called on small DataFrames.*
 
 Converts a DataFrame to an array of Maps.
 
