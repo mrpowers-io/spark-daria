@@ -10,15 +10,25 @@ Spark helper methods to maximize developer productivity.
 
 ## Setup
 
-1. Add the [sbt-spark-package plugin](https://github.com/databricks/sbt-spark-package) to your application.  The spark-daria releases are maintained in [Spark Packages](https://spark-packages.org/package/mrpowers/spark-daria).
+* Option 1 *
 
-2. Update your build.sbt file: `spDependencies += "mrpowers/spark-daria:0.5.0"`
-
-3. Import the spark-daria code into your project, for example:
+Fetch the JAR file from Maven.
 
 ```scala
-import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
+resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
+
+libraryDependencies += "mrpowers" % "spark-daria" % "2.2.0_0.12.0"
 ```
+
+* Option 2 *
+
+1. Add the [sbt-spark-package plugin](https://github.com/databricks/sbt-spark-package) to your application.  The spark-daria releases are maintained in [Spark Packages](https://spark-packages.org/package/mrpowers/spark-daria).
+
+2. Update your build.sbt file: `spDependencies += "mrpowers/spark-daria:2.2.0_0.12.0"`
+
+* Accessing spark-daria versions for different Spark versions *
+
+Message me if you need spark-daria to be compiled with a different Spark version and I'll help you out :wink:
 
 ## :white_check_mark: DataFrameValidator
 
