@@ -12,9 +12,9 @@ name := "spark-daria"
 
 spName := "mrpowers/spark-daria"
 
-spShortDescription := "Open source Spark transformations and functions"
+spShortDescription := "Spark helper methods to maximize developer productivity"
 
-spDescription := "When the Spark source code doesn't provide functionality, turn to this library"
+spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
 version := "2.2.0_0.12.0"
 
@@ -23,10 +23,9 @@ sparkVersion := "2.2.0"
 
 sparkComponents ++= Seq("sql")
 
-spDependencies += "MrPowers/spark-fast-tests:0.4.0"
+libraryDependencies += "MrPowers" % "spark-fast-tests" % "2.2.0_0.5.0" % "test"
 
-libraryDependencies += "org.apache.commons" % "commons-text" % "1.1"
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
+libraryDependencies += "org.apache.commons" % "commons-text" % "1.1" % "provided"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
