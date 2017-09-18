@@ -27,12 +27,7 @@ object DataFrameHelpers extends DataFrameValidator {
     df: DataFrame,
     colName: String
   ): Array[T] = {
-    df
-      .collect()
-      .foldLeft(collection.mutable.Buffer[T]()) { (memo, arr) =>
-        memo += arr(0).asInstanceOf[T]
-      }
-      .toArray
+    df.select(colName).collect().map(r => r(0).asInstanceOf[T])
   }
 
   def toArrayOfMaps(df: DataFrame) = {
