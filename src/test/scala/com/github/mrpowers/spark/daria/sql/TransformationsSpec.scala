@@ -152,7 +152,7 @@ class TransformationsSpec
           ("IntegerTypeCol", IntegerType, true)
         )
       )
-      val actualDF = sourceDF.transform(transformations.applyRegExToCols()) //"\\\\x00", "ThisIsAnother"))
+      val actualDF = sourceDF.transform(transformations.applyRegExToCols("\\\\x00", ""))
 
       val expectedDF = spark.createDF(
         List(

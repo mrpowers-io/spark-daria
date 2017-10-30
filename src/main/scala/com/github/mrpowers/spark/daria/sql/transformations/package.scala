@@ -31,8 +31,7 @@ package object transformations {
 
   def applyRegExToCols(regularExp: String = "\\\\x00", replacement: String = "")(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (returnDf, colName) =>
-      if (col(colName) == null) null
-      else if (df.schema(colName).dataType.toString == "StringType")
+      if (df.schema(colName).dataType.toString == "StringType")
         returnDf.withColumn(colName, regexp_replace(col(colName), regularExp, replacement))
       else
         returnDf.withColumn(colName, col(colName))
