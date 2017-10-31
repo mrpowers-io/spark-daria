@@ -33,7 +33,7 @@ package object transformations {
 
   def multiRegexpReplace(
     cols: List[Column],
-    pattern: String = "\\\\x00",
+    pattern: String = "\u0000",
     replacement: String = ""
   )(df: DataFrame): DataFrame = {
     cols.foldLeft(df) { (memoDF, col) =>
@@ -46,7 +46,7 @@ package object transformations {
   }
 
   def bulkRegexpReplace(
-    pattern: String = "\\\\x00",
+    pattern: String = "\u0000",
     replacement: String = ""
   )(df: DataFrame): DataFrame = {
     val cols = df.schema.filter { (s: StructField) =>
