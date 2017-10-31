@@ -1,7 +1,9 @@
 package com.github.mrpowers.spark.daria.sql
 
+import org.apache.avro.generic.GenericData.StringType
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions.{col, regexp_replace}
+import org.apache.spark.sql.types.StructField
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
@@ -41,6 +43,19 @@ package object transformations {
           regexp_replace(col, pattern, replacement)
         )
     }
+  }
+
+  def bulkRegexpReplace(
+    pattern: String = "\\\\x00",
+    replacement: String = ""
+  )(df: DataFrame): DataFrame = {
+    val cols = df.schema.filter { (s: StructField) =>
+      s.dataType.simpleString == "string"
+    }.map { (s: StructField) =>
+      col(s.name)
+    }.toList
+
+    multiRegexpReplace(cols, pattern, replacement)(df)
   }
 
 }

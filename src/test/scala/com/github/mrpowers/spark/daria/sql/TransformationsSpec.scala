@@ -225,4 +225,43 @@ class TransformationsSpec
 
   }
 
+  describe("#bulkRegexpReplace") {
+
+    it("works on all the StringType columns") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bart cool", "moto cool", 5),
+          ("cool James", "droid fun", 10)
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true),
+          ("num", IntegerType, true)
+        )
+      )
+
+      val actualDF = sourceDF.transform(
+        transformations.bulkRegexpReplace(
+          "cool",
+          "dude"
+        )
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bart dude", "moto dude", 5),
+          ("dude James", "droid fun", 10)
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true),
+          ("num", IntegerType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
