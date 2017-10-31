@@ -118,4 +118,52 @@ class TransformationsSpec
 
   }
 
+  describe("#applyRegExToTextCols") {
+
+    it("remove characters that match a regular expression in the columns of a DataFrame") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("\u0000StringTest", 123)
+        ), List(
+          ("StringTypeCol", StringType, true),
+          ("IntegerTypeCol", IntegerType, true)
+        )
+      )
+      val actualDF = sourceDF.transform(transformations.applyRegExToCols("\u0000", "ThisIsA"))
+
+      val expectedDF = spark.createDF(
+        List(
+          ("ThisIsAStringTest", 123)
+        ), List(
+          ("StringTypeCol", StringType, true),
+          ("IntegerTypeCol", IntegerType, true)
+        )
+      )
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+    }
+    it("removes \\x00 in the columns of a DataFrame") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("\\x00", 123)
+        ), List(
+          ("StringTypeCol", StringType, true),
+          ("IntegerTypeCol", IntegerType, true)
+        )
+      )
+      val actualDF = sourceDF.transform(transformations.applyRegExToCols("\\\\x00", ""))
+
+      val expectedDF = spark.createDF(
+        List(
+          ("", 123)
+        ), List(
+          ("StringTypeCol", StringType, true),
+          ("IntegerTypeCol", IntegerType, true)
+        )
+      )
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+    }
+  }
+
 }
