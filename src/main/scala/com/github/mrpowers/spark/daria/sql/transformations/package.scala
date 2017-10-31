@@ -1,6 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions.{col, regexp_replace}
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
@@ -29,12 +29,18 @@ package object transformations {
     str.toLowerCase().replace(" ", "_")
   }
 
-  def applyRegExToCols(regularExp: String = "\\\\x00", replacement: String = "")(df: DataFrame): DataFrame = {
-    df.columns.foldLeft(df) { (returnDf, colName) =>
-      if (df.schema(colName).dataType.toString == "StringType")
-        returnDf.withColumn(colName, regexp_replace(col(colName), regularExp, replacement))
-      else
-        returnDf.withColumn(colName, col(colName))
+  def multiRegexpReplace(
+    cols: List[Column],
+    pattern: String = "\\\\x00",
+    replacement: String = ""
+  )(df: DataFrame): DataFrame = {
+    cols.foldLeft(df) { (memoDF, col) =>
+      memoDF
+        .withColumn(
+          col.toString(),
+          regexp_replace(col, pattern, replacement)
+        )
     }
   }
+
 }

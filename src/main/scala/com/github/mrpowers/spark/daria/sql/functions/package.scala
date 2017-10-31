@@ -1,8 +1,9 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.Column
+import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions._
 import org.apache.commons.text.WordUtils
+
 import scala.reflect.runtime.universe._
 
 package object functions {

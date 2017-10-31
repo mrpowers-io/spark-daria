@@ -1,8 +1,11 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.github.mrpowers.spark.fast.tests.DataFrameComparer
-import org.scalatest.FunSpec
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{StringType, IntegerType}
+
+import org.scalatest.FunSpec
+
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 
 class TransformationsSpec
@@ -118,7 +121,7 @@ class TransformationsSpec
 
   }
 
-  describe("#applyRegExToTextCols") {
+  describe("#multiRegexpReplace") {
 
     it("remove characters that match a regular expression in the columns of a DataFrame") {
 
@@ -130,7 +133,16 @@ class TransformationsSpec
           ("IntegerTypeCol", IntegerType, true)
         )
       )
-      val actualDF = sourceDF.transform(transformations.applyRegExToCols("\u0000", "ThisIsA"))
+
+      val actualDF = sourceDF.transform(
+        transformations.multiRegexpReplace(
+          List(
+            col("StringTypeCol")
+          ),
+          "\u0000",
+          "ThisIsA"
+        )
+      )
 
       val expectedDF = spark.createDF(
         List(
@@ -140,8 +152,11 @@ class TransformationsSpec
           ("IntegerTypeCol", IntegerType, true)
         )
       )
+
       assertSmallDataFrameEquality(actualDF, expectedDF)
+
     }
+
     it("removes \\x00 in the columns of a DataFrame") {
 
       val sourceDF = spark.createDF(
@@ -149,21 +164,65 @@ class TransformationsSpec
           ("\\x00", 123)
         ), List(
           ("StringTypeCol", StringType, true),
-          ("IntegerTypeCol", IntegerType, true)
+          ("num", IntegerType, true)
         )
       )
-      val actualDF = sourceDF.transform(transformations.applyRegExToCols("\\\\x00", ""))
+
+      val actualDF = sourceDF.transform(
+        transformations.multiRegexpReplace(
+          List(col("StringTypeCol"), col("num")),
+          "\\\\x00",
+          ""
+        )
+      )
 
       val expectedDF = spark.createDF(
         List(
-          ("", 123)
+          ("", "123")
         ), List(
           ("StringTypeCol", StringType, true),
-          ("IntegerTypeCol", IntegerType, true)
+          ("num", StringType, true)
         )
       )
+
       assertSmallDataFrameEquality(actualDF, expectedDF)
+
     }
+
+    it("works on multiple columns") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bart cool", "moto cool"),
+          ("cool James", "droid fun")
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.transform(
+        transformations.multiRegexpReplace(
+          List(col("person"), col("phone")),
+          "cool",
+          "dude"
+        )
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bart dude", "moto dude"),
+          ("dude James", "droid fun")
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
   }
 
 }
