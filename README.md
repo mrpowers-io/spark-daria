@@ -830,6 +830,33 @@ Console output:
 +-----+----+
 ```
 
+### `multiRegexpReplace`
+
+```scala
+val actualDF = sourceDF.transform(
+  transformations.multiRegexpReplace(
+    List(col("person"), col("phone")),
+    "cool",
+    "dude"
+  )
+)
+```
+
+Replaces all `"cool"` strings in the `person` and `phone` columns with the string `"dude"`.
+
+### `bulkRegexpReplace`
+
+```scala
+val actualDF = sourceDF.transform(
+  transformations.bulkRegexpReplace(
+    "cool",
+    "dude"
+  )
+)
+```
+
+Replaces all `"cool"` strings in all the `sourceDF` columns of `StringType` with the string `"dude"`.
+
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
