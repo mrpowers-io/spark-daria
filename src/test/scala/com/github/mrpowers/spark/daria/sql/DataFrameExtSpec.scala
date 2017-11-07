@@ -4,9 +4,12 @@ import org.scalatest.FunSpec
 import SparkSessionExt._
 import org.apache.spark.sql.types.{IntegerType, StringType}
 import DataFrameExt._
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
+import org.apache.spark.sql.DataFrame
 
 class DataFrameExtSpec
     extends FunSpec
+    with DataFrameComparer
     with SparkSessionTestWrapper {
 
   describe("#printSchemaInCodeFormat") {
@@ -26,6 +29,43 @@ class DataFrameExtSpec
 
       //      uncomment the next line if you want to check out the console output
       //      sourceDF.printSchemaInCodeFormat()
+
+    }
+
+  }
+
+  describe("#composeTransforms") {
+
+    it("runs a list of transforms") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("jets"),
+          ("nacional")
+        ), List(
+          ("team", StringType, true)
+        )
+      )
+
+      val transforms = List(
+        ExampleTransforms.withGreeting()(_),
+        ExampleTransforms.withCat("sandy")(_)
+      )
+
+      val actualDF = sourceDF.composeTransforms(transforms)
+
+      val expectedDF = spark.createDF(
+        List(
+          ("jets", "hello world", "sandy meow"),
+          ("nacional", "hello world", "sandy meow")
+        ), List(
+          ("team", StringType, true),
+          ("greeting", StringType, false),
+          ("cats", StringType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 

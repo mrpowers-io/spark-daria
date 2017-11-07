@@ -512,6 +512,27 @@ StructType(
 )
 ```
 
+### `composeTransforms`
+
+Uses function composition to run a list of DataFrame transformations.
+
+```scala
+def withGreeting()(df: DataFrame): DataFrame = {
+  df.withColumn("greeting", lit("hello world"))
+}
+
+def withCat(name: String)(df: DataFrame): DataFrame = {
+  df.withColumn("cats", lit(s"$name meow"))
+}
+
+val transforms = List(
+  withGreeting()(_),
+  withCat("sandy")(_)
+)
+
+sourceDF.composeTransforms(transforms)
+```
+
 ## DataFrame Helpers
 
 ### `twoColumnsToMap`
@@ -856,6 +877,9 @@ val actualDF = sourceDF.transform(
 ```
 
 Replaces all `"cool"` strings in all the `sourceDF` columns of `StringType` with the string `"dude"`.
+
+
+
 
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 

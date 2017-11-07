@@ -17,9 +17,17 @@ object DataFrameExt {
       println("    " + fields.mkString(",\n    "))
       println("  )")
       println(")")
+    }
 
+    def composeTransforms(
+      transforms: List[(DataFrame => DataFrame)]
+    ): DataFrame = {
+      transforms.foldLeft(df) { (memoDF, t) =>
+        memoDF.transform(t)
+      }
     }
 
   }
 
 }
+
