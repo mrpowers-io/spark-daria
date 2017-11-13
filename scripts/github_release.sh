@@ -1,5 +1,18 @@
 echo "Starting deploy script"
 
+JAR_CREATION_METHOD=$1
+if [ "$JAR_CREATION_METHOD" = "" ]
+  then
+    echo "JAR creation method variable must be set"
+    exit 1
+fi
+
+if [ $JAR_CREATION_METHOD != "assembly" ] && [ $JAR_CREATION_METHOD != "package" ]
+  then
+    echo "JAR creation method must be 'assembly' or 'package', was '$JAR_CREATION_METHOD'"
+    exit 1
+fi
+
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ $CURRENT_BRANCH != "master" ]
   then
@@ -70,7 +83,7 @@ git tag v$PROJECT_VERSION
 git push origin v$PROJECT_VERSION
 
 echo "Create a JAR file"
-sbt package
+sbt $JAR_CREATION_METHOD
 
 echo "Create a GitHub release"
 JAR_PATH=target/scala-${SCALA_BINARY_VERSION}/${PROJECT_NAME}_${SCALA_BINARY_VERSION}-${SPARK_VERSION}_${PROJECT_VERSION}.jar
