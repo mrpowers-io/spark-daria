@@ -13,6 +13,44 @@ class FunctionsSpec
     with DataFrameComparer
     with SparkSessionTestWrapper {
 
+  describe("#singleSpace") {
+
+    it("single spaces a string") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bruce   willis"),
+          ("    obama"),
+          ("  nice  hair person  "),
+          (null)
+        ), List(
+          ("some_string", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "some_string_single_spaced",
+        functions.singleSpace(col("some_string"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bruce   willis", "Bruce willis"),
+          ("    obama", "obama"),
+          ("  nice  hair person  ", "nice hair person"),
+          (null, null)
+        ), List(
+          ("some_string", StringType, true),
+          ("some_string_single_spaced", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
   describe("#yeardiff") {
 
     it("calculates the years between two dates") {

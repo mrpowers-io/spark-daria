@@ -8,6 +8,10 @@ import scala.reflect.runtime.universe._
 
 package object functions {
 
+  def singleSpace(col: Column): Column = {
+    trim(regexp_replace(col, " +", " "))
+  }
+
   def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
     (arr: Seq[T]) => arr.exists(f(_))
   }
