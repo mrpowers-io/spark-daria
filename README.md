@@ -631,6 +631,39 @@ Array(
 
 Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
 
+### `singleSpace`
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "some_string_single_spaced",
+  functions.singleSpace(col("some_string"))
+)
+```
+
+Replaces all multispaces with single spaces (e.g. changes `"this   has     some"` to `"this has some"`.
+
+### `removeAllWhitespace`
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "some_string_without_whitespace",
+  functions.removeAllWhitespace(col("some_string"))
+)
+```
+
+Removes all whitespace in a string (e.g. changes `"this   has     some"` to `"thishassome"`.
+
+### `antiTrim`
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "some_string_anti_trimmed",
+  functions.antiTrim(col("some_string"))
+)
+```
+
+Removes all inner whitespace, but doesn't delete leading or trailing whitespace (e.g. changes `"  this   has     some   "` to `"  thishassome   "`.
+
 ### `exists`
 
 Scala has an Array#exists function that works like this:
