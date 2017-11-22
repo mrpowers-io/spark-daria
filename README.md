@@ -636,7 +636,7 @@ Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/
 ```scala
 val actualDF = sourceDF.withColumn(
   "some_string_single_spaced",
-  functions.singleSpace(col("some_string"))
+  singleSpace(col("some_string"))
 )
 ```
 
@@ -647,7 +647,7 @@ Replaces all multispaces with single spaces (e.g. changes `"this   has     some"
 ```scala
 val actualDF = sourceDF.withColumn(
   "some_string_without_whitespace",
-  functions.removeAllWhitespace(col("some_string"))
+  removeAllWhitespace(col("some_string"))
 )
 ```
 
@@ -658,11 +658,22 @@ Removes all whitespace in a string (e.g. changes `"this   has     some"` to `"th
 ```scala
 val actualDF = sourceDF.withColumn(
   "some_string_anti_trimmed",
-  functions.antiTrim(col("some_string"))
+  antiTrim(col("some_string"))
 )
 ```
 
 Removes all inner whitespace, but doesn't delete leading or trailing whitespace (e.g. changes `"  this   has     some   "` to `"  thishassome   "`.
+
+### `removeNonWordCharacters`
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "some_string_remove_non_word_chars",
+  removeNonWordCharacters(col("some_string"))
+)
+```
+
+Removes all non-word characters from a string, excluding whitespace (e.g. changes `"  ni!!ce  h^^air person  "` to `"  nice  hair person  "`).
 
 ### `exists`
 

@@ -20,6 +20,10 @@ package object functions {
     regexp_replace(col, "\\b\\s+\\b", "")
   }
 
+  def removeNonWordCharacters(col: Column): Column = {
+    regexp_replace(col, "[^\\w\\s]+", "")
+  }
+
   def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
     (arr: Seq[T]) => arr.exists(f(_))
   }
