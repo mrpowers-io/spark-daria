@@ -51,6 +51,81 @@ class FunctionsSpec
 
   }
 
+  describe("#removeAllWhitespace") {
+
+    it("removes all whitespace from a string") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bruce   willis   "),
+          ("    obama"),
+          ("  nice  hair person  "),
+          (null)
+        ), List(
+          ("some_string", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "some_string_without_whitespace",
+        functions.removeAllWhitespace(col("some_string"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bruce   willis   ", "Brucewillis"),
+          ("    obama", "obama"),
+          ("  nice  hair person  ", "nicehairperson"),
+          (null, null)
+        ), List(
+          ("some_string", StringType, true),
+          ("some_string_without_whitespace", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#antiTrim") {
+
+    it("removes all inner whitespace from a string") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bruce   willis   "),
+          ("    obama"),
+          ("  nice  hair person  "),
+          (null)
+        ), List(
+          ("some_string", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "some_string_anti_trimmed",
+        functions.antiTrim(col("some_string"))
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Bruce   willis   ", "Brucewillis   "),
+          ("    obama", "    obama"),
+          ("  nice  hair person  ", "  nicehairperson  "),
+          (null, null)
+        ), List(
+          ("some_string", StringType, true),
+          ("some_string_anti_trimmed", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
   describe("#yeardiff") {
 
     it("calculates the years between two dates") {

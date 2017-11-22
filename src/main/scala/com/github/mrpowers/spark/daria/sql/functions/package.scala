@@ -12,6 +12,14 @@ package object functions {
     trim(regexp_replace(col, " +", " "))
   }
 
+  def removeAllWhitespace(col: Column): Column = {
+    regexp_replace(col, "\\s+", "")
+  }
+
+  def antiTrim(col: Column): Column = {
+    regexp_replace(col, "\\b\\s+\\b", "")
+  }
+
   def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
     (arr: Seq[T]) => arr.exists(f(_))
   }
