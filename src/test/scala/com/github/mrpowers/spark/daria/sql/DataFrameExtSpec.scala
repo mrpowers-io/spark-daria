@@ -71,4 +71,24 @@ class DataFrameExtSpec
 
   }
 
+  describe("#containsColumn") {
+
+    it("returns true if a DataFrame contains a column") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("jets"),
+          ("nacional")
+        ), List(
+          ("team", StringType, true)
+        )
+      )
+
+      assert(sourceDF.containsColumn("team") === true)
+      assert(sourceDF.containsColumn("blah") === false)
+
+    }
+
+  }
+
 }

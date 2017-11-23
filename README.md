@@ -533,6 +533,14 @@ val transforms = List(
 sourceDF.composeTransforms(transforms)
 ```
 
+### `containsColumn`
+
+```scala
+sourceDF.containsColumn("team")
+```
+
+Returns `true` if `sourceDF` contains a column named `"team"` and false otherwise.
+
 ## DataFrame Helpers
 
 ### `twoColumnsToMap`
@@ -833,6 +841,17 @@ Console output:
 +--------------------+--------------------+------------------+
 ```
 
+### `truncate`
+
+```scala
+sourceDF.withColumn(
+  "some_string_truncated",
+  truncate(col("some_string"), 3)
+)
+```
+
+Truncates the `"some_string"` column to only have three characters.
+
 ## :trident: sql.transformations
 
 SQL transformations take a DataFrame as an argument and return a DataFrame.  They are suitable arguments for the `Dataset#transform` method.
@@ -922,8 +941,20 @@ val actualDF = sourceDF.transform(
 
 Replaces all `"cool"` strings in all the `sourceDF` columns of `StringType` with the string `"dude"`.
 
+### `truncateColumns`
 
+```scala
+val columnLengths: Map[String, Int] = Map(
+  "person" -> 2,
+  "phone" -> 3
+)
 
+sourceDF.transform(
+  truncateColumns(columnLengths)
+)
+```
+
+Limits the `"person"` column to 2 characters and the `"phone"` column to 3 characters.
 
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
