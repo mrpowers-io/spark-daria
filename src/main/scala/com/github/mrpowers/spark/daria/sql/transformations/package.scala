@@ -1,9 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.avro.generic.GenericData.StringType
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions.{col, regexp_replace}
 import org.apache.spark.sql.types.StructField
+import com.github.mrpowers.spark.daria.sql.functions.truncate
+import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
@@ -56,6 +57,19 @@ package object transformations {
     }.toList
 
     multiRegexpReplace(cols, pattern, replacement)(df)
+  }
+
+  def truncateColumns(
+    columnLengths: Map[String, Int]
+  )(df: DataFrame): DataFrame = {
+    columnLengths.foldLeft(df) {
+      case (memoDF, (colName, length)) =>
+        if (memoDF.containsColumnName(colName)) {
+          memoDF.withColumn(colName, truncate(col(colName), length))
+        } else {
+          memoDF
+        }
+    }
   }
 
 }

@@ -52,4 +52,8 @@ package object functions {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
   }
 
+  def truncate(col: Column, len: Int): Column = {
+    substring(col, 0, len)
+  }
+
 }

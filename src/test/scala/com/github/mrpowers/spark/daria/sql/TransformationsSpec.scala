@@ -264,4 +264,46 @@ class TransformationsSpec
 
   }
 
+  describe("#truncateColumns") {
+
+    it("truncates columns based on specified lengths") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("Bart cool", "moto cool"),
+          ("cool James", "droid fun"),
+          (null, null)
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true)
+        )
+      )
+
+      val columnLengths: Map[String, Int] = Map(
+        "person" -> 2,
+        "phone" -> 3,
+        "whatever" -> 50000
+      )
+
+      val actualDF = sourceDF.transform(
+        transformations.truncateColumns(columnLengths)
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("Ba", "mot"),
+          ("co", "dro"),
+          (null, null)
+        ), List(
+          ("person", StringType, true),
+          ("phone", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }

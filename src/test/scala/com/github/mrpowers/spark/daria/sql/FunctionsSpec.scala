@@ -467,4 +467,42 @@ class FunctionsSpec
 
   }
 
+  describe("#truncate") {
+
+    it("truncates a string") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("happy person"),
+          ("fun person"),
+          ("laughing person"),
+          (null)
+        ), List(
+          ("some_string", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "some_string_truncated",
+        functions.truncate(col("some_string"), 3)
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("happy person", "hap"),
+          ("fun person", "fun"),
+          ("laughing person", "lau"),
+          (null, null)
+        ), List(
+          ("some_string", StringType, true),
+          ("some_string_truncated", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
