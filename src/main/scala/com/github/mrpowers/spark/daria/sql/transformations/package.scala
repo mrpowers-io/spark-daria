@@ -64,7 +64,7 @@ package object transformations {
   )(df: DataFrame): DataFrame = {
     columnLengths.foldLeft(df) {
       case (memoDF, (colName, length)) =>
-        if (memoDF.containsColumnName(colName)) {
+        if (memoDF.containsColumn(colName)) {
           memoDF.withColumn(colName, truncate(col(colName), length))
         } else {
           memoDF

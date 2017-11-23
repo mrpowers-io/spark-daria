@@ -27,7 +27,7 @@ object DataFrameExt {
       }
     }
 
-    def containsColumnName(colName: String): Boolean = {
+    def containsColumn(colName: String): Boolean = {
       df.schema.fieldNames.contains(colName)
     }
 
