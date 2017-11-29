@@ -43,6 +43,9 @@ object ColumnExt {
       not(col.isin(list: _*))
     }
 
+    def isNotNullOrBlank: Column = {
+      !(col.isNullOrBlank)
+    }
   }
 
 }

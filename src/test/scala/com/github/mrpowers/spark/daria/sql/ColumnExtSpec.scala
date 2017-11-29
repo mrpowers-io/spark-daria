@@ -535,4 +535,43 @@ class ColumnExtSpec
 
   }
 
+  describe("#isNotNullOrBlank") {
+
+    it("returns true if a column is not null or blank and false otherwise") {
+
+      val sourceDF = spark.createDF(
+        List(
+          "notnullhere",
+          null,
+          "",
+          "   "
+        ), List(
+          ("testColumn", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "testColumn_is_not_null_or_blank",
+        col("testColumn").isNotNullOrBlank
+      )
+      actualDF.show()
+
+      val expectedDF = spark.createDF(
+        List(
+          ("notnullhere", true),
+          (null, false),
+          ("", false),
+          ("   ", false)
+        ), List(
+          ("testColumn", StringType, true),
+          ("testColumn_is_not_null_or_blank", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
 }
