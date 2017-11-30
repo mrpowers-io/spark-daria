@@ -442,14 +442,14 @@ val actualDF = sourceDF.withColumn(
 Here are the contents of `actualDF`:
 
 ```
-+-------------+------------------------------+
-|employee_name|employee_name_is_null_or_blank|
-+-------------+------------------------------+
-|         John|                          true|
-|         null|                         false|
-|           ""|                         false|
-|       "    "|                         false|
-+-------------+------------------------------+
++-------------+----------------------------------+
+|employee_name|employee_name_is_not_null_or_blank|
++-------------+----------------------------------+
+|         John|                              true|
+|         null|                             false|
+|           ""|                             false|
+|       "    "|                             false|
++-------------+----------------------------------+
 ```
 
 ### `isNotIn`
