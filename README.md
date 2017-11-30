@@ -413,6 +413,44 @@ Here are the contents of `actualDF`:
 |     "    "|                        true|
 +-----------+----------------------------+
 ```
+### `isNotNullOrBlank`
+
+The `isNotNullOrBlank` method returns `true` if a column is not `null` or `blank` and `false` otherwise.
+
+Suppose you start with the following `sourceDF`:
+
+```
++-------------+
+|employee_name|
++-------------+
+|         John|
+|         null|
+|           ""|
+|       "    "|
++-------------+
+```
+
+Run the `isNotNullOrBlank` method:
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "employee_name_is_not_null_or_blank",
+  col("employee_name").isNotNullOrBlank
+)
+```
+
+Here are the contents of `actualDF`:
+
+```
++-------------+----------------------------------+
+|employee_name|employee_name_is_not_null_or_blank|
++-------------+----------------------------------+
+|         John|                              true|
+|         null|                             false|
+|           ""|                             false|
+|       "    "|                             false|
++-------------+----------------------------------+
+```
 
 ### `isNotIn`
 
