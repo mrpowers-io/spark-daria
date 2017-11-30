@@ -13,4 +13,8 @@ object ExampleTransforms {
     df.withColumn("cats", lit(s"$name meow"))
   }
 
+  def dropWordCol()(df: DataFrame): DataFrame = {
+    df.drop("word")
+  }
+
 }
