@@ -137,8 +137,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting"),
-        columnsRemoved = Seq(): Seq[String]
+        columnsAdded = Seq("greeting")
       )
 
       val actualDF = sourceDF.trans(ct)
@@ -171,8 +170,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting"),
-        columnsRemoved = Seq(): Seq[String]
+        columnsAdded = Seq("greeting")
       )
 
       intercept[DataFrameColumnsException] {
@@ -216,8 +214,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withCat("sandy"),
-        columnsAdded = Seq("greeting"),
-        columnsRemoved = Seq(): Seq[String]
+        columnsAdded = Seq("greeting")
       )
 
       intercept[DataFrameColumnsException] {
@@ -230,9 +227,10 @@ class DataFrameExtSpec
 
       val sourceDF = spark.createDF(
         List(
-          ("jets")
+          ("jets", "car")
         ), List(
-          ("team", StringType, true)
+          ("team", StringType, true),
+          ("word", StringType, true)
         )
       )
 
@@ -240,15 +238,19 @@ class DataFrameExtSpec
         .trans(
           CustomTransform(
             transform = ExampleTransforms.withGreeting(),
-            columnsAdded = Seq("greeting"),
-            columnsRemoved = Seq(): Seq[String]
+            columnsAdded = Seq("greeting")
           )
         )
         .trans(
           CustomTransform(
             transform = ExampleTransforms.withCat("spanky"),
-            columnsAdded = Seq("cats"),
-            columnsRemoved = Seq(): Seq[String]
+            columnsAdded = Seq("cats")
+          )
+        )
+        .trans(
+          CustomTransform(
+            transform = ExampleTransforms.dropWordCol(),
+            columnsRemoved = Seq("word")
           )
         )
 
@@ -302,7 +304,6 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.dropWordCol(),
-        columnsAdded = Seq(): Seq[String],
         columnsRemoved = Seq("word")
       )
 

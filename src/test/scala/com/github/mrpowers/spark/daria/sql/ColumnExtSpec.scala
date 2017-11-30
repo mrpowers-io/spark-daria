@@ -554,7 +554,6 @@ class ColumnExtSpec
         "testColumn_is_not_null_or_blank",
         col("testColumn").isNotNullOrBlank
       )
-      actualDF.show()
 
       val expectedDF = spark.createDF(
         List(
