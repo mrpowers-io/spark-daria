@@ -994,6 +994,59 @@ sourceDF.transform(
 
 Limits the `"person"` column to 2 characters and the `"phone"` column to 3 characters.
 
+## ETL
+
+spark-daria can be used as a lightweight framework for running ETL analyses in Spark.
+
+You can define EtlDefinitions, group them in a collection, and run the etls via jobs.
+
+### Components of an ETL
+
+An ETL starts with a DataFrame, runs a series of transformations (filter, custom transformations, repartition), and writes out data.
+
+The `EtlDefinition` class is generic and can be molded to suit all ETL situations.  For example, it can read a CSV file from S3, run transformations, and write out Parquet files on your local filesystem.
+
+### Code example
+
+This snippet creates a DataFrame and writes it out as a CSV file in your local filesystem.
+
+```scala
+val sourceDF = spark.createDF(
+  List(
+    ("bob", 14),
+    ("liz", 20)
+  ), List(
+    ("name", StringType, true),
+    ("age", IntegerType, true)
+  )
+)
+
+def someTransform()(df: DataFrame): DataFrame = {
+  df.withColumn("cool", lit("dude"))
+}
+
+def someWriter()(df: DataFrame): Unit = {
+  val path = new java.io.File("./tmp/example").getCanonicalPath
+  df.repartition(1).write.csv(path)
+}
+
+val etlDefinition = new EtlDefinition(
+  name =  "example",
+  sourceDF = sourceDF,
+  transform = someTransform(),
+  write = someWriter(),
+  hidden = false
+)
+
+etlDefinition.process()
+```
+
+In production applications, it's more likely that you'll use Spark DataFrame readers to create the `sourceDF` (e.g. `spark.read.parquet("some_s3_path")`).
+
+### Example production use case
+
+You can define a collection of ETL definitions in a Databricks notebook and create a Slack command that runs an EtlDefinition on command from Slack.
+
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
