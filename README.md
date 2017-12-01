@@ -583,7 +583,7 @@ Returns `true` if `sourceDF` contains a column named `"team"` and false otherwis
 
 ### `trans`
 
-Enables you to specify the columns that are added by custom transformations and errors out if the colums you specify are added / removed are different from the columns that are actually added / removed.
+Enables you to specify the columns that should be added / removed by a custom transformations and errors out if the columns the columns that are actually added / removed are different.
 
 ```scala
 val actualDF = sourceDF
