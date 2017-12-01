@@ -495,6 +495,44 @@ class ColumnExtSpec
 
   }
 
+  describe("#isNotNullOrBlank") {
+
+    it("returns true if a column is not null or blank and false otherwise") {
+
+      val sourceDF = spark.createDF(
+        List(
+          "notnullhere",
+          null,
+          "",
+          "   "
+        ), List(
+          ("testColumn", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.withColumn(
+        "testColumn_is_not_null_or_blank",
+        col("testColumn").isNotNullOrBlank
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("notnullhere", true),
+          (null, false),
+          ("", false),
+          ("   ", false)
+        ), List(
+          ("testColumn", StringType, true),
+          ("testColumn_is_not_null_or_blank", BooleanType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
   describe("#isNotIn") {
 
     it("returns true if the column element is not in the list") {
@@ -526,44 +564,6 @@ class ColumnExtSpec
         ), List(
           ("stuff", StringType, true),
           ("is_not_footwear_related", BooleanType, true)
-        )
-      )
-
-      assertSmallDataFrameEquality(actualDF, expectedDF)
-
-    }
-
-  }
-
-  describe("#isNotNullOrBlank") {
-
-    it("returns true if a column is not null or blank and false otherwise") {
-
-      val sourceDF = spark.createDF(
-        List(
-          "notnullhere",
-          null,
-          "",
-          "   "
-        ), List(
-          ("testColumn", StringType, true)
-        )
-      )
-
-      val actualDF = sourceDF.withColumn(
-        "testColumn_is_not_null_or_blank",
-        col("testColumn").isNotNullOrBlank
-      )
-
-      val expectedDF = spark.createDF(
-        List(
-          ("notnullhere", true),
-          (null, false),
-          ("", false),
-          ("   ", false)
-        ), List(
-          ("testColumn", StringType, true),
-          ("testColumn_is_not_null_or_blank", BooleanType, true)
         )
       )
 
