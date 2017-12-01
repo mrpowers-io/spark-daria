@@ -521,6 +521,8 @@ val actualDF = sourceDF.withColumn(
 
 ## DataFrame Extensions
 
+### `printSchemaInCodeFormat`
+
 Spark has a `printSchema` method to print the schema of a DataFrame and a `schema` method that returns a `StructType` object.
 
 The `Dataset#schema` method can be easily converted into working code for small DataFrames, but it can be a lot of manual work for DataFrames with a lot of columns.
@@ -578,6 +580,32 @@ sourceDF.containsColumn("team")
 ```
 
 Returns `true` if `sourceDF` contains a column named `"team"` and false otherwise.
+
+### `trans`
+
+Enables you to specify the columns that are added by custom transformations and errors out if the colums you specify are added / removed are different from the columns that are actually added / removed.
+
+```scala
+val actualDF = sourceDF
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.withGreeting(),
+      columnsAdded = Seq("greeting")
+    )
+  )
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.withCat("spanky"),
+      columnsAdded = Seq("cats")
+    )
+  )
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.dropWordCol(),
+      columnsRemoved = Seq("word")
+    )
+  )
+```
 
 ## DataFrame Helpers
 
