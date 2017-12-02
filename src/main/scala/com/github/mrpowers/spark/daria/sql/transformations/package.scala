@@ -19,7 +19,7 @@ package object transformations {
       val message = s"The sort order must be 'asc' or 'desc'.  Your sort order was '$order'."
       throw new InvalidColumnSortOrderException(message)
     }
-    df.select(cols.map(col): _*)
+    df.reorderColumns(cols)
   }
 
   def snakeCaseColumns(df: DataFrame): DataFrame = {

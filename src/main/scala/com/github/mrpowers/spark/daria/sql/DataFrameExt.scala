@@ -1,6 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
@@ -27,6 +28,11 @@ object DataFrameExt {
       transforms.foldLeft(df) { (memoDF, t) =>
         memoDF.transform(t)
       }
+    }
+
+    def reorderColumns(colNames: Seq[String]): DataFrame = {
+      val cols = colNames.map(col(_))
+      df.select(cols: _*)
     }
 
     def containsColumn(colName: String): Boolean = {

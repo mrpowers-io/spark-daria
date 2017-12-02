@@ -71,6 +71,42 @@ class DataFrameExtSpec
 
   }
 
+  describe("reorderColumns") {
+
+    it("reorders the columns in a DataFrame") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("jets", "hello", "sandy"),
+          ("nacional", "hello", "sandy")
+        ), List(
+          ("team", StringType, true),
+          ("greeting", StringType, false),
+          ("cats", StringType, false)
+        )
+      )
+
+val actualDF = sourceDF.reorderColumns(
+  Seq("greeting", "team", "cats")
+)
+
+      val expectedDF = spark.createDF(
+        List(
+          ("hello", "jets", "sandy"),
+          ("hello", "nacional", "sandy")
+        ), List(
+          ("greeting", StringType, false),
+          ("team", StringType, true),
+          ("cats", StringType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
   describe("#containsColumn") {
 
     it("returns true if a DataFrame contains a column") {

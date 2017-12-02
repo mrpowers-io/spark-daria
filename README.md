@@ -573,6 +573,18 @@ val transforms = List(
 sourceDF.composeTransforms(transforms)
 ```
 
+### `reorderColumns`
+
+Reorders the columns in a DataFrame.
+
+```scala
+val actualDF = sourceDF.reorderColumns(
+  Seq("greeting", "team", "cats")
+)
+```
+
+The `actualDF` will have the `greeting` column first, then the `team` column then the `cats` column.
+
 ### `containsColumn`
 
 ```scala
