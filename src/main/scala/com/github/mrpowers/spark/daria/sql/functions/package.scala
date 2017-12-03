@@ -16,6 +16,10 @@ package object functions {
     regexp_replace(col, "\\s+", "")
   }
 
+  def removeAllWhitespace(colName: String): Column = {
+    regexp_replace(col(colName), "\\s+", "")
+  }
+
   def antiTrim(col: Column): Column = {
     regexp_replace(col, "\\b\\s+\\b", "")
   }

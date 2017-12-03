@@ -739,6 +739,15 @@ val actualDF = sourceDF.withColumn(
 
 Removes all whitespace in a string (e.g. changes `"this   has     some"` to `"thishassome"`.
 
+You can also use this function with a `colName` string argument.
+
+```scala
+val actualDF = sourceDF.withColumn(
+  "some_string_without_whitespace",
+  removeAllWhitespace(col("some_string"))
+)
+```
+
 ### `antiTrim`
 
 ```scala

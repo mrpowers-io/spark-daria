@@ -86,9 +86,9 @@ class DataFrameExtSpec
         )
       )
 
-val actualDF = sourceDF.reorderColumns(
-  Seq("greeting", "team", "cats")
-)
+      val actualDF = sourceDF.reorderColumns(
+        Seq("greeting", "team", "cats")
+      )
 
       val expectedDF = spark.createDF(
         List(
@@ -98,6 +98,48 @@ val actualDF = sourceDF.reorderColumns(
           ("greeting", StringType, false),
           ("team", StringType, true),
           ("cats", StringType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("matches the column ordering of one DataFrame with another DataFrame") {
+
+      val df1 = spark.createDF(
+        List(
+          ("jets", "hello", "sandy"),
+          ("nacional", "hello", "sandy")
+        ), List(
+          ("team", StringType, true),
+          ("greeting", StringType, false),
+          ("cats", StringType, false)
+        )
+      )
+
+      val df2 = spark.createDF(
+        List(
+          ("AAA", "BBB", "CCC")
+        ), List(
+          ("cats", StringType, false),
+          ("greeting", StringType, false),
+          ("team", StringType, true)
+        )
+      )
+
+      val actualDF = df1.reorderColumns(
+        df2.columns
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("sandy", "hello", "jets"),
+          ("sandy", "hello", "nacional")
+        ), List(
+          ("cats", StringType, false),
+          ("greeting", StringType, false),
+          ("team", StringType, true)
         )
       )
 
