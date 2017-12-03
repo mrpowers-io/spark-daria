@@ -602,19 +602,20 @@ val actualDF = sourceDF
   .trans(
     CustomTransform(
       transform = ExampleTransforms.withGreeting(),
-      columnsAdded = Seq("greeting")
+      addedColumns = Seq("greeting"),
+      requiredColumns = Seq("something")
     )
   )
   .trans(
     CustomTransform(
       transform = ExampleTransforms.withCat("spanky"),
-      columnsAdded = Seq("cats")
+      addedColumns = Seq("cats")
     )
   )
   .trans(
     CustomTransform(
       transform = ExampleTransforms.dropWordCol(),
-      columnsRemoved = Seq("word")
+      removedColumns = Seq("word")
     )
   )
 ```

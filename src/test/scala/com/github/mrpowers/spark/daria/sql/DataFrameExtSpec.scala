@@ -215,7 +215,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting")
+        addedColumns = Seq("greeting")
       )
 
       val actualDF = sourceDF.trans(ct)
@@ -248,7 +248,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting")
+        addedColumns = Seq("greeting")
       )
 
       intercept[DataFrameColumnsException] {
@@ -270,8 +270,8 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting"),
-        columnsRemoved = Seq("foo")
+        addedColumns = Seq("greeting"),
+        removedColumns = Seq("foo")
       )
 
       intercept[DataFrameColumnsException] {
@@ -292,11 +292,67 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withCat("sandy"),
-        columnsAdded = Seq("greeting")
+        addedColumns = Seq("greeting")
       )
 
       intercept[DataFrameColumnsException] {
         sourceDF.trans(ct)
+      }
+
+    }
+
+    it("works when the required columns are included") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("jets"),
+          ("nacional")
+        ), List(
+          ("team", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.trans(
+        CustomTransform(
+          transform = ExampleTransforms.withGreeting(),
+          addedColumns = Seq("greeting"),
+          requiredColumns = Seq("team")
+        )
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("jets", "hello world"),
+          ("nacional", "hello world")
+        ), List(
+          ("team", StringType, true),
+          ("greeting", StringType, false)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+    it("errors out if required columns are missing") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("jets"),
+          ("nacional")
+        ), List(
+          ("team", StringType, true)
+        )
+      )
+
+      intercept[MissingDataFrameColumnsException] {
+        sourceDF.trans(
+          CustomTransform(
+            transform = ExampleTransforms.withGreeting(),
+            addedColumns = Seq("greeting"),
+            requiredColumns = Seq("something")
+          )
+        )
       }
 
     }
@@ -316,19 +372,19 @@ class DataFrameExtSpec
         .trans(
           CustomTransform(
             transform = ExampleTransforms.withGreeting(),
-            columnsAdded = Seq("greeting")
+            addedColumns = Seq("greeting")
           )
         )
         .trans(
           CustomTransform(
             transform = ExampleTransforms.withCat("spanky"),
-            columnsAdded = Seq("cats")
+            addedColumns = Seq("cats")
           )
         )
         .trans(
           CustomTransform(
             transform = ExampleTransforms.dropWordCol(),
-            columnsRemoved = Seq("word")
+            removedColumns = Seq("word")
           )
         )
 
@@ -359,8 +415,8 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.withGreeting(),
-        columnsAdded = Seq("greeting"),
-        columnsRemoved = Seq("word")
+        addedColumns = Seq("greeting"),
+        removedColumns = Seq("word")
       )
 
       intercept[DataFrameColumnsException] {
@@ -382,7 +438,7 @@ class DataFrameExtSpec
 
       val ct = CustomTransform(
         transform = ExampleTransforms.dropWordCol(),
-        columnsRemoved = Seq("word")
+        removedColumns = Seq("word")
       )
 
       val actualDF = sourceDF.trans(ct)

@@ -44,24 +44,32 @@ object DataFrameExt {
     }
 
     def trans(customTransform: CustomTransform): DataFrame = {
-      if (df.columns.toSeq.exists((c: String) => customTransform.columnsAdded.contains(c))) {
-        throw new DataFrameColumnsException(s"The DataFrame already contains the columns your transformation will add. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will add these columns: [${customTransform.columnsAdded.mkString(", ")}]")
+      // make sure df doesn't already have the columns that will be added
+      if (df.columns.toSeq.exists((c: String) => customTransform.addedColumns.contains(c))) {
+        throw new DataFrameColumnsException(s"The DataFrame already contains the columns your transformation will add. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will add these columns: [${customTransform.addedColumns.mkString(", ")}]")
       }
 
-      if (!customTransform.columnsRemoved.isEmpty && df.columns.toSeq.intersect(customTransform.columnsRemoved).isEmpty) {
-        throw new DataFrameColumnsException(s"The DataFrame does not contain the columns your transformation will drop. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will drop these columns: [${customTransform.columnsRemoved.mkString(", ")}]")
+      // make sure df isn't missing the columns that will be dropped
+      if (!customTransform.removedColumns.isEmpty && df.columns.toSeq.intersect(customTransform.removedColumns).isEmpty) {
+        throw new DataFrameColumnsException(s"The DataFrame does not contain the columns your transformation will drop. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will drop these columns: [${customTransform.removedColumns.mkString(", ")}]")
       }
+
+      // validate presence of columns
+      val c = new DataFrameColumnsChecker(df, customTransform.requiredColumns)
+      c.validatePresenceOfColumns()
 
       val transformedDF = df.transform(customTransform.transform)
 
+      // make sure the columns have been added
       val actualColumnsAdded = transformedDF.columnDiff(df)
-      if (!actualColumnsAdded.equals(customTransform.columnsAdded)) {
-        throw new DataFrameColumnsException(s"The [${actualColumnsAdded.mkString(", ")}] columns were actually added, but you specified that these columns should have been added [${customTransform.columnsAdded.mkString(", ")}]")
+      if (!actualColumnsAdded.equals(customTransform.addedColumns)) {
+        throw new DataFrameColumnsException(s"The [${actualColumnsAdded.mkString(", ")}] columns were actually added, but you specified that these columns should have been added [${customTransform.addedColumns.mkString(", ")}]")
       }
 
+      // make sure the columns have been removed
       val actualColumnsRemoved = df.columnDiff(transformedDF)
-      if (!actualColumnsRemoved.equals(customTransform.columnsRemoved)) {
-        throw new DataFrameColumnsException(s"The [${actualColumnsRemoved.mkString(", ")}] columns were actually removed, but you specified that these columns should have been removed [${customTransform.columnsRemoved.mkString(", ")}]")
+      if (!actualColumnsRemoved.equals(customTransform.removedColumns)) {
+        throw new DataFrameColumnsException(s"The [${actualColumnsRemoved.mkString(", ")}] columns were actually removed, but you specified that these columns should have been removed [${customTransform.removedColumns.mkString(", ")}]")
       }
 
       transformedDF
