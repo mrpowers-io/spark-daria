@@ -32,6 +32,19 @@ package object transformations {
     str.toLowerCase().replace(" ", "_")
   }
 
+  def titleCaseColumns(df: DataFrame): DataFrame = {
+    df.columns.foldLeft(df) { (memoDF, colName) =>
+      memoDF.withColumnRenamed(colName, toTitleCase(colName))
+    }
+  }
+
+  private def toTitleCase(str: String): String = {
+
+    str.split(" ").map(str =>
+      Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase).reduce(_ + " " + _)
+
+  }
+
   def multiRegexpReplace(
     cols: List[Column],
     pattern: String = "\u0000",

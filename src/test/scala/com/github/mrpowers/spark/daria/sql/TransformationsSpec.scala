@@ -121,6 +121,36 @@ class TransformationsSpec
 
   }
 
+  describe("#titleCaseColumns") {
+
+    it("Title Case the columns of a DataFrame") {
+
+      val sourceDF = spark.createDF(
+        List(
+          ("funny", "joke")
+        ), List(
+          ("This is a simple text", StringType, true),
+          ("this is anoTher teXt", StringType, true)
+        )
+      )
+
+      val actualDF = sourceDF.transform(transformations.titleCaseColumns)
+
+      val expectedDF = spark.createDF(
+        List(
+          ("funny", "joke")
+        ), List(
+          ("This Is A Simple Text", StringType, true),
+          ("This Is Another Text", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
   describe("#multiRegexpReplace") {
 
     it("remove characters that match a regular expression in the columns of a DataFrame") {
