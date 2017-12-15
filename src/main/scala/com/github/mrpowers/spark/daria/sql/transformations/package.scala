@@ -5,6 +5,7 @@ import org.apache.spark.sql.functions.{col, regexp_replace}
 import org.apache.spark.sql.types.StructField
 import com.github.mrpowers.spark.daria.sql.functions.truncate
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
+import org.apache.commons.text.WordUtils
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
@@ -34,15 +35,8 @@ package object transformations {
 
   def titleCaseColumns(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(colName, toTitleCase(colName))
+      memoDF.withColumnRenamed(colName, WordUtils.capitalizeFully(colName))
     }
-  }
-
-  private def toTitleCase(str: String): String = {
-
-    str.split(" ").map(str =>
-      Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase).reduce(_ + " " + _)
-
   }
 
   def multiRegexpReplace(
