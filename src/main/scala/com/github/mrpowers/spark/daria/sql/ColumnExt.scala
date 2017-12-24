@@ -27,6 +27,14 @@ object ColumnExt {
       )
     }
 
+    def isTrue: Column = {
+      when(col.isNull, false).otherwise(col === true)
+    }
+
+    def isFalse: Column = {
+      when(col.isNull, false).otherwise(col === false)
+    }
+
     def isFalsy: Column = {
       when(col.isNull || col === lit(false), true).otherwise(false)
     }

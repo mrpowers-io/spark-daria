@@ -3,13 +3,14 @@ package com.github.mrpowers.spark.daria.sql
 import org.scalatest.FunSpec
 import org.apache.spark.sql.functions._
 import ColumnExt._
-import com.github.mrpowers.spark.fast.tests.DataFrameComparer
+import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import SparkSessionExt._
 import org.apache.spark.sql.types.{BooleanType, IntegerType, StringType}
 
 class ColumnExtSpec
     extends FunSpec
     with DataFrameComparer
+    with ColumnComparer
     with SparkSessionTestWrapper {
 
   import spark.implicits._
@@ -325,6 +326,54 @@ class ColumnExtSpec
       )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#isTrue") {
+
+    it("returns true when the column is true") {
+
+      val df = spark.createDF(
+        List(
+          (true, true),
+          (false, false),
+          (null, false)
+        ), List(
+          ("is_fun", BooleanType, true),
+          ("expected_is_fun_true", BooleanType, true)
+        )
+      ).withColumn(
+          "is_fun_true",
+          col("is_fun").isTrue
+        )
+
+      assertColumnEquality(df, "expected_is_fun_true", "is_fun_true")
+
+    }
+
+  }
+
+  describe("#isFalse") {
+
+    it("returns true when the column is false") {
+
+      val df = spark.createDF(
+        List(
+          (true, false),
+          (false, true),
+          (null, false)
+        ), List(
+          ("is_fun", BooleanType, true),
+          ("expected_is_fun_false", BooleanType, true)
+        )
+      ).withColumn(
+          "is_fun_false",
+          col("is_fun").isFalse
+        )
+
+      assertColumnEquality(df, "expected_is_fun_false", "is_fun_false")
 
     }
 
