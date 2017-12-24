@@ -16,7 +16,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-version := "2.2.0_0.15.0"
+version := "2.2.0_0.16.0"
 
 scalaVersion := "2.11.8"
 sparkVersion := "2.2.0"
