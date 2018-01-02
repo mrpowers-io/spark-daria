@@ -23,17 +23,19 @@ package object transformations {
     df.reorderColumns(cols)
   }
 
-  def snakeCaseColumns(df: DataFrame): DataFrame = {
+  def snakeCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(colName, toSnakeCase(colName))
     }
   }
 
   private def toSnakeCase(str: String): String = {
-    str.toLowerCase().replace(" ", "_")
+    str
+      .replaceAll("\\s+", "_")
+      .toLowerCase
   }
 
-  def titleCaseColumns(df: DataFrame): DataFrame = {
+  def titleCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(colName, WordUtils.capitalizeFully(colName))
     }

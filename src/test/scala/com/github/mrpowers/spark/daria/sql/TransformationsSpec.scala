@@ -97,21 +97,23 @@ class TransformationsSpec
 
       val sourceDF = spark.createDF(
         List(
-          ("funny", "joke")
+          ("funny", "joke", "person")
         ), List(
           ("A b C", StringType, true),
-          ("de F", StringType, true)
+          ("de F", StringType, true),
+          ("cr   ay", StringType, true)
         )
       )
 
-      val actualDF = sourceDF.transform(transformations.snakeCaseColumns)
+      val actualDF = sourceDF.transform(transformations.snakeCaseColumns())
 
       val expectedDF = spark.createDF(
         List(
-          ("funny", "joke")
+          ("funny", "joke", "person")
         ), List(
           ("a_b_c", StringType, true),
-          ("de_f", StringType, true)
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true)
         )
       )
 
@@ -134,7 +136,7 @@ class TransformationsSpec
         )
       )
 
-      val actualDF = sourceDF.transform(transformations.titleCaseColumns)
+      val actualDF = sourceDF.transform(transformations.titleCaseColumns())
 
       val expectedDF = spark.createDF(
         List(
