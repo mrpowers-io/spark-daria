@@ -7,7 +7,7 @@ import com.github.mrpowers.spark.daria.sql.functions.truncate
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import org.apache.commons.text.WordUtils
 
-case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
+private[sql] case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
 package object transformations {
 

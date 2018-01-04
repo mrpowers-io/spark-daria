@@ -2,9 +2,9 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.DataFrame
 
-case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
+private[sql] case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
 
-class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[String]) {
+private[sql] class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[String]) {
 
   val missingColumns = requiredColNames.diff(df.columns.toSeq)
 

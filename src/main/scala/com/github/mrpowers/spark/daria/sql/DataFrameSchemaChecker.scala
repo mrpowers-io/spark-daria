@@ -3,9 +3,9 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
-case class InvalidDataFrameSchemaException(smth: String) extends Exception(smth)
+private[sql] case class InvalidDataFrameSchemaException(smth: String) extends Exception(smth)
 
-class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructType) {
+private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructType) {
 
   val missingStructFields = requiredSchema.diff(df.schema)
 

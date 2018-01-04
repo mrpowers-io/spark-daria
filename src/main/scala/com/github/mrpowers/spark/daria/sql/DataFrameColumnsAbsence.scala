@@ -2,9 +2,9 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql._
 
-case class ProhibitedDataFrameColumnsException(smth: String) extends Exception(smth)
+private[sql] case class ProhibitedDataFrameColumnsException(smth: String) extends Exception(smth)
 
-class DataFrameColumnsAbsence(df: DataFrame, prohibitedColNames: Seq[String]) {
+private[sql] class DataFrameColumnsAbsence(df: DataFrame, prohibitedColNames: Seq[String]) {
 
   val extraColNames = (df.columns.toSeq).intersect(prohibitedColNames)
 
