@@ -24,6 +24,7 @@ object SparkSessionExt {
       }
     }
 
+    /** Creates a DataFrame, similar to createDataFrame, but with better syntax */
     def createDF[U, T](rowData: List[U], fields: List[T]): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.parallelize(asRows(rowData)),

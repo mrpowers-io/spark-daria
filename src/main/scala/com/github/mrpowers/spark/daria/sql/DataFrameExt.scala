@@ -10,6 +10,7 @@ object DataFrameExt {
 
   implicit class DataFrameMethods(df: DataFrame) {
 
+    /** Prints the schema with StructType and StructFields so it's easy to copy into code */
     def printSchemaInCodeFormat(): Unit = {
       val fields = df.schema.map { (f: StructField) =>
         s"""StructField("${f.name}", ${f.dataType}, ${f.nullable})"""
@@ -22,6 +23,7 @@ object DataFrameExt {
       println(")")
     }
 
+    /** Executes a list of custom DataFrame transformations */
     def composeTransforms(
       transforms: List[(DataFrame => DataFrame)]
     ): DataFrame = {
@@ -30,19 +32,23 @@ object DataFrameExt {
       }
     }
 
+    /** Reorders columns as specified */
     def reorderColumns(colNames: Seq[String]): DataFrame = {
       val cols = colNames.map(col(_))
       df.select(cols: _*)
     }
 
+    /** Returns true if the DataFrame contains the column */
     def containsColumn(colName: String): Boolean = {
       df.schema.fieldNames.contains(colName)
     }
 
+    /** Returns the columns in otherDF that aren't in self */
     def columnDiff(otherDF: DataFrame): Seq[String] = {
       (df.columns).diff(otherDF.columns).toSeq
     }
 
+    /** Like transform(), but for CustomTransform objects */
     def trans(customTransform: CustomTransform): DataFrame = {
       // make sure df doesn't already have the columns that will be added
       if (df.columns.toSeq.exists((c: String) => customTransform.addedColumns.contains(c))) {
