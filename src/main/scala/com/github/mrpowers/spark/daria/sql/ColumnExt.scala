@@ -30,7 +30,7 @@ object ColumnExt {
       )
     }
 
-    /** Returns true if the col is true */
+    /** Returns true if the current expression is true */
     def isTrue: Column = {
       when(col.isNull, false).otherwise(col === true)
     }

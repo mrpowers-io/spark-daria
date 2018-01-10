@@ -48,10 +48,6 @@ package object functions {
     col.geq(min) && col.leq(max)
   }
 
-  def rpadDaria(len: Integer, pad: String)(col: Column): Column = {
-    rpad(col, len, pad)
-  }
-
   def capitalizeFully(delimiters: List[Char]) = {
     udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
   }

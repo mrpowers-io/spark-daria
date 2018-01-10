@@ -62,7 +62,7 @@ class ColumnExtSpec
 
       val actualDF = wordsDF.withColumn(
         "diff_word",
-        col("word").chain(trim).chain(functions.rpadDaria(5, "x"))
+        col("word").chain(trim).chain(rpad(_, 5, "x"))
       )
 
       val expectedDF = spark.createDF(

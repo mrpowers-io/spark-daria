@@ -14,3 +14,4 @@ case class EtlDefinition(
   }
 
 }
+
