@@ -11,6 +11,7 @@ private[sql] case class InvalidColumnSortOrderException(smth: String) extends Ex
 
 object transformations {
 
+  /** Sorts the columns of a DataFrame alphabetically */
   def sortColumns(order: String = "asc")(df: DataFrame): DataFrame = {
     val cols = if (order == "asc") {
       df.columns.sorted
@@ -23,6 +24,7 @@ object transformations {
     df.reorderColumns(cols)
   }
 
+  /** snake_cases all the columns of a DataFrame */
   def snakeCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(colName, toSnakeCase(colName))
@@ -35,12 +37,14 @@ object transformations {
       .toLowerCase
   }
 
+  /** Title Cases all the columns of a DataFrame */
   def titleCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(colName, WordUtils.capitalizeFully(colName))
     }
   }
 
+  /** Runs regexp_replace on multiple columns */
   def multiRegexpReplace(
     cols: List[Column],
     pattern: String = "\u0000",
@@ -55,6 +59,7 @@ object transformations {
     }
   }
 
+  /** Runs regexp_replace on all StringType columns in a DataFrame */
   def bulkRegexpReplace(
     pattern: String = "\u0000",
     replacement: String = ""
@@ -68,6 +73,7 @@ object transformations {
     multiRegexpReplace(cols, pattern, replacement)(df)
   }
 
+  /** Truncates multiple columns in a DataFrame */
   def truncateColumns(
     columnLengths: Map[String, Int]
   )(df: DataFrame): DataFrame = {
