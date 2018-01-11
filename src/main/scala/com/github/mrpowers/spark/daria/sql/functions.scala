@@ -1,12 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.{Column, DataFrame}
-import org.apache.spark.sql.functions._
 import org.apache.commons.text.WordUtils
+import org.apache.spark.sql.Column
+import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
 
-package object functions {
+object functions {
 
   def singleSpace(col: Column): Column = {
     trim(regexp_replace(col, " +", " "))
