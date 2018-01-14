@@ -67,4 +67,9 @@ object functions {
     substring(col, 0, len)
   }
 
+  /** Like array but doesn't include null elements */
+  def arrayExNull(cols: Column*): Column = {
+    split(concat_ws(",,,", cols: _*), ",,,")
+  }
+
 }
