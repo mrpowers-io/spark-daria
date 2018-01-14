@@ -3,7 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
-private[sql] case class InvalidDataFrameSchemaException(smth: String) extends Exception(smth)
+case class InvalidDataFrameSchemaException(smth: String) extends Exception(smth)
 
 private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructType) {
 

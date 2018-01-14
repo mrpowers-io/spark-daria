@@ -2,7 +2,7 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.DataFrame
 
-private[sql] case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
+case class MissingDataFrameColumnsException(smth: String) extends Exception(smth)
 
 private[sql] class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[String]) {
 

@@ -4,7 +4,7 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
 
-private[sql] case class DataFrameColumnsException(smth: String) extends Exception(smth)
+case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
 object DataFrameExt {
 

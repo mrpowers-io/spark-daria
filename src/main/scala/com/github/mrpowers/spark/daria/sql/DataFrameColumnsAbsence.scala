@@ -2,7 +2,7 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql._
 
-private[sql] case class ProhibitedDataFrameColumnsException(smth: String) extends Exception(smth)
+case class ProhibitedDataFrameColumnsException(smth: String) extends Exception(smth)
 
 private[sql] class DataFrameColumnsAbsence(df: DataFrame, prohibitedColNames: Seq[String]) {
 

@@ -7,7 +7,7 @@ import org.apache.spark.sql.functions.{col, regexp_replace}
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.{Column, DataFrame}
 
-private[sql] case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
+case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
 object transformations {
 
