@@ -40,3 +40,6 @@ credentials += Credentials(Path.userHome / ".ivy2" / ".sbtcredentials")
 fork in Test := true
 
 javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled","-Duser.timezone=GMT")
+
+/* Only invoked when you do `doc` in SBT */
+scalacOptions in (Compile, doc) += "-groups"
