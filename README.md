@@ -10,7 +10,7 @@ Spark helper methods to maximize developer productivity.
 
 ## Setup
 
-**Option 1**
+**Option 1: Maven**
 
 Fetch the JAR file from Maven.
 
@@ -20,11 +20,20 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 libraryDependencies += "mrpowers" % "spark-daria" % "2.2.0_0.12.0"
 ```
 
-**Option 2**
+**Option 2: Spark Packages**
 
 1. Add the [sbt-spark-package plugin](https://github.com/databricks/sbt-spark-package) to your application.  The spark-daria releases are maintained in [Spark Packages](https://spark-packages.org/package/mrpowers/spark-daria).
 
 2. Update your build.sbt file: `spDependencies += "mrpowers/spark-daria:2.2.0_0.12.0"`
+
+**Option 3: JitPack**
+
+Update your `build.sbt` file as follows.
+
+```scala
+resolvers += "jitpack" at "https://jitpack.io"
+libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v2.2.0_0.17.1"
+```
 
 **Accessing spark-daria versions for different Spark versions**
 
