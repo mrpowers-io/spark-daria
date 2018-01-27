@@ -31,6 +31,7 @@ object functions {
     * Removes all whitespace in a string
     *
     * @group string_funcs
+    * @since 0.16.0
     */
   def removeAllWhitespace(col: Column): Column = {
     regexp_replace(col, "\\s+", "")
@@ -40,6 +41,7 @@ object functions {
     * Removes all whitespace in a string
     *
     * @group string_funcs
+    * @since 0.16.0
     */
   def removeAllWhitespace(colName: String): Column = {
     regexp_replace(col(colName), "\\s+", "")
