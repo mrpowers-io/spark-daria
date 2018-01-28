@@ -39,43 +39,6 @@ libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v2.2.0_0.17.1"
 
 Message me if you need spark-daria to be compiled with a different Spark version and I'll help you out :wink:
 
-## :heart_eyes: Creating DataFrames
-
-Spark provides two methods for creating DataFrames:
-
-* `createDataFrame` is verbose
-* `toDF` doesn't provide enough control for customizing the schema
-
-spark-daria defined a createDF method that allows for the terse syntax of `toDF` and the control of `createDataFrame`.
-
-```scala
-spark.createDF(
-  List(
-    ("bob", 45),
-    ("liz", 25),
-    ("freeman", 32)
-  ), List(
-    ("name", StringType, true),
-    ("age", IntegerType, false)
-  )
-)
-```
-
-The `createDF` method can also be used with lists of `Row` and `StructField` objects.
-
-```scala
-spark.createDF(
-  List(
-    Row("bob", 45),
-    Row("liz", 25),
-    Row("freeman", 32)
-  ), List(
-    StructField("name", StringType, true),
-    StructField("age", IntegerType, false)
-  )
-)
-```
-
 ## DataFrame Extensions
 
 ### `printSchemaInCodeFormat`
