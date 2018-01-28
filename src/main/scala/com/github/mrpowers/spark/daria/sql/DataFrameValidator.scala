@@ -74,24 +74,24 @@ trait DataFrameValidator {
   }
 
   /**
-    * Throws an error if the DataFrame contains any of the prohibited columns
-    * Validates columns are not included in a DataFrame. This code will error out:
-    *
-    * {{{
-    * val sourceDF = Seq(
-    *   ("jets", "football"),
-    *   ("nacional", "soccer")
-    * ).toDF("team", "sport")
-    *
-    * val prohibitedColNames = Seq("team", "sport", "country", "city")
-    *
-    * validateAbsenceOfColumns(sourceDF, prohibitedColNames)
-    * }}}
-    *
-    * This is the error message:
-    *
-    * > com.github.mrpowers.spark.daria.sql.ProhibitedDataFrameColumnsException: The [team, sport] columns are not allowed to be included in the DataFrame with the following columns [team, sport]
-    */
+   * Throws an error if the DataFrame contains any of the prohibited columns
+   * Validates columns are not included in a DataFrame. This code will error out:
+   *
+   * {{{
+   * val sourceDF = Seq(
+   *   ("jets", "football"),
+   *   ("nacional", "soccer")
+   * ).toDF("team", "sport")
+   *
+   * val prohibitedColNames = Seq("team", "sport", "country", "city")
+   *
+   * validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+   * }}}
+   *
+   * This is the error message:
+   *
+   * > com.github.mrpowers.spark.daria.sql.ProhibitedDataFrameColumnsException: The [team, sport] columns are not allowed to be included in the DataFrame with the following columns [team, sport]
+   */
   def validateAbsenceOfColumns(df: DataFrame, prohibitedColNames: Seq[String]): Unit = {
     val c = new DataFrameColumnsAbsence(df, prohibitedColNames)
     c.validateAbsenceOfColumns()
