@@ -34,104 +34,9 @@ Update your `build.sbt` file as follows.
 resolvers += "jitpack" at "https://jitpack.io"
 libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v2.2.0_0.17.1"
 ```
-
 **Accessing spark-daria versions for different Spark versions**
 
 Message me if you need spark-daria to be compiled with a different Spark version and I'll help you out :wink:
-
-## DataFrame Helpers
-
-### `twoColumnsToMap`
-
-* N.B. This method uses `collect` and should only be called on small DataFrames.*
-
-Converts two columns in a DataFrame to a Map.
-
-Suppose we have the following `sourceDF`:
-
-```
-+-----------+---------+
-|     island|fun_level|
-+-----------+---------+
-|    boracay|        7|
-|long island|        9|
-+-----------+---------+
-```
-
-Let's convert this DataFrame to a Map with `island` as the key and `fun_level` as the value.
-
-```scala
-val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
-  sourceDF,
-  "island",
-  "fun_level"
-)
-
-println(actual)
-
-// Map(
-//   "boracay" -> 7,
-//   "long island" -> 9
-// )
-```
-
-### `columnToArray`
-
-* N.B. This method uses `collect` and should only be called on small DataFrames.*
-
-This function converts a column to an array of items.
-
-Suppose we have the following `sourceDF`:
-
-```
-+---+
-|num|
-+---+
-|  1|
-|  2|
-|  3|
-+---+
-```
-
-Let's convert the `num` column to an Array of values.  Let's run the code and view the results.
-
-```scala
-val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
-
-println(actual)
-
-// Array(1, 2, 3)
-```
-
-### `toArrayOfMaps`
-
-* N.B. This method uses `collect` and should only be called on small DataFrames.*
-
-Converts a DataFrame to an array of Maps.
-
-Suppose we have the following `sourceDF`:
-
-```
-+----------+-----------+---------+
-|profession|some_number|pay_grade|
-+----------+-----------+---------+
-|    doctor|          4|     high|
-|   dentist|         10|     high|
-+----------+-----------+---------+
-```
-
-Run the code to convert this DataFrame into an array of Maps.
-
-```scala
-val actual = DataFrameHelpers.toArrayOfMaps(sourceDF)
-
-println(actual)
-
-Array(
-  Map("profession" -> "doctor", "some_number" -> 4, "pay_grade" -> "high"),
-  Map("profession" -> "dentist", "some_number" -> 10, "pay_grade" -> "high")
-)
-```
 
 ## :zap: sql.functions
 
@@ -358,17 +263,6 @@ sourceDF.withColumn(
 ```
 
 Truncates the `"some_string"` column to only have three characters.
-
-### Code example
-
-
-```
-
-In production applications, it's more likely that you'll use Spark DataFrame readers to create the `sourceDF` (e.g. `spark.read.parquet("some_s3_path")`).
-
-### Example production use case
-
-You can define a collection of ETL definitions in a Databricks notebook and create a Slack command that runs an EtlDefinition on command from Slack.
 
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
