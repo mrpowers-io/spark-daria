@@ -38,6 +38,10 @@ libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v2.2.0_0.17.1"
 
 Message me if you need spark-daria to be compiled with a different Spark version and I'll help you out :wink:
 
+## Documentation
+
+[Here is the latest spark-daria documentation](https://mrpowers.github.io/docs/spark_daria/index.html#package).
+
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
 We are actively looking for contributors to add functionality that fills in the gaps of the Spark source code.
