@@ -60,7 +60,7 @@ object DataFrameExt {
      * }
      *
      * def withCat(name: String)(df: DataFrame): DataFrame = {
-     *   df.withColumn("cats", lit($name + " meow"))
+     *   df.withColumn("cats", lit(name + " meow"))
      * }
      *
      * val transforms = List(
