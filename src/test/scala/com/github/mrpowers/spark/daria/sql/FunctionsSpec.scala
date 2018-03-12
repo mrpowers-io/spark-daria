@@ -204,7 +204,7 @@ class FunctionsSpec
 
     it("convert Array to String with Special character escape") {
 
-      val origArray = Array("D/E", "(E/F)", "", "E|G", null, "E;;G", "^AB-C")
+      val origArray = Array("D/E", "(E/F)", "", "E|G", "E;;G", "^AB-C")
 
       val actualStr =
         functions.convertArrayToStringWithEscape(origArray)
