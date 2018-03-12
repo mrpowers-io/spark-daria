@@ -106,6 +106,19 @@ object functions {
   }
 
   /**
+   * Converts String Array to String with Special Character Escape
+   * Users can add Special Characters to escape
+   *
+   * @group string_funcs
+   */
+
+  def convertArrayToStringWithEscape(inputArray: Array[String], special: List[String] = List("\\(", "\\)", "\\|")): String = {
+    val text = inputArray.flatMap(Option[String]).mkString(";;;;;")
+    special.foldLeft(text) { case (res, pattern) => res.replaceAll(pattern, "\\" + pattern) }
+      .replaceAll(";;;;;", "|")
+  }
+
+  /**
    * Like initcap, but factors in additional delimiters
    *
    * @group string_funcs
@@ -135,24 +148,24 @@ object functions {
    * Like Scala Array exists method, but for ArrayType columns
    * Scala has an Array#exists function that works like this:
    *
-    * {{{
+   * {{{
    * Array(1, 2, 5).exists(_ % 2 == 0) // true
-    * }}}
+   * }}}
    *
    * Suppose we have the following sourceDF:
    *
-    * {{{
+   * {{{
    * +---------+
    * |     nums|
    * +---------+
    * |[1, 4, 9]|
    * |[1, 3, 5]|
    * +---------+
-    * }}}
+   * }}}
    *
    * We can use the spark-daria `exists` function to see if there are even numbers in the arrays in the `nums` column.
    *
-    * {{{
+   * {{{
    * val actualDF = sourceDF.withColumn(
    * "nums_has_even",
    * exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
@@ -166,7 +179,7 @@ object functions {
    * |[1, 4, 9]|         true|
    * |[1, 3, 5]|        false|
    * +---------+-------------+
-    * }}}
+   * }}}
    *
    * @group collection_funcs
    */
@@ -183,18 +196,18 @@ object functions {
    *
    * Suppose we have the following sourceDF:
    *
-    * {{{
+   * {{{
    * +------------+
    * |       words|
    * +------------+
    * |[snake, rat]|
    * |[cat, crazy]|
    * +------------+
-    * }}}
+   * }}}
    *
    * We can use the spark-daria `forall` function to see if all the strings in an array contain the string `"cat"`.
    *
-    * {{{
+   * {{{
    * val actualDF = sourceDF.withColumn(
    * "all_words_begin_with_c",
    * forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
@@ -208,7 +221,7 @@ object functions {
    * |[snake, rat]|                 false|
    * |[cat, crazy]|                  true|
    * +------------+----------------------+
-    * }}}
+   * }}}
    *
    * @group collection_funcs
    */

@@ -1,6 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
-import java.sql.{Date, Timestamp}
+import java.sql.Timestamp
 
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.functions._
@@ -195,6 +195,23 @@ class FunctionsSpec
       )
 
       assertSmallDataFrameEquality(actualDF, expectedDF)
+
+    }
+
+  }
+
+  describe("#convertArrayToStringWithEscape") {
+
+    it("convert Array to String with Special character escape") {
+
+      val origArray = Array("D/E", "(E/F)", "", "E|G", null, "E;;G", "^AB-C")
+
+      val actualStr =
+        functions.convertArrayToStringWithEscape(origArray)
+
+      val expectedStr = """D/E|\(E/F\)||E\|G|E;;G|^AB-C"""
+
+      assertResult(actualStr) { expectedStr }
 
     }
 
