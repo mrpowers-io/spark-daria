@@ -200,23 +200,6 @@ class FunctionsSpec
 
   }
 
-  describe("#convertArrayToStringWithEscape") {
-
-    it("convert Array to String with Special character escape") {
-
-      val origArray = Array("D/E", "(E/F)", "", "E|G", "E;;G", "^AB-C")
-
-      val actualStr =
-        functions.convertArrayToStringWithEscape(origArray)
-
-      val expectedStr = """D/E|\(E/F\)||E\|G|E;;G|^AB-C"""
-
-      assertResult(actualStr) { expectedStr }
-
-    }
-
-  }
-
   describe("#yeardiff") {
 
     it("calculates the years between two dates") {

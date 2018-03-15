@@ -106,19 +106,6 @@ object functions {
   }
 
   /**
-   * Converts String Array to String with Special Character Escape
-   * Users can add Special Characters to escape
-   *
-   * @group string_funcs
-   */
-
-  def convertArrayToStringWithEscape(inputArray: Array[String], special: List[String] = List("\\(", "\\)", "\\|")): String = {
-    val text = inputArray.flatMap(Option[String]).mkString(";;;;;")
-    special.foldLeft(text) { case (res, pattern) => res.replaceAll(pattern, "\\" + pattern) }
-      .replaceAll(";;;;;", "|")
-  }
-
-  /**
    * Like initcap, but factors in additional delimiters
    *
    * @group string_funcs
