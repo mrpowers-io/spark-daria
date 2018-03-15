@@ -6,9 +6,9 @@ object StringHelpers {
    * All the characters that need to be escaped for SQL regexp
    *
    */
-  val sqlCharsToEscape = List("(", ")", "/", "-", ".", "'", "|").map { c: String =>
-    s"\\$c"
-  }
+  val sqlCharsToEscape = "()/-.'|".map { c: Char =>
+    "\\" + c
+  }.toList
 
   /**
    * Escapes all the special characters in a string for a SQL regexp expression
