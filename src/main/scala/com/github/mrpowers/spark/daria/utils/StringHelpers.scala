@@ -3,12 +3,22 @@ package com.github.mrpowers.spark.daria.utils
 object StringHelpers {
 
   /**
+   * All the characters that need to be escaped for SQL regexp
+   *
+   */
+  val sqlCharsToEscape = List("(", ")", "/", "-", ".", "'", "|").map { c: String =>
+    s"\\$c"
+  }
+
+  /**
    * Escapes all the special characters in a string for a SQL regexp expression
    *
    */
-  def escapeForSqlRegexp(str: String): Option[String] = {
+  def escapeForSqlRegexp(
+    str: String,
+    charsToEscape: List[String] = sqlCharsToEscape
+  ): Option[String] = {
     val s = Option(str).getOrElse(return None)
-    val charsToEscape: List[String] = List("\\(", "\\)", "\\|")
     Some(charsToEscape.foldLeft(str) {
       case (res, pattern) =>
         res.replaceAll(pattern, "\\" + pattern)
