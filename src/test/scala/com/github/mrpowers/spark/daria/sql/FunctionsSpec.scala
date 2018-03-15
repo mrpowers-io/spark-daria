@@ -303,7 +303,7 @@ class FunctionsSpec
           (Array(1, 3, 5), false)
         ), List(
           ("nums", ArrayType(IntegerType, true), true),
-          ("nums_has_even", BooleanType, true)
+          ("nums_has_even", BooleanType, false)
         )
       )
 
@@ -337,7 +337,7 @@ class FunctionsSpec
           (Array("cat", "crazy"), true)
         ), List(
           ("words", ArrayType(StringType, true), true),
-          ("all_words_begin_with_c", BooleanType, true)
+          ("all_words_begin_with_c", BooleanType, false)
         )
       )
 

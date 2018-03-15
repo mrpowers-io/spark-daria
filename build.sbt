@@ -19,7 +19,7 @@ spDescription := "DataFrame validations, Column extensions, SparkSession extensi
 version := "2.3.0_0.18.0"
 
 scalaVersion := "2.11.8"
-sparkVersion := "2.2.0"
+sparkVersion := "2.3.0"
 
 sparkComponents ++= Seq("sql")
 
