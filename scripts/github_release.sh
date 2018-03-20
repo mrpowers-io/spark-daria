@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 echo "Starting deploy script"
 
 JAR_CREATION_METHOD=$1
