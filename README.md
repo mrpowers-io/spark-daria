@@ -40,7 +40,7 @@ Message me if you need spark-daria to be compiled with a different Spark version
 
 ## Documentation
 
-[Here is the latest spark-daria documentation](https://mrpowers.github.io/docs/spark_daria/index.html#package).
+[Here is the latest spark-daria documentation](https://mrpowers.github.io/docs/spark_daria/latest/index.html).
 
 ## :two_women_holding_hands: :two_men_holding_hands: :couple: Contribution Criteria
 
