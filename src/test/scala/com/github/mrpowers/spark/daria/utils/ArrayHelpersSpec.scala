@@ -1,16 +1,20 @@
 package com.github.mrpowers.spark.daria.utils
 
-import org.scalatest.FunSpec
+import utest._
 
-class ArrayHelpersSpec extends FunSpec {
+class ArrayHelpersSpec extends TestSuite {
 
-  describe("regexpString") {
+  val tests = Tests {
 
-    it("converts an array of strings to an escaped regexp string") {
-      val origArray = Array("D/E", "(E/F)", "", "E|G", "E;;G", "^AB-C", null)
-      val actualStr = ArrayHelpers.regexpString(origArray)
-      val expectedStr = """D\/E|\(E\/F\)||E\|G|E;;G|^AB\-C"""
-      assert(actualStr === expectedStr)
+    'regexpString - {
+
+      "converts an array of strings to an escaped regexp string" - {
+        val origArray = Array("D/E", "(E/F)", "", "E|G", "E;;G", "^AB-C", null)
+        val actualStr = ArrayHelpers.regexpString(origArray)
+        val expectedStr = """D\/E|\(E\/F\)||E\|G|E;;G|^AB\-C"""
+        assert(actualStr == expectedStr)
+      }
+
     }
 
   }

@@ -21,7 +21,9 @@ libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
 libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.8.0" % "test"
 
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1" % "provided"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+
+libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
+testFrameworks += new TestFramework("utest.runner.Framework")
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   artifact.name + "-" + module.revision + "." + artifact.extension
