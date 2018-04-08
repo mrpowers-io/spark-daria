@@ -12,16 +12,14 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 name := "spark-daria"
 
-version := "2.3.0_0.18.0"
+version := "0.19.0"
 
 scalaVersion := "2.11.12"
 
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
-
-libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.8.0" % "test"
-
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1" % "provided"
 
+libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.8.0" % "test"
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("utest.runner.Framework")
 
