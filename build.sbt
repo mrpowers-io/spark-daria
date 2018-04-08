@@ -8,6 +8,8 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(DoubleIndentClassDeclaration, true)
   .setPreference(SpacesAroundMultiImports, false)
 
+resolvers += "jitpack" at "https://jitpack.io"
+
 name := "spark-daria"
 
 spName := "mrpowers/spark-daria"
@@ -23,7 +25,7 @@ sparkVersion := "2.3.0"
 
 sparkComponents ++= Seq("sql")
 
-libraryDependencies += "MrPowers" % "spark-fast-tests" % "2.2.0_0.6.0" % "test"
+libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.8.0" % "test"
 
 libraryDependencies += "org.apache.commons" % "commons-text" % "1.1" % "provided"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
