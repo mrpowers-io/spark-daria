@@ -12,18 +12,11 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 name := "spark-daria"
 
-spName := "mrpowers/spark-daria"
-
-spShortDescription := "Spark helper methods to maximize developer productivity"
-
-spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
-
 version := "2.3.0_0.18.0"
 
 scalaVersion := "2.11.8"
-sparkVersion := "2.3.0"
 
-sparkComponents ++= Seq("sql")
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
 
 libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.8.0" % "test"
 
