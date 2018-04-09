@@ -85,20 +85,20 @@ echo Scala binary version $SCALA_BINARY_VERSION
 echo Spark version $SPARK_VERSION
 echo SPARK_PROJECT_VERSION $SPARK_PROJECT_VERSION
 
-#echo "Create a git commit to bump the version"
-#git commit -am "Version bump to $SPARK_PROJECT_VERSION"
-#
-#echo "Push the version bump commit to master"
-#git push origin master
-#
-#echo "Create a tag"
-#git tag v$SPARK_PROJECT_VERSION
-#git push origin v$SPARK_PROJECT_VERSION
-#
-#echo "Create a JAR file"
-#sbt $JAR_CREATION_METHOD
-#
-#echo "Create a GitHub release"
-#JAR_PATH=target/scala-${SCALA_BINARY_VERSION}/${PROJECT_NAME}_${SCALA_BINARY_VERSION}-${SPARK_VERSION}_${PROJECT_VERSION}.jar
-#hub release create -a $JAR_PATH -m "Release v${SPARK_PROJECT_VERSION}" v${SPARK_PROJECT_VERSION}
+echo "Create a git commit to bump the version"
+git commit -am "Version bump to $SPARK_PROJECT_VERSION"
+
+echo "Push the version bump commit to master"
+git push origin master
+
+echo "Create a tag"
+git tag v$SPARK_PROJECT_VERSION
+git push origin v$SPARK_PROJECT_VERSION
+
+echo "Create a JAR file"
+sbt $JAR_CREATION_METHOD
+
+echo "Create a GitHub release"
+JAR_PATH=target/scala-${SCALA_BINARY_VERSION}/${PROJECT_NAME}_${SCALA_BINARY_VERSION}-${SPARK_VERSION}_${PROJECT_VERSION}.jar
+hub release create -a $JAR_PATH -m "Release v${SPARK_PROJECT_VERSION}" v${SPARK_PROJECT_VERSION}
 
