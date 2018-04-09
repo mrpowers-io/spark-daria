@@ -286,31 +286,20 @@ object FunctionsTest
 
       "returns true if the array includes a value that makes the function return true" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            (Array(1, 4, 9)),
-            (Array(1, 3, 5))
-          ), List(
-            ("nums", ArrayType(IntegerType, true), true)
-          )
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "nums_has_even",
-          functions.exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
-        )
-
-        val expectedDF = spark.createDF(
+        val df = spark.createDF(
           List(
             (Array(1, 4, 9), true),
             (Array(1, 3, 5), false)
           ), List(
             ("nums", ArrayType(IntegerType, true), true),
-            ("nums_has_even", BooleanType, false)
+            ("expected", BooleanType, false)
           )
-        )
+        ).withColumn(
+            "nums_has_even",
+            functions.exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertColumnEquality(df, "nums_has_even", "expected")
 
       }
 
@@ -320,31 +309,20 @@ object FunctionsTest
 
       "works like the Scala forall method" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            (Array("snake", "rat")),
-            (Array("cat", "crazy"))
-          ), List(
-            ("words", ArrayType(StringType, true), true)
-          )
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "all_words_begin_with_c",
-          functions.forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
-        )
-
-        val expectedDF = spark.createDF(
+        val df = spark.createDF(
           List(
             (Array("snake", "rat"), false),
             (Array("cat", "crazy"), true)
           ), List(
             ("words", ArrayType(StringType, true), true),
-            ("all_words_begin_with_c", BooleanType, false)
+            ("expected", BooleanType, false)
           )
-        )
+        ).withColumn(
+            "all_words_begin_with_c",
+            functions.forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertColumnEquality(df, "all_words_begin_with_c", "expected")
 
       }
 
