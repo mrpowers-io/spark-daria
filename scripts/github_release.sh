@@ -53,8 +53,16 @@ if [ "$SCALA_BINARY_VERSION" = "" ]
     exit 1
 fi
 
-SPARK_VERSION="$(sbt -no-colors sparkVersion | tail -1)"
-SPARK_VERSION="${SPARK_VERSION#* }"
+# the SPARK_VERSION_REGULAR code supports these definitions: val sparkVersion = "2.2.0"
+SPARK_VERSION_REGULAR=$(cat build.sbt | grep "val sparkVersion = " | cut -f 4 -d " " | tr -d '"')
+# the SPARK_VERSION_SPARK_PACKAGES code supports these definitions: sparkVersion := "2.3.0"
+SPARK_VERSION_SPARK_PACKAGES=$(cat build.sbt | grep "sparkVersion := " | cut -f 3 -d " " | tr -d '"')
+if [ "$SPARK_VERSION_REGULAR" = "" ]
+  then
+    SPARK_VERSION=$SPARK_VERSION_SPARK_PACKAGES
+  else
+    SPARK_VERSION=$SPARK_VERSION_REGULAR
+fi
 if [ "$SPARK_VERSION" = "" ]
   then
     echo "SPARK_VERSION variable cannot be empty"
@@ -77,20 +85,20 @@ echo Scala binary version $SCALA_BINARY_VERSION
 echo Spark version $SPARK_VERSION
 echo SPARK_PROJECT_VERSION $SPARK_PROJECT_VERSION
 
-echo "Create a git commit to bump the version"
-git commit -am "Version bump to $SPARK_PROJECT_VERSION"
-
-echo "Push the version bump commit to master"
-git push origin master
-
-echo "Create a tag"
-git tag v$SPARK_PROJECT_VERSION
-git push origin v$SPARK_PROJECT_VERSION
-
-echo "Create a JAR file"
-sbt $JAR_CREATION_METHOD
-
-echo "Create a GitHub release"
-JAR_PATH=target/scala-${SCALA_BINARY_VERSION}/${PROJECT_NAME}_${SCALA_BINARY_VERSION}-${SPARK_VERSION}_${PROJECT_VERSION}.jar
-hub release create -a $JAR_PATH -m "Release v${SPARK_PROJECT_VERSION}" v${SPARK_PROJECT_VERSION}
+#echo "Create a git commit to bump the version"
+#git commit -am "Version bump to $SPARK_PROJECT_VERSION"
+#
+#echo "Push the version bump commit to master"
+#git push origin master
+#
+#echo "Create a tag"
+#git tag v$SPARK_PROJECT_VERSION
+#git push origin v$SPARK_PROJECT_VERSION
+#
+#echo "Create a JAR file"
+#sbt $JAR_CREATION_METHOD
+#
+#echo "Create a GitHub release"
+#JAR_PATH=target/scala-${SCALA_BINARY_VERSION}/${PROJECT_NAME}_${SCALA_BINARY_VERSION}-${SPARK_VERSION}_${PROJECT_VERSION}.jar
+#hub release create -a $JAR_PATH -m "Release v${SPARK_PROJECT_VERSION}" v${SPARK_PROJECT_VERSION}
 
