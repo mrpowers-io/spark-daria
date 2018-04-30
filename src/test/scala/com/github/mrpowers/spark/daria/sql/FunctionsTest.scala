@@ -91,6 +91,27 @@ object FunctionsTest
 
       }
 
+      "removes all whitespace from a string with a column argument and assertColumnEquality" - {
+
+        val df = spark.createDF(
+          List(
+            ("Bruce   willis   ", "Brucewillis"),
+            ("    obama", "obama"),
+            ("  nice  hair person  ", "nicehairperson"),
+            (null, null)
+          ), List(
+            ("some_string", StringType, true),
+            ("expected", StringType, true)
+          )
+        ).withColumn(
+            "some_string_without_whitespace",
+            functions.removeAllWhitespace(col("some_string"))
+          )
+
+        assertColumnEquality(df, "expected", "some_string_without_whitespace")
+
+      }
+
       "removes all whitespace from a string with a colName argument" - {
 
         val sourceDF = spark.createDF(
