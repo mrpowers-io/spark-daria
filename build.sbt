@@ -28,6 +28,9 @@ artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   artifact.name + "_" + sv.binary + "-" + sparkVersion + "_" + module.revision + "." + artifact.extension
 }
 
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
+assemblyJarName in assembly := s"${name.value}_${scalaBinaryVersion.value}-${sparkVersion}_${version.value}.jar"
+
 // All Spark Packages need a license
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
