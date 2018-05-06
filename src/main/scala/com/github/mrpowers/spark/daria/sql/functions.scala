@@ -1,6 +1,5 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.commons.text.WordUtils
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 
@@ -110,8 +109,17 @@ object functions {
    *
    * @group string_funcs
    */
-  def capitalizeFully(delimiters: List[Char]) = {
-    udf((s: String) => WordUtils.capitalizeFully(s, delimiters: _*))
+  val capitalizeFully = udf[Option[String], String, String](capitalizeFullyFun)
+
+  def capitalizeFullyFun(colName: String, delimiters: String): Option[String] = {
+    val d = Option(delimiters).getOrElse(return None)
+    val c = Option(colName).getOrElse(return None)
+    //    Some(c.toLowerCase.split(d).map(_.capitalize).mkString(d))
+    var memo: String = c
+    d.split("").foreach { delimiter: String =>
+      memo = memo.split(delimiter).map(_.capitalize).mkString(delimiter)
+    }
+    Some(memo)
   }
 
   /**

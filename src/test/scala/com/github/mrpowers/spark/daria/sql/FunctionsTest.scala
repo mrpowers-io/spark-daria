@@ -57,59 +57,9 @@ object FunctionsTest
 
     'removeAllWhitespace - {
 
-      "removes all whitespace from a string with a column argument" - {
-
-        val sourceDF = spark.createDF(
-          List(
-            ("Bruce   willis   "),
-            ("    obama"),
-            ("  nice  hair person  "),
-            (null)
-          ), List(
-            ("some_string", StringType, true)
-          )
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "some_string_without_whitespace",
-          functions.removeAllWhitespace(col("some_string"))
-        )
-
-        val expectedDF = spark.createDF(
-          List(
-            ("Bruce   willis   ", "Brucewillis"),
-            ("    obama", "obama"),
-            ("  nice  hair person  ", "nicehairperson"),
-            (null, null)
-          ), List(
-            ("some_string", StringType, true),
-            ("some_string_without_whitespace", StringType, true)
-          )
-        )
-
-        assertSmallDataFrameEquality(actualDF, expectedDF)
-
-      }
-
       "removes all whitespace from a string with a colName argument" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("Bruce   willis   "),
-            ("    obama"),
-            ("  nice  hair person  "),
-            (null)
-          ), List(
-            ("some_string", StringType, true)
-          )
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "some_string_without_whitespace",
-          functions.removeAllWhitespace("some_string")
-        )
-
-        val expectedDF = spark.createDF(
+        val df = spark.createDF(
           List(
             ("Bruce   willis   ", "Brucewillis"),
             ("    obama", "obama"),
@@ -117,11 +67,14 @@ object FunctionsTest
             (null, null)
           ), List(
             ("some_string", StringType, true),
-            ("some_string_without_whitespace", StringType, true)
+            ("expected", StringType, true)
           )
-        )
+        ).withColumn(
+            "some_string_without_whitespace",
+            functions.removeAllWhitespace("some_string")
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertColumnEquality(df, "expected", "some_string_without_whitespace")
 
       }
 
@@ -260,7 +213,7 @@ object FunctionsTest
         )
 
         val actualDF = sourceDF.select(
-          functions.capitalizeFully(List(','))(col("some_string")).as("some_string_udf")
+          functions.capitalizeFully(col("some_string"), lit(",")).as("some_string_udf")
         )
 
         val expectedDF = spark.createDF(
@@ -278,6 +231,44 @@ object FunctionsTest
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
+      }
+
+      "can be called with multiple delimiters" - {
+        val sourceDF = spark.createDF(
+          List(
+            ("Bruce,willis"),
+            ("Trump,donald"),
+            ("clinton,Hillary"),
+            ("Brack/obama"),
+            ("george w./bush"),
+            (null)
+          ), List(
+            ("some_string", StringType, true)
+          )
+        )
+
+        val actualDF = sourceDF.withColumn(
+          "some_string_udf",
+          functions.capitalizeFully(
+            col("some_string"),
+            lit("/,")
+          )
+        ).select("some_string_udf")
+
+        val expectedDF = spark.createDF(
+          List(
+            ("Bruce,Willis"),
+            ("Trump,Donald"),
+            ("Clinton,Hillary"),
+            ("Brack/Obama"),
+            ("George w./Bush"),
+            (null)
+          ), List(
+            ("some_string_udf", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
       }
 
     }

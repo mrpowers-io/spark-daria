@@ -2,7 +2,6 @@ package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import com.github.mrpowers.spark.daria.sql.functions.truncate
-import org.apache.commons.text.WordUtils
 import org.apache.spark.sql.functions.{col, regexp_replace}
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.{Column, DataFrame}
@@ -100,7 +99,7 @@ object transformations {
    */
   def titleCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(colName, WordUtils.capitalizeFully(colName))
+      memoDF.withColumnRenamed(colName, colName.toLowerCase().split(' ').map(_.capitalize).mkString(" "))
     }
   }
 

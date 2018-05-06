@@ -19,7 +19,6 @@ val sparkVersion = "2.3.0"
 val sparkFastTestsVersion = s"v${sparkVersion}_0.8.0"
 
 libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
-libraryDependencies += "org.apache.commons" % "commons-text" % "1.1" % "provided"
 
 libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % sparkFastTestsVersion % "test"
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
