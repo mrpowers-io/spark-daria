@@ -240,7 +240,7 @@ object FunctionsTest
             ("Trump,donald"),
             ("clinton,Hillary"),
             ("Brack/obama"),
-            ("george w./bush"),
+            ("george w. bush"),
             (null)
           ), List(
             ("some_string", StringType, true)
@@ -251,7 +251,7 @@ object FunctionsTest
           "some_string_udf",
           functions.capitalizeFully(
             col("some_string"),
-            lit("/,")
+            lit("/, ")
           )
         ).select("some_string_udf")
 
@@ -261,7 +261,7 @@ object FunctionsTest
             ("Trump,Donald"),
             ("Clinton,Hillary"),
             ("Brack/Obama"),
-            ("George w./Bush"),
+            ("George W. Bush"),
             (null)
           ), List(
             ("some_string_udf", StringType, true)
