@@ -114,12 +114,19 @@ object functions {
   def capitalizeFullyFun(colName: String, delimiters: String): Option[String] = {
     val d = Option(delimiters).getOrElse(return None)
     val c = Option(colName).getOrElse(return None)
-    //    Some(c.toLowerCase.split(d).map(_.capitalize).mkString(d))
-    var memo: String = c
-    d.split("").foreach { delimiter: String =>
-      memo = memo.split(delimiter).map(_.capitalize).mkString(delimiter)
-    }
-    Some(memo)
+    // initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
+    var previousLetter: Char = '\0'
+    Some(
+      c.map { (letter: Char) =>
+        if (d.contains(previousLetter) || previousLetter.equals('\0')) {
+          previousLetter = letter
+          letter.toUpper
+        } else {
+          previousLetter = letter
+          letter.toLower
+        }
+      }
+    )
   }
 
   /**

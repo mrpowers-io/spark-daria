@@ -199,76 +199,49 @@ object FunctionsTest
 
       "uses the supplied delimeter to identify word breaks with org.apache.commons WordUtils.capitalizeFully" - {
 
-        val sourceDF = spark.createDF(
+        val df = spark.createDF(
           List(
-            ("Bruce,willis"),
-            ("Trump,donald"),
-            ("clinton,Hillary"),
-            ("Brack obama"),
-            ("george w. bush"),
-            (null)
+            ("Bruce,willis", "Bruce,Willis"),
+            ("Trump,donald", "Trump,Donald"),
+            ("clinton,Hillary", "Clinton,Hillary"),
+            ("Brack obama", "Brack obama"),
+            ("george w. bush", "George w. bush"),
+            (null, null)
           ), List(
-            ("some_string", StringType, true)
+            ("some_string", StringType, true),
+            ("expected", StringType, true)
           )
-        )
-
-        val actualDF = sourceDF.select(
-          functions.capitalizeFully(col("some_string"), lit(",")).as("some_string_udf")
-        )
-
-        val expectedDF = spark.createDF(
-          List(
-            ("Bruce,Willis"),
-            ("Trump,Donald"),
-            ("Clinton,Hillary"),
-            ("Brack obama"),
-            ("George w. bush"),
-            (null)
-          ), List(
-            ("some_string_udf", StringType, true)
+        ).withColumn(
+            "some_string_udf",
+            functions.capitalizeFully(col("some_string"), lit(","))
           )
-        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertColumnEquality(df, "expected", "some_string_udf")
 
       }
 
       "can be called with multiple delimiters" - {
-        val sourceDF = spark.createDF(
+
+        val df = spark.createDF(
           List(
-            ("Bruce,willis"),
-            ("Trump,donald"),
-            ("clinton,Hillary"),
-            ("Brack/obama"),
-            ("george w. bush"),
-            (null)
+            ("Bruce,willis", "Bruce,Willis"),
+            ("Trump,donald", "Trump,Donald"),
+            ("clinton,Hillary", "Clinton,Hillary"),
+            ("Brack/obama", "Brack/Obama"),
+            ("george w. bush", "George W. Bush"),
+            ("RALPHY", "Ralphy"),
+            (null, null)
           ), List(
-            ("some_string", StringType, true)
+            ("some_string", StringType, true),
+            ("expected", StringType, true)
           )
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "some_string_udf",
-          functions.capitalizeFully(
-            col("some_string"),
-            lit("/, ")
+        ).withColumn(
+            "some_string_udf",
+            functions.capitalizeFully(col("some_string"), lit("/, "))
           )
-        ).select("some_string_udf")
 
-        val expectedDF = spark.createDF(
-          List(
-            ("Bruce,Willis"),
-            ("Trump,Donald"),
-            ("Clinton,Hillary"),
-            ("Brack/Obama"),
-            ("George W. Bush"),
-            (null)
-          ), List(
-            ("some_string_udf", StringType, true)
-          )
-        )
+        assertColumnEquality(df, "expected", "some_string_udf")
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
       }
 
     }
