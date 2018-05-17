@@ -3,7 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import com.github.mrpowers.spark.daria.sql.functions.truncate
 import org.apache.spark.sql.functions.{col, regexp_replace}
-import org.apache.spark.sql.types.StructField
+import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)

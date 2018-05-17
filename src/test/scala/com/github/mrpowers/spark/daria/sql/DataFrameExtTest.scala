@@ -2,7 +2,9 @@ package com.github.mrpowers.spark.daria.sql
 
 import utest._
 import SparkSessionExt._
-import org.apache.spark.sql.types.{IntegerType, StringType}
+import org.apache.spark.sql.types.{StructType, _}
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.functions._
 import DataFrameExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
@@ -453,6 +455,149 @@ object DataFrameExtTest
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
+      }
+
+    }
+
+    'flattenSchema - {
+
+      "flattens schema with the default delimiter" - {
+
+        val data = Seq(
+          Row("this", "is", Row("something", "cool"))
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField("a", StringType, true),
+            StructField("b", StringType, true),
+            StructField(
+              "c",
+              StructType(
+                Seq(
+                  StructField("foo", StringType, true),
+                  StructField("bar", StringType, true)
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val df = spark.createDataFrame(
+          spark.sparkContext.parallelize(data),
+          StructType(schema)
+        ).flattenSchema()
+
+        val expectedDF = spark.createDF(
+          List(
+            ("this", "is", "something", "cool")
+          ), List(
+            ("a", StringType, true),
+            ("b", StringType, true),
+            ("c.foo", StringType, true),
+            ("c.bar", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF)
+
+      }
+
+      "flattens deeply nested schemas" - {
+
+        val data = Seq(
+          Row("this", "is", Row("something", "cool", Row("i", "promise")))
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField("a", StringType, true),
+            StructField("b", StringType, true),
+            StructField(
+              "c",
+              StructType(
+                Seq(
+                  StructField("foo", StringType, true),
+                  StructField("bar", StringType, true),
+                  StructField(
+                    "d",
+                    StructType(
+                      Seq(
+                        StructField("crazy", StringType, true),
+                        StructField("deep", StringType, true)
+                      )
+                    )
+                  )
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val df = spark.createDataFrame(
+          spark.sparkContext.parallelize(data),
+          StructType(schema)
+        ).flattenSchema()
+
+        val expectedDF = spark.createDF(
+          List(
+            ("this", "is", "something", "cool", "i", "promise")
+          ), List(
+            ("a", StringType, true),
+            ("b", StringType, true),
+            ("c.foo", StringType, true),
+            ("c.bar", StringType, true),
+            ("c.d.crazy", StringType, true),
+            ("c.d.deep", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF)
+
+      }
+
+      "allows for different column delimiters" - {
+
+        val data = Seq(
+          Row("this", "is", Row("something", "cool"))
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField("a", StringType, true),
+            StructField("b", StringType, true),
+            StructField(
+              "c",
+              StructType(
+                Seq(
+                  StructField("foo", StringType, true),
+                  StructField("bar", StringType, true)
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val df = spark.createDataFrame(
+          spark.sparkContext.parallelize(data),
+          StructType(schema)
+        ).flattenSchema(delimiter = "_")
+
+        val expectedDF = spark.createDF(
+          List(
+            ("this", "is", "something", "cool")
+          ), List(
+            ("a", StringType, true),
+            ("b", StringType, true),
+            ("c_foo", StringType, true),
+            ("c_bar", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF)
       }
 
     }

@@ -3,6 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
+import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
@@ -168,6 +169,12 @@ object DataFrameExt {
       }
 
       transformedDF
+    }
+
+    def flattenSchema(delimiter: String = ".", prefix: String = null): DataFrame = {
+      df.select(
+        StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*
+      )
     }
 
   }
