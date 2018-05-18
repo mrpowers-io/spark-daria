@@ -461,6 +461,51 @@ object DataFrameExtTest
 
     'flattenSchema - {
 
+      "uses the StackOverflow answer format" - {
+
+        val data = Seq(
+          Row(Row("this", "is"), "something", "cool", ";)")
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField("bar", StringType, true),
+                  StructField("baz", StringType, true)
+                )
+              ),
+              true
+            ),
+            StructField("x", StringType, true),
+            StructField("y", StringType, true),
+            StructField("z", StringType, true)
+          )
+        )
+
+        val df = spark.createDataFrame(
+          spark.sparkContext.parallelize(data),
+          StructType(schema)
+        ).flattenSchema("_")
+
+        val expectedDF = spark.createDF(
+          List(
+            ("this", "is", "something", "cool", ";)")
+          ), List(
+            ("foo_bar", StringType, true),
+            ("foo_baz", StringType, true),
+            ("x", StringType, true),
+            ("y", StringType, true),
+            ("z", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF)
+
+      }
+
       "flattens schema with the default delimiter" - {
 
         val data = Seq(
