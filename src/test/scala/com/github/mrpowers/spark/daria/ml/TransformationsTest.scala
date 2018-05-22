@@ -2,11 +2,13 @@ package com.github.mrpowers.spark.daria.ml
 
 import com.github.mrpowers.spark.daria.sql.SparkSessionTestWrapper
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
-import org.apache.spark.sql.types.DoubleType
+import org.apache.spark.sql.types.{DoubleType, StringType}
 import utest._
+import com.github.mrpowers.spark.fast.tests.ColumnComparer
 
 object TransformationsTest
     extends TestSuite
+    with ColumnComparer
     with SparkSessionTestWrapper {
 
   val tests = Tests {
@@ -24,6 +26,46 @@ object TransformationsTest
             ("expected", new org.apache.spark.mllib.linalg.VectorUDT, true)
           )
         ).transform(transformations.withVectorizedFeatures(Array("gender", "age")))
+
+      }
+
+    }
+
+    'withLabel - {
+
+      "adds a label column" - {
+
+        val df = spark.createDF(
+          List(
+            (0.0, 1.0),
+            (1.0, 0.0)
+          ), List(
+            ("survived", DoubleType, true),
+            ("expected", DoubleType, true)
+          )
+        )
+          .transform(transformations.withLabel("survived"))
+
+        assertColumnEquality(df, "expected", "label")
+
+      }
+
+      "works if the label column is a string" - {
+
+        val df = spark.createDF(
+          List(
+            ("no", 0.0),
+            ("yes", 1.0),
+            ("hi", 2.0),
+            ("no", 0.0)
+          ), List(
+            ("survived", StringType, true),
+            ("expected", DoubleType, true)
+          )
+        )
+          .transform(transformations.withLabel("survived"))
+
+        assertColumnEquality(df, "expected", "label")
 
       }
 

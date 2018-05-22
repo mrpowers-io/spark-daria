@@ -1,6 +1,6 @@
 package com.github.mrpowers.spark.daria.ml
 
-import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
 import org.apache.spark.sql._
 
 object transformations {
@@ -17,6 +17,19 @@ object transformations {
       .setInputCols(featureColNames)
       .setOutputCol(outputColName)
     assembler.transform(df)
+  }
+
+  def withLabel(
+    inputColName: String,
+    outputColName: String = "label"
+  )(df: DataFrame) = {
+    val labelIndexer: StringIndexer = new StringIndexer()
+      .setInputCol(inputColName)
+      .setOutputCol(outputColName)
+
+    labelIndexer
+      .fit(df)
+      .transform(df)
   }
 
 }
