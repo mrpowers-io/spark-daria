@@ -4,7 +4,6 @@ import utest._
 import SparkSessionExt._
 import org.apache.spark.sql.types.{StructType, _}
 import org.apache.spark.sql.Row
-import org.apache.spark.sql.functions._
 import DataFrameExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
