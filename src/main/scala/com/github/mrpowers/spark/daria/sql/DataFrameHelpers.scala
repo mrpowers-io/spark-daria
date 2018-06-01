@@ -1,9 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.types.{IntegerType, LongType, StructField, StructType}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import scala.reflect.runtime.universe._
-
 import scala.reflect.ClassTag
 
 object DataFrameHelpers extends DataFrameValidator {
@@ -123,6 +124,28 @@ object DataFrameHelpers extends DataFrameValidator {
    */
   def toArrayOfMaps(df: DataFrame) = {
     df.collect.map(r => Map(df.columns.zip(r.toSeq): _*))
+  }
+
+  def withOrderedIndex(df: DataFrame, spark: SparkSession): DataFrame = {
+    val rows: RDD[Row] = df.rdd.zipWithIndex().map {
+      case (row, idx) =>
+        Row.fromSeq(Seq(idx) ++ row.toSeq)
+    }
+    val schema = StructType(
+      Array(StructField("ordered_index", LongType, true)) ++ df.schema.fields
+    )
+    spark.createDataFrame(rows, schema)
+  }
+
+  def smush(df1: DataFrame, df2: DataFrame, spark: SparkSession) = {
+    val df1a = withOrderedIndex(df1, spark)
+      .transform(transformations.prependToColName("df1_"))
+    val df2a = withOrderedIndex(df2, spark)
+      .transform(transformations.prependToColName("df2_"))
+    df1a
+      .join(df2a, df1a("df1_ordered_index") <=> df2a("df2_ordered_index"), "left")
+      .drop("df1_ordered_index")
+      .drop("df2_ordered_index")
   }
 
 }

@@ -1,13 +1,14 @@
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
-
-import org.apache.spark.sql.types.{IntegerType, StringType}
+import org.apache.spark.sql.types.{IntegerType, LongType, StringType}
 import SparkSessionExt._
+import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
 object DataFrameHelpersTest
     extends TestSuite
-    with SparkSessionTestWrapper {
+    with SparkSessionTestWrapper
+    with DataFrameComparer {
 
   val tests = Tests {
 
@@ -89,6 +90,84 @@ object DataFrameHelpersTest
         actual ==> expected
 
       }
+
+    }
+
+    'withOrderedIndex - {
+
+      "appends an ordered_index column to a DataFrame" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            ("Bart cool", "moto cool"),
+            ("cool James", "droid fun"),
+            (null, null)
+          ), List(
+            ("person", StringType, true),
+            ("phone", StringType, true)
+          )
+        )
+
+        val actualDF = DataFrameHelpers.withOrderedIndex(sourceDF, spark)
+
+        val expectedDF = spark.createDF(
+          List(
+            (0L, "Bart cool", "moto cool"),
+            (1L, "cool James", "droid fun"),
+            (2L, null, null)
+          ), List(
+            ("ordered_index", LongType, true),
+            ("person", StringType, true),
+            ("phone", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+
+      }
+
+    }
+
+    'smush - {
+
+      val df1 = spark.createDF(
+        List(
+          ("bob", 10),
+          ("frank", 15),
+          (null, null)
+        ), List(
+          ("name", StringType, true),
+          ("age", IntegerType, true)
+        )
+      )
+
+      val df2 = spark.createDF(
+        List(
+          ("bob", 12),
+          ("frank", 15),
+          (null, null)
+        ), List(
+          ("name", StringType, true),
+          ("age", IntegerType, true)
+        )
+      )
+
+      val actualDF = DataFrameHelpers.smush(df1, df2, spark)
+
+      val expectedDF = spark.createDF(
+        List(
+          ("bob", 10, "bob", 12),
+          ("frank", 15, "frank", 15),
+          (null, null, null, null)
+        ), List(
+          ("df1_name", StringType, true),
+          ("df1_age", IntegerType, true),
+          ("df2_name", StringType, true),
+          ("df2_age", IntegerType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(actualDF, expectedDF)
 
     }
 

@@ -2,9 +2,11 @@ package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import com.github.mrpowers.spark.daria.sql.functions.truncate
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{col, regexp_replace}
 import org.apache.spark.sql.types.{StructField, StructType}
-import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.{Column, DataFrame, Row, SparkSession}
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
@@ -100,6 +102,12 @@ object transformations {
   def titleCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(colName, colName.toLowerCase().split(' ').map(_.capitalize).mkString(" "))
+    }
+  }
+
+  def prependToColName(str: String)(df: DataFrame): DataFrame = {
+    df.columns.foldLeft(df) { (memoDF, colName) =>
+      memoDF.withColumnRenamed(colName, str + colName)
     }
   }
 
