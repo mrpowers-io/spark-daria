@@ -455,6 +455,48 @@ object FunctionsTest
 
       }
 
+      'bucketFinder - {
+
+        "finds what bucket a column value belongs in" - {
+
+          val df = spark.createDF(
+            List(
+              // works for standard use cases
+              (24, "20-30"),
+              (45, "30-70"),
+              // works with range boundries
+              (10, "10-20"),
+              (20, "10-20"),
+              // works with less than / greater than
+              (3, "<10"),
+              (99, ">70"),
+              // works with null
+              (null, null)
+            ),
+            List(
+              ("some_num", IntegerType, true),
+              ("expected", StringType, true)
+            )
+          ).withColumn(
+              "bucket",
+              functions.bucketFinder(
+                col("some_num"),
+                Array(
+                  (null, 10),
+                  (10, 20),
+                  (20, 30),
+                  (30, 70),
+                  (70, null)
+                )
+              )
+            )
+
+          assertColumnEquality(df, "expected", "bucket")
+
+        }
+
+      }
+
     }
 
   }
