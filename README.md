@@ -64,6 +64,8 @@ col("is_nice_person").isNull && col("likes_peanut_butter").isFalse
 
 [This blog post](https://medium.com/@mrpowers/manually-creating-spark-dataframes-b14dae906393) describes how to use the spark-daria `createDF()` method that's much better than the `toDF()` and `createDataFrame()` methods provided by Spark.
 
+See the `ColumnExt`, `DataFrameExt`, and `SparkSessionExt` objects for all the core extensions offered by spark-daria.
+
 ### Column functions
 
 Column functions can be used in addition to the [org.apache.spark.sql.functions](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.functions$).
