@@ -463,13 +463,15 @@ object FunctionsTest
             List(
               // works for standard use cases
               (24, "20-30"),
-              (45, "30-70"),
+              (45, "30-60"),
               // works with range boundries
               (10, "10-20"),
               (20, "10-20"),
               // works with less than / greater than
               (3, "<10"),
               (99, ">70"),
+              // works for numbers that don't fall in any buckets
+              (65, null),
               // works with null
               (null, null)
             ),
@@ -485,9 +487,52 @@ object FunctionsTest
                   (null, 10),
                   (10, 20),
                   (20, 30),
-                  (30, 70),
+                  (30, 60),
                   (70, null)
                 )
+              )
+            )
+
+          assertColumnEquality(df, "expected", "bucket")
+
+        }
+
+        "can use inclusive bucket ranges" - {
+
+          val df = spark.createDF(
+            List(
+              // works for standard use cases
+              (15, "10-20"),
+              // works with range boundries
+              (10, "10-20"),
+              (20, "10-20"),
+              (50, "41-50"),
+              (40, "31-40"),
+              // works with less than / greater than
+              (9, "<10"),
+              (72, ">70"),
+              // works for numbers that don't fall in any bucket
+              (65, null),
+              // works with null
+              (null, null)
+            ),
+            List(
+              ("some_num", IntegerType, true),
+              ("expected", StringType, true)
+            )
+          ).withColumn(
+              "bucket",
+              functions.bucketFinder(
+                col("some_num"),
+                Array(
+                  (null, 10),
+                  (10, 20),
+                  (21, 30),
+                  (31, 40),
+                  (41, 50),
+                  (70, null)
+                ),
+                inclusiveBoundries = true
               )
             )
 
