@@ -455,90 +455,129 @@ object FunctionsTest
 
       }
 
-      'bucketFinder - {
+    }
 
-        "finds what bucket a column value belongs in" - {
+    'bucketFinder - {
 
-          val df = spark.createDF(
-            List(
-              // works for standard use cases
-              (24, "20-30"),
-              (45, "30-60"),
-              // works with range boundries
-              (10, "10-20"),
-              (20, "10-20"),
-              // works with less than / greater than
-              (3, "<10"),
-              (99, ">70"),
-              // works for numbers that don't fall in any buckets
-              (65, null),
-              // works with null
-              (null, null)
-            ),
-            List(
-              ("some_num", IntegerType, true),
-              ("expected", StringType, true)
-            )
-          ).withColumn(
-              "bucket",
-              functions.bucketFinder(
-                col("some_num"),
-                Array(
-                  (null, 10),
-                  (10, 20),
-                  (20, 30),
-                  (30, 60),
-                  (70, null)
-                )
+      "finds what bucket a column value belongs in" - {
+
+        val df = spark.createDF(
+          List(
+            // works for standard use cases
+            (24, "20-30"),
+            (45, "30-60"),
+            // works with range boundries
+            (10, "10-20"),
+            (20, "10-20"),
+            // works with less than / greater than
+            (3, "<10"),
+            (99, ">70"),
+            // works for numbers that don't fall in any buckets
+            (65, null),
+            // works with null
+            (null, null)
+          ),
+          List(
+            ("some_num", IntegerType, true),
+            ("expected", StringType, true)
+          )
+        ).withColumn(
+            "bucket",
+            functions.bucketFinder(
+              col("some_num"),
+              Array(
+                (null, 10),
+                (10, 20),
+                (20, 30),
+                (30, 60),
+                (70, null)
               )
             )
+          )
 
-          assertColumnEquality(df, "expected", "bucket")
+        assertColumnEquality(df, "expected", "bucket")
 
-        }
+      }
 
-        "can use inclusive bucket ranges" - {
+      "can use inclusive bucket ranges" - {
 
-          val df = spark.createDF(
-            List(
-              // works for standard use cases
-              (15, "10-20"),
-              // works with range boundries
-              (10, "10-20"),
-              (20, "10-20"),
-              (50, "41-50"),
-              (40, "31-40"),
-              // works with less than / greater than
-              (9, "<10"),
-              (72, ">70"),
-              // works for numbers that don't fall in any bucket
-              (65, null),
-              // works with null
-              (null, null)
-            ),
-            List(
-              ("some_num", IntegerType, true),
-              ("expected", StringType, true)
+        val df = spark.createDF(
+          List(
+            // works for standard use cases
+            (15, "10-20"),
+            // works with range boundries
+            (10, "10-20"),
+            (20, "10-20"),
+            (50, "41-50"),
+            (40, "31-40"),
+            // works with less than / greater than
+            (9, "<10"),
+            (72, ">70"),
+            // works for numbers that don't fall in any bucket
+            (65, null),
+            // works with null
+            (null, null)
+          ),
+          List(
+            ("some_num", IntegerType, true),
+            ("expected", StringType, true)
+          )
+        ).withColumn(
+            "bucket",
+            functions.bucketFinder(
+              col("some_num"),
+              Array(
+                (null, 10),
+                (10, 20),
+                (21, 30),
+                (31, 40),
+                (41, 50),
+                (70, null)
+              ),
+              inclusiveBoundries = true
             )
-          ).withColumn(
-              "bucket",
-              functions.bucketFinder(
-                col("some_num"),
-                Array(
-                  (null, 10),
-                  (10, 20),
-                  (21, 30),
-                  (31, 40),
-                  (41, 50),
-                  (70, null)
-                ),
-                inclusiveBoundries = true
-              )
+          )
+
+        assertColumnEquality(df, "expected", "bucket")
+
+      }
+
+      "works with a highly customized use case" - {
+
+        val df = spark.createDF(
+          List(
+            (0, "<1"),
+            (1, "1-1"),
+            (2, "2-4"),
+            (3, "2-4"),
+            (4, "2-4"),
+            (10, "5-74"),
+            (75, ">=75"),
+            (90, ">=75"),
+            (null, null)
+          ),
+          List(
+            ("some_num", IntegerType, true),
+            ("expected", StringType, true)
+          )
+        ).withColumn(
+            "bucket",
+            functions.bucketFinder(
+              col("some_num"),
+              Array(
+                (null, 1),
+                (1, 1),
+                (2, 4),
+                (5, 74),
+                (75, null)
+              ),
+              inclusiveBoundries = true,
+              lowestBoundLte = false,
+              hightestBoundGte = true
             )
+          )
 
-          assertColumnEquality(df, "expected", "bucket")
-
-        }
+        assertColumnEquality(df, "expected", "bucket")
 
       }
 

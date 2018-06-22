@@ -330,47 +330,44 @@ object functions {
   def bucketFinder(
     col: Column,
     buckets: Array[(Any, Any)],
-    inclusiveBoundries: Boolean = false
+    inclusiveBoundries: Boolean = false,
+    lowestBoundLte: Boolean = false,
+    hightestBoundGte: Boolean = false
   ): Column = {
 
-    val b = if (inclusiveBoundries) {
-      buckets.map { res: (Any, Any) =>
-        when(
-          col.isNull,
-          lit(null)
+    val inclusiveBoundriesCol = lit(inclusiveBoundries)
+    val lowerBoundLteCol = lit(lowestBoundLte)
+    val upperBoundGteCol = lit(hightestBoundGte)
+
+    val b = buckets.map { res: (Any, Any) =>
+      when(
+        col.isNull,
+        lit(null)
+      )
+        .when(
+          lowerBoundLteCol === false && lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
+          lit(s"<${res._2}")
         )
-          .when(
-            lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
-            lit(s"<${res._2}")
-          )
-          .when(
-            lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
-            lit(s">${res._1}")
-          )
-          .when(
-            col.geq(res._1) && col.leq(res._2),
-            lit(s"${res._1}-${res._2}")
-          )
-      }
-    } else {
-      buckets.map { res: (Any, Any) =>
-        when(
-          col.isNull,
-          lit(null)
+        .when(
+          lowerBoundLteCol === true && lit(res._1).isNull && lit(res._2).isNotNull && col <= lit(res._2),
+          lit(s"<=${res._2}")
         )
-          .when(
-            lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
-            lit(s"<${res._2}")
-          )
-          .when(
-            lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
-            lit(s">${res._1}")
-          )
-          .when(
-            col.between(res._1, res._2),
-            lit(s"${res._1}-${res._2}")
-          )
-      }
+        .when(
+          upperBoundGteCol === false && lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
+          lit(s">${res._1}")
+        )
+        .when(
+          upperBoundGteCol === true && lit(res._1).isNotNull && lit(res._2).isNull && col >= lit(res._1),
+          lit(s">=${res._1}")
+        )
+        .when(
+          inclusiveBoundriesCol === true && col.geq(res._1) && col.leq(res._2),
+          lit(s"${res._1}-${res._2}")
+        )
+        .when(
+          inclusiveBoundriesCol === false && col.between(res._1, res._2),
+          lit(s"${res._1}-${res._2}")
+        )
     }
 
     coalesce(b: _*)
