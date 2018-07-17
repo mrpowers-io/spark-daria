@@ -12,7 +12,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 name := "spark-daria"
 
-version := "0.22.0"
+version := "0.22.1"
 
 scalaVersion := "2.11.12"
 val sparkVersion = "2.3.0"
