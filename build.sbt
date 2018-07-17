@@ -15,7 +15,7 @@ name := "spark-daria"
 version := "0.22.1"
 
 scalaVersion := "2.11.12"
-val sparkVersion = "2.2.1"
+val sparkVersion = "2.3.0"
 val sparkFastTestsVersion = s"v${sparkVersion}_0.8.0"
 
 libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
