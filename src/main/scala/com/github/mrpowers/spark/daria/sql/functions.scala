@@ -361,11 +361,11 @@ object functions {
           lit(s">=${res._1}")
         )
         .when(
-          inclusiveBoundriesCol === true && col.geq(res._1) && col.leq(res._2),
+          inclusiveBoundriesCol === true && col.between(res._1, res._2),
           lit(s"${res._1}-${res._2}")
         )
         .when(
-          inclusiveBoundriesCol === false && col.between(res._1, res._2),
+          inclusiveBoundriesCol === false && col.gt(res._1) && col.lt(res._2),
           lit(s"${res._1}-${res._2}")
         )
     }

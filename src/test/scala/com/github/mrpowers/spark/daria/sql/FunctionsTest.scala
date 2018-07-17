@@ -491,7 +491,8 @@ object FunctionsTest
                 (20, 30),
                 (30, 60),
                 (70, null)
-              )
+              ),
+              inclusiveBoundries = true
             )
           )
 
@@ -581,8 +582,36 @@ object FunctionsTest
 
       }
 
+      "works with a highly customized use case" - {
+
+        val df = spark.createDF(
+          List(
+            (0, "<1"),
+            (10, "1-11"),
+            (11, ">=11")
+          ),
+          List(
+            ("some_num", IntegerType, true),
+            ("expected", StringType, true)
+          )
+        ).withColumn(
+            "bucket",
+            functions.bucketFinder(
+              col("some_num"),
+              Array(
+                (null, 1),
+                (1, 11),
+                (11, null)
+              ),
+              inclusiveBoundries = false,
+              hightestBoundGte = true
+            )
+          )
+
+        assertColumnEquality(df, "expected", "bucket")
+
+      }
+
     }
-
   }
-
 }
