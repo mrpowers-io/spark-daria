@@ -574,7 +574,7 @@ object FunctionsTest
               ),
               inclusiveBoundries = true,
               lowestBoundLte = false,
-              hightestBoundGte = true
+              highestBoundGte = true
             )
           )
 
@@ -604,7 +604,7 @@ object FunctionsTest
                 (11, null)
               ),
               inclusiveBoundries = false,
-              hightestBoundGte = true
+              highestBoundGte = true
             )
           )
 

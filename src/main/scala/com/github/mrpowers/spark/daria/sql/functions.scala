@@ -332,12 +332,12 @@ object functions {
     buckets: Array[(Any, Any)],
     inclusiveBoundries: Boolean = false,
     lowestBoundLte: Boolean = false,
-    hightestBoundGte: Boolean = false
+    highestBoundGte: Boolean = false
   ): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
     val lowerBoundLteCol = lit(lowestBoundLte)
-    val upperBoundGteCol = lit(hightestBoundGte)
+    val upperBoundGteCol = lit(highestBoundGte)
 
     val b = buckets.map { res: (Any, Any) =>
       when(
