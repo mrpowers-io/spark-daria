@@ -93,6 +93,41 @@ object DataFrameHelpers extends DataFrameValidator {
   }
 
   /**
+   * Converts a DataFrame column to a List of values
+   * '''N.B. This method uses `collect` and should only be called on small DataFrames.'''
+   *
+   * This function converts a column to a list of items.
+   *
+   * Suppose we have the following `sourceDF`:
+   *
+   * {{{
+   * +---+
+   * |num|
+   * +---+
+   * |  1|
+   * |  2|
+   * |  3|
+   * +---+
+   * }}}
+   *
+   * Let's convert the `num` column to a List of values.  Let's run the code and view the results.
+   *
+   * {{{
+   * val actual = DataFrameHelpers.columnToList[Int](sourceDF, "num")
+   *
+   * println(actual)
+   *
+   * // List(1, 2, 3)
+   * }}}
+   */
+  def columnToList[T: ClassTag](
+    df: DataFrame,
+    colName: String
+  ): List[T] = {
+    columnToArray[T](df, colName).toList
+  }
+
+  /**
    * Converts a DataFrame to an Array of Maps
    * '''N.B. This method uses `collect` and should only be called on small DataFrames.'''
    *

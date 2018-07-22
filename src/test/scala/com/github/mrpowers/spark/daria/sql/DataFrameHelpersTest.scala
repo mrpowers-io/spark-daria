@@ -65,6 +65,28 @@ object DataFrameHelpersTest
 
     }
 
+    'columnToList - {
+
+      "converts a column to a list" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            1,
+            2,
+            3
+          ), List(
+            ("num", IntegerType, true)
+          )
+        )
+
+        val actual = DataFrameHelpers.columnToList[Int](sourceDF, "num")
+
+        actual ==> List(1, 2, 3)
+
+      }
+
+    }
+
     'toArrayOfMaps - {
 
       "converts a DataFrame into an array of maps" - {
