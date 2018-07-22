@@ -6,11 +6,13 @@ import org.apache.spark.sql.types.{StringType, IntegerType}
 import utest._
 
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
+import com.github.mrpowers.spark.fast.tests.ColumnComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 
 object TransformationsTest
     extends TestSuite
     with DataFrameComparer
+    with ColumnComparer
     with SparkSessionTestWrapper {
 
   val tests = Tests {
@@ -335,6 +337,48 @@ object TransformationsTest
         )
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
+
+      }
+
+    }
+
+    'withColBucket - {
+
+      "buckets a numeric column" - {
+
+        val df = spark.createDF(
+          List(
+            (20, "10-20"),
+            (50, "41-50"),
+            (10, "10-20"),
+            (40, "31-40"),
+            (50, "41-50"),
+            (72, ">70"),
+            (9, "<10"),
+            (null, null),
+            (62, null)
+          ),
+          List(
+            ("some_num", IntegerType, true),
+            ("expected", StringType, true)
+          )
+        ).transform(
+            transformations.withColBucket(
+              colName = "some_num",
+              outputColName = "my_bucket",
+              buckets = Array(
+                (null, 10),
+                (10, 20),
+                (21, 30),
+                (31, 40),
+                (41, 50),
+                (70, null)
+              ),
+              inclusiveBoundries = true
+            )
+          )
+
+        assertColumnEquality(df, "expected", "my_bucket")
 
       }
 

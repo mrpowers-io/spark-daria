@@ -193,4 +193,27 @@ object transformations {
     }
   }
 
+  /**
+   * Categorizes a numeric column in various user specified "buckets"
+   */
+  def withColBucket(
+    colName: String,
+    outputColName: String,
+    buckets: Array[(Any, Any)],
+    inclusiveBoundries: Boolean = false,
+    lowestBoundLte: Boolean = false,
+    highestBoundGte: Boolean = false
+  )(df: DataFrame) = {
+    df.withColumn(
+      outputColName,
+      functions.bucketFinder(
+        col(colName),
+        buckets,
+        inclusiveBoundries,
+        lowestBoundLte,
+        highestBoundGte
+      )
+    )
+  }
+
 }

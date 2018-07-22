@@ -2,7 +2,7 @@ package com.github.mrpowers.spark.daria.ml
 
 import com.github.mrpowers.spark.daria.sql.SparkSessionTestWrapper
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
-import org.apache.spark.sql.types.{DoubleType, StringType}
+import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType}
 import utest._
 import com.github.mrpowers.spark.fast.tests.ColumnComparer
 
