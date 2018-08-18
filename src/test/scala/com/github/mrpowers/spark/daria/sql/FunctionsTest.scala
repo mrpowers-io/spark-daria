@@ -613,5 +613,30 @@ object FunctionsTest
       }
 
     }
+
+    'isLuhnNumber - {
+
+      val df = spark.createDF(
+        List(
+          ("49927398716", true),
+          ("49927398717", false),
+          ("1234567812345678", false),
+          ("1234567812345670", true),
+          ("", false),
+          (null, null)
+        ), List(
+          ("something", StringType, true),
+          ("expected", BooleanType, true)
+        )
+      ).withColumn(
+          "is_something_luhn",
+          functions.isLuhnNumber(col("something"))
+        )
+
+      assertColumnEquality(df, "is_something_luhn", "expected")
+
+    }
+
   }
+
 }

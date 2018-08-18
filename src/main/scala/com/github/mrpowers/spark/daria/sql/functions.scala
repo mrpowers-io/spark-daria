@@ -374,4 +374,22 @@ object functions {
 
   }
 
+  // copied from Rosetta Code: https://rosettacode.org/wiki/Luhn_test_of_credit_card_numbers#Scala
+  private[sql] def isLuhn(str: String): Option[Boolean] = {
+    val s = Option(str).getOrElse(return None)
+    if (s.isEmpty()) {
+      return Some(false)
+    }
+    var (odd, sum) = (true, 0)
+
+    for (int <- str.reverse.map { _.toString.toShort }) {
+      if (odd) sum += int
+      else sum += (int * 2 % 10) + (int / 5)
+      odd = !odd
+    }
+    Some(sum % 10 == 0)
+  }
+
+  val isLuhnNumber = udf[Option[Boolean], String](isLuhn)
+
 }
