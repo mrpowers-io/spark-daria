@@ -12,25 +12,28 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 name := "spark-daria"
 
-version := "0.23.0"
+version := "2.3.0_0.23.1"
 
 scalaVersion := "2.11.12"
-val sparkVersion = "2.3.0"
-val sparkFastTestsVersion = s"v${sparkVersion}_0.12.0"
+sparkVersion := "2.3.0"
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.3.0" % "provided"
 
-libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % sparkFastTestsVersion % "test"
+spName := "mrpowers/spark-daria"
+
+spShortDescription := "Spark helper methods to maximize developer productivity"
+
+spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
+
+libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.12.0" % "test"
+
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-  artifact.name + "_" + sv.binary + "-" + sparkVersion + "_" + module.revision + "." + artifact.extension
+  artifact.name + "-" + module.revision + "." + artifact.extension
 }
-
-assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
-assemblyJarName in assembly := s"${name.value}_${scalaBinaryVersion.value}-${sparkVersion}_${version.value}.jar"
 
 // All Spark Packages need a license
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))

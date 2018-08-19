@@ -622,6 +622,7 @@ object FunctionsTest
           ("49927398717", false),
           ("1234567812345678", false),
           ("1234567812345670", true),
+          ("808401831202241", true),
           ("", false),
           (null, null)
         ), List(
