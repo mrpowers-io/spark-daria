@@ -8,7 +8,7 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(DoubleIndentClassDeclaration, true)
   .setPreference(SpacesAroundMultiImports, false)
 
-resolvers += "jitpack" at "https://jitpack.io"
+resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
 name := "spark-daria"
 
@@ -26,7 +26,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-libraryDependencies += "com.github.mrpowers" % "spark-fast-tests" % "v2.3.0_0.12.0" % "test"
+libraryDependencies += "MrPowers" % "spark-fast-tests" % "2.3.0_0.13.1" % "test"
 
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
