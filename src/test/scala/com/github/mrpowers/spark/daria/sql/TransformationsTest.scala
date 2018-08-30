@@ -1,16 +1,15 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{StringType, IntegerType}
-
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import utest._
-
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import com.github.mrpowers.spark.fast.tests.ColumnComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
+import org.apache.spark.sql.Row
 
 object TransformationsTest
-    extends TestSuite
+  extends TestSuite
     with DataFrameComparer
     with ColumnComparer
     with SparkSessionTestWrapper {
@@ -363,25 +362,108 @@ object TransformationsTest
             ("expected", StringType, true)
           )
         ).transform(
-            transformations.withColBucket(
-              colName = "some_num",
-              outputColName = "my_bucket",
-              buckets = Array(
-                (null, 10),
-                (10, 20),
-                (21, 30),
-                (31, 40),
-                (41, 50),
-                (70, null)
-              ),
-              inclusiveBoundries = true
-            )
+          transformations.withColBucket(
+            colName = "some_num",
+            outputColName = "my_bucket",
+            buckets = Array(
+              (null, 10),
+              (10, 20),
+              (21, 30),
+              (31, 40),
+              (41, 50),
+              (70, null)
+            ),
+            inclusiveBoundries = true
           )
+        )
 
         assertColumnEquality(df, "expected", "my_bucket")
 
       }
 
+    }
+
+    'extractFromJson - {
+
+      val sourceDF = spark.createDF(
+        List(
+          (10, """{"name": "Bart cool", "age": 25}"""),
+          (20, """{"name": "Lisa frost", "age": 27}""")
+        ), List(
+          ("id", IntegerType, true),
+          ("person", StringType, true)
+        )
+      )
+
+      'extractTheCompleteSchema - {
+        val personSchema = StructType(List(
+          StructField("name", StringType),
+          StructField("age", IntegerType)
+        ))
+
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson("person", "personData", personSchema)
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, """{"name": "Bart cool", "age": 25}""", Row("Bart cool", 25)),
+            (20, """{"name": "Lisa frost", "age": 27}""", Row("Lisa frost", 27))
+          ), List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("personData", personSchema, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+      }
+
+      'extractPartialSchema - {
+        val personNameSchema = StructType(List(
+          StructField("name", StringType)
+        ))
+
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson("person", "personData", personNameSchema)
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, """{"name": "Bart cool", "age": 25}""", Row("Bart cool")),
+            (20, """{"name": "Lisa frost", "age": 27}""", Row("Lisa frost"))
+          ), List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("personData", personNameSchema, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+      }
+
+      'extractNonExistingSchema - {
+        val wrongSchema = StructType(List(
+          StructField("wrong_field", StringType)
+        ))
+
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson("person", "personData", wrongSchema)
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, """{"name": "Bart cool", "age": 25}""", Row(None.orNull)),
+            (20, """{"name": "Lisa frost", "age": 27}""", Row(None.orNull))
+          ), List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("personData", wrongSchema, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+      }
     }
 
   }
