@@ -37,16 +37,27 @@ object DataFrameExtTest
 
     'composeTransforms - {
 
-      "runs a list of transforms" - {
-
-        val sourceDF = spark.createDF(
-          List(
-            ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
+      val sourceDF = spark.createDF(
+        List(
+          ("jets"),
+          ("nacional")
+        ), List(
+          ("team", StringType, true)
         )
+      )
+
+      val expectedDF = spark.createDF(
+        List(
+          ("jets", "hello world", "sandy meow"),
+          ("nacional", "hello world", "sandy meow")
+        ), List(
+          ("team", StringType, true),
+          ("greeting", StringType, false),
+          ("cats", StringType, false)
+        )
+      )
+
+      "runs a list of transforms" - {
 
         val transforms = List(
           ExampleTransforms.withGreeting()(_),
@@ -55,15 +66,15 @@ object DataFrameExtTest
 
         val actualDF = sourceDF.composeTransforms(transforms)
 
-        val expectedDF = spark.createDF(
-          List(
-            ("jets", "hello world", "sandy meow"),
-            ("nacional", "hello world", "sandy meow")
-          ), List(
-            ("team", StringType, true),
-            ("greeting", StringType, false),
-            ("cats", StringType, false)
-          )
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+
+      }
+
+      "runs a sequence of transforms" - {
+
+        val actualDF = sourceDF.composeTransforms(
+          ExampleTransforms.withGreeting(),
+          ExampleTransforms.withCat("sandy")
         )
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
