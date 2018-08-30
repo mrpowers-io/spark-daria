@@ -217,37 +217,37 @@ object transformations {
   }
 
   /**
-    * Extracts an object from a JSON field with a specified schema
-    *
-    * {{{
-    * val sourceDF = spark.createDF(
-    *   List(
-    *     (10, """{"name": "Bart cool", "age": 25}"""),
-    *     (20, """{"name": "Lisa frost", "age": 27}""")
-    *   ), List(
-    *     ("id", IntegerType, true),
-    *     ("person", StringType, true)
-    *   )
-    * )
-    *
-    * val personSchema = StructType(List(
-    *   StructField("name", StringType),
-    *   StructField("age", IntegerType)
-    * ))
-    *
-    * val actualDF = sourceDF.transform(
-    *   transformations.extractFromJson("person", "personData", personSchema)
-    * )
-    *
-    * sourceDF.show()
-    * +---+---------------------------------+----------------+
-    * |id |person                           |personData      |
-    * +---+---------------------------------+----------------+
-    * |10 |{"name": "Bart cool", "age": 25} |[Bart cool, 25] |
-    * |20 |{"name": "Lisa frost", "age": 27}|[Lisa frost, 27]|
-    * +---+---------------------------------+----------------+
-    * }}}
-    */
+   * Extracts an object from a JSON field with a specified schema
+   *
+   * {{{
+   * val sourceDF = spark.createDF(
+   *   List(
+   *     (10, """{"name": "Bart cool", "age": 25}"""),
+   *     (20, """{"name": "Lisa frost", "age": 27}""")
+   *   ), List(
+   *     ("id", IntegerType, true),
+   *     ("person", StringType, true)
+   *   )
+   * )
+   *
+   * val personSchema = StructType(List(
+   *   StructField("name", StringType),
+   *   StructField("age", IntegerType)
+   * ))
+   *
+   * val actualDF = sourceDF.transform(
+   *   transformations.extractFromJson("person", "personData", personSchema)
+   * )
+   *
+   * sourceDF.show()
+   * +---+---------------------------------+----------------+
+   * |id |person                           |personData      |
+   * +---+---------------------------------+----------------+
+   * |10 |{"name": "Bart cool", "age": 25} |[Bart cool, 25] |
+   * |20 |{"name": "Lisa frost", "age": 27}|[Lisa frost, 27]|
+   * +---+---------------------------------+----------------+
+   * }}}
+   */
   def extractFromJson(colName: String, outputColName: String, jsonSchema: StructType)(df: DataFrame): DataFrame = {
     df.withColumn(outputColName, from_json(col(colName), jsonSchema))
   }

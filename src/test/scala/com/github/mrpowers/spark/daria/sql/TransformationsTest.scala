@@ -9,7 +9,7 @@ import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 import org.apache.spark.sql.Row
 
 object TransformationsTest
-  extends TestSuite
+    extends TestSuite
     with DataFrameComparer
     with ColumnComparer
     with SparkSessionTestWrapper {
@@ -362,20 +362,20 @@ object TransformationsTest
             ("expected", StringType, true)
           )
         ).transform(
-          transformations.withColBucket(
-            colName = "some_num",
-            outputColName = "my_bucket",
-            buckets = Array(
-              (null, 10),
-              (10, 20),
-              (21, 30),
-              (31, 40),
-              (41, 50),
-              (70, null)
-            ),
-            inclusiveBoundries = true
+            transformations.withColBucket(
+              colName = "some_num",
+              outputColName = "my_bucket",
+              buckets = Array(
+                (null, 10),
+                (10, 20),
+                (21, 30),
+                (31, 40),
+                (41, 50),
+                (70, null)
+              ),
+              inclusiveBoundries = true
+            )
           )
-        )
 
         assertColumnEquality(df, "expected", "my_bucket")
 

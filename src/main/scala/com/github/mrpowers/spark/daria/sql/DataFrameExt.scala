@@ -76,19 +76,19 @@ object DataFrameExt {
     }
 
     /**
-      * Executes a list of custom DataFrame transformations
-      * Uses function composition to run a list of DataFrame transformations.
-      *
-      * def withGreeting()(df: DataFrame): DataFrame = {
-      *   df.withColumn("greeting", lit("hello world"))
-      * }
-      *
-      * def withCat(name: String)(df: DataFrame): DataFrame = {
-      *   df.withColumn("cats", lit(name + " meow"))
-      * }
-      *
-      * sourceDF.composeTransforms(withGreeting(), withCat("sandy"))
-      */
+     * Executes a list of custom DataFrame transformations
+     * Uses function composition to run a list of DataFrame transformations.
+     *
+     * def withGreeting()(df: DataFrame): DataFrame = {
+     *   df.withColumn("greeting", lit("hello world"))
+     * }
+     *
+     * def withCat(name: String)(df: DataFrame): DataFrame = {
+     *   df.withColumn("cats", lit(name + " meow"))
+     * }
+     *
+     * sourceDF.composeTransforms(withGreeting(), withCat("sandy"))
+     */
     def composeTransforms(transforms: (DataFrame => DataFrame)*): DataFrame = {
       transforms.foldLeft(df) { (memoDF, t) =>
         memoDF.transform(t)
