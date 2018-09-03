@@ -193,6 +193,17 @@ object DataFrameExt {
       )
     }
 
+    /**
+     * Executes a list of transformations in CustomTransform objects
+     * Uses function composition
+     *
+     */
+    def composeTrans(customTransforms: CustomTransform*): DataFrame = {
+      customTransforms.foldLeft(df) { (memoDF, ct) =>
+        memoDF.trans(ct)
+      }
+    }
+
   }
 
 }

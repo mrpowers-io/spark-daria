@@ -3,9 +3,10 @@ package com.github.mrpowers.spark.daria.sql
 import utest._
 import SparkSessionExt._
 import org.apache.spark.sql.types.{StructType, _}
-import org.apache.spark.sql.Row
+import org.apache.spark.sql.{DataFrame, Row}
 import DataFrameExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
+import org.apache.spark.sql.functions._
 
 object DataFrameExtTest
     extends TestSuite
@@ -653,6 +654,70 @@ object DataFrameExtTest
         )
 
         assertSmallDataFrameEquality(df, expectedDF)
+      }
+
+    }
+
+    'composeTrans - {
+
+      "executes a series of CustomTransforms" - {
+
+        def withCountry()(df: DataFrame): DataFrame = {
+          df.withColumn(
+            "country",
+            when(col("city") === "Calgary", "Canada")
+              .when(col("city") === "Buenos Aires", "Argentina")
+              .when(col("city") === "Cape Town", "South Africa")
+          )
+        }
+
+        val countryCT = CustomTransform(
+          transform = withCountry(),
+          requiredColumns = Seq("city"),
+          addedColumns = Seq("country")
+        )
+
+        def withHemisphere()(df: DataFrame): DataFrame = {
+          df.withColumn(
+            "hemisphere",
+            when(col("country") === "Canada", "Northern Hemisphere")
+              .when(col("country") === "Argentina", "Southern Hemisphere")
+              .when(col("country") === "South Africa", "Southern Hemisphere")
+          )
+        }
+
+        val hemisphereCT = CustomTransform(
+          transform = withHemisphere(),
+          requiredColumns = Seq("country"),
+          addedColumns = Seq("hemisphere")
+        )
+
+        val df = spark.createDF(
+          List(
+            ("Calgary"),
+            ("Buenos Aires"),
+            ("Cape Town")
+          ), List(
+            ("city", StringType, true)
+          )
+        )
+
+        val actualDF = df.composeTrans(countryCT, hemisphereCT)
+
+        val expectedDF = spark.createDF(
+          List(
+            ("Calgary", "Canada", "Northern Hemisphere"),
+            ("Buenos Aires", "Argentina", "Southern Hemisphere"),
+            ("Cape Town", "South Africa", "Southern Hemisphere")
+          ), List(
+            ("city", StringType, true),
+            ("country", StringType, true),
+            ("hemisphere", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+
       }
 
     }
