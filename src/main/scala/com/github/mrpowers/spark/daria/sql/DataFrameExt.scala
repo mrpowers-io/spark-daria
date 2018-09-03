@@ -125,6 +125,19 @@ object DataFrameExt {
       df.schema.fieldNames.contains(colName)
     }
 
+    /**
+     * Returns true if the DataFrame contains the StructField
+     *
+     * {{{
+     * sourceDF.containsColumn(StructField("team", StringType, true))
+     * }}}
+     *
+     * Returns `true` if `sourceDF` contains the StructField and false otherwise.
+     */
+    def containsColumn(structField: StructField): Boolean = {
+      df.schema.contains(structField)
+    }
+
     /** Returns the columns in otherDF that aren't in self */
     def columnDiff(otherDF: DataFrame): Seq[String] = {
       (df.columns).diff(otherDF.columns).toSeq
@@ -187,6 +200,11 @@ object DataFrameExt {
       transformedDF
     }
 
+    /**
+     * Converts all the StructType columns to regular columns
+     * This StackOverflow answer provides a detailed description how to use flattenSchema: https://stackoverflow.com/a/50402697/1125159
+     *
+     */
     def flattenSchema(delimiter: String = ".", prefix: String = null): DataFrame = {
       df.select(
         StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*

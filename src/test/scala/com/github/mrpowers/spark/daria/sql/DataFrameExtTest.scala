@@ -180,6 +180,22 @@ object DataFrameExtTest
 
       }
 
+      "returns false if a DataFrame contains a StructField" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            ("jets"),
+            ("nacional")
+          ), List(
+            ("team", StringType, true)
+          )
+        )
+
+        assert(sourceDF.containsColumn(StructField("team", StringType, true)) == true)
+        assert(sourceDF.containsColumn(StructField("blah", StringType, true)) == false)
+
+      }
+
     }
 
     'columnDiff - {
