@@ -198,6 +198,29 @@ object DataFrameExtTest
 
     }
 
+    'containsColumns - {
+
+      "returns true if a DataFrame contains a column" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            ("jets", "blah"),
+            ("nacional", "meow")
+          ), List(
+            ("team", StringType, true),
+            ("sound", StringType, true)
+          )
+        )
+
+        assert(sourceDF.containsColumns("team", "sound") == true)
+        assert(sourceDF.containsColumns("team", "hi") == false)
+        assert(sourceDF.containsColumns("sound", "bye") == false)
+        assert(sourceDF.containsColumns("blah") == false)
+
+      }
+
+    }
+
     'columnDiff - {
 
       "returns the columns in otherDF that aren't in df" - {
@@ -676,37 +699,37 @@ object DataFrameExtTest
 
     'composeTrans - {
 
+      def withCountry()(df: DataFrame): DataFrame = {
+        df.withColumn(
+          "country",
+          when(col("city") === "Calgary", "Canada")
+            .when(col("city") === "Buenos Aires", "Argentina")
+            .when(col("city") === "Cape Town", "South Africa")
+        )
+      }
+
+      val countryCT = CustomTransform(
+        transform = withCountry(),
+        requiredColumns = Seq("city"),
+        addedColumns = Seq("country")
+      )
+
+      def withHemisphere()(df: DataFrame): DataFrame = {
+        df.withColumn(
+          "hemisphere",
+          when(col("country") === "Canada", "Northern Hemisphere")
+            .when(col("country") === "Argentina", "Southern Hemisphere")
+            .when(col("country") === "South Africa", "Southern Hemisphere")
+        )
+      }
+
+      val hemisphereCT = CustomTransform(
+        transform = withHemisphere(),
+        requiredColumns = Seq("country"),
+        addedColumns = Seq("hemisphere")
+      )
+
       "executes a series of CustomTransforms" - {
-
-        def withCountry()(df: DataFrame): DataFrame = {
-          df.withColumn(
-            "country",
-            when(col("city") === "Calgary", "Canada")
-              .when(col("city") === "Buenos Aires", "Argentina")
-              .when(col("city") === "Cape Town", "South Africa")
-          )
-        }
-
-        val countryCT = CustomTransform(
-          transform = withCountry(),
-          requiredColumns = Seq("city"),
-          addedColumns = Seq("country")
-        )
-
-        def withHemisphere()(df: DataFrame): DataFrame = {
-          df.withColumn(
-            "hemisphere",
-            when(col("country") === "Canada", "Northern Hemisphere")
-              .when(col("country") === "Argentina", "Southern Hemisphere")
-              .when(col("country") === "South Africa", "Southern Hemisphere")
-          )
-        }
-
-        val hemisphereCT = CustomTransform(
-          transform = withHemisphere(),
-          requiredColumns = Seq("country"),
-          addedColumns = Seq("hemisphere")
-        )
 
         val df = spark.createDF(
           List(
@@ -718,7 +741,44 @@ object DataFrameExtTest
           )
         )
 
-        val actualDF = df.composeTrans(countryCT, hemisphereCT)
+        val actualDF = df.composeTrans(
+          List(countryCT, hemisphereCT),
+          skipCustomTransformWhenPossible = false
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            ("Calgary", "Canada", "Northern Hemisphere"),
+            ("Buenos Aires", "Argentina", "Southern Hemisphere"),
+            ("Cape Town", "South Africa", "Southern Hemisphere")
+          ), List(
+            ("city", StringType, true),
+            ("country", StringType, true),
+            ("hemisphere", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(actualDF, expectedDF)
+
+      }
+
+      "runs CustomTransformations, but only when necessary" - {
+
+        val df = spark.createDF(
+          List(
+            ("Calgary", "Canada"),
+            ("Buenos Aires", "Argentina"),
+            ("Cape Town", "South Africa")
+          ), List(
+            ("city", StringType, true),
+            ("country", StringType, true)
+          )
+        )
+
+        val actualDF = df.composeTrans(List(countryCT, hemisphereCT))
+
+        // examine the explain output to verify that the countryCT transformation isn't executed
+//        actualDF.explain()
 
         val expectedDF = spark.createDF(
           List(

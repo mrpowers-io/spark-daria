@@ -138,6 +138,19 @@ object DataFrameExt {
       df.schema.contains(structField)
     }
 
+    /**
+     * Returns true if the DataFrame contains all the columns
+     *
+     * {{{
+     * sourceDF.containsColumns("team", "city")
+     * }}}
+     *
+     * Returns `true` if `sourceDF` contains the `"team"` and `"city"` columns and false otherwise.
+     */
+    def containsColumns(colNames: String*): Boolean = {
+      colNames.forall(df.schema.fieldNames.contains(_))
+    }
+
     /** Returns the columns in otherDF that aren't in self */
     def columnDiff(otherDF: DataFrame): Seq[String] = {
       (df.columns).diff(otherDF.columns).toSeq
@@ -216,9 +229,22 @@ object DataFrameExt {
      * Uses function composition
      *
      */
-    def composeTrans(customTransforms: CustomTransform*): DataFrame = {
-      customTransforms.foldLeft(df) { (memoDF, ct) =>
-        memoDF.trans(ct)
+    def composeTrans(
+      customTransforms: List[CustomTransform],
+      skipCustomTransformWhenPossible: Boolean = true
+    ): DataFrame = {
+      if (skipCustomTransformWhenPossible) {
+        customTransforms.foldLeft(df) { (memoDF, ct) =>
+          if (memoDF.containsColumns(ct.addedColumns: _*)) {
+            memoDF
+          } else {
+            memoDF.trans(ct)
+          }
+        }
+      } else {
+        customTransforms.foldLeft(df) { (memoDF, ct) =>
+          memoDF.trans(ct)
+        }
       }
     }
 
