@@ -708,12 +708,6 @@ object DataFrameExtTest
         )
       }
 
-      val countryCT = CustomTransform(
-        transform = withCountry(),
-        requiredColumns = Seq("city"),
-        addedColumns = Seq("country")
-      )
-
       def withHemisphere()(df: DataFrame): DataFrame = {
         df.withColumn(
           "hemisphere",
@@ -722,12 +716,6 @@ object DataFrameExtTest
             .when(col("country") === "South Africa", "Southern Hemisphere")
         )
       }
-
-      val hemisphereCT = CustomTransform(
-        transform = withHemisphere(),
-        requiredColumns = Seq("country"),
-        addedColumns = Seq("hemisphere")
-      )
 
       "executes a series of CustomTransforms" - {
 
@@ -741,9 +729,22 @@ object DataFrameExtTest
           )
         )
 
+        val countryCT = CustomTransform(
+          transform = withCountry(),
+          requiredColumns = Seq("city"),
+          addedColumns = Seq("country"),
+          skipWhenPossible = false
+        )
+
+        val hemisphereCT = CustomTransform(
+          transform = withHemisphere(),
+          requiredColumns = Seq("country"),
+          addedColumns = Seq("hemisphere"),
+          skipWhenPossible = false
+        )
+
         val actualDF = df.composeTrans(
-          List(countryCT, hemisphereCT),
-          skipCustomTransformWhenPossible = false
+          List(countryCT, hemisphereCT)
         )
 
         val expectedDF = spark.createDF(
@@ -775,10 +776,24 @@ object DataFrameExtTest
           )
         )
 
+        val countryCT = CustomTransform(
+          transform = withCountry(),
+          requiredColumns = Seq("city"),
+          addedColumns = Seq("country"),
+          skipWhenPossible = true
+        )
+
+        val hemisphereCT = CustomTransform(
+          transform = withHemisphere(),
+          requiredColumns = Seq("country"),
+          addedColumns = Seq("hemisphere"),
+          skipWhenPossible = true
+        )
+
         val actualDF = df.composeTrans(List(countryCT, hemisphereCT))
 
         // examine the explain output to verify that the countryCT transformation isn't executed
-//        actualDF.explain()
+        //        actualDF.explain()
 
         val expectedDF = spark.createDF(
           List(

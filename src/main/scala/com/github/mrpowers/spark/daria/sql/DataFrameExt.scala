@@ -230,19 +230,12 @@ object DataFrameExt {
      *
      */
     def composeTrans(
-      customTransforms: List[CustomTransform],
-      skipCustomTransformWhenPossible: Boolean = true
+      customTransforms: List[CustomTransform]
     ): DataFrame = {
-      if (skipCustomTransformWhenPossible) {
-        customTransforms.foldLeft(df) { (memoDF, ct) =>
-          if (memoDF.containsColumns(ct.addedColumns: _*)) {
-            memoDF
-          } else {
-            memoDF.trans(ct)
-          }
-        }
-      } else {
-        customTransforms.foldLeft(df) { (memoDF, ct) =>
+      customTransforms.foldLeft(df) { (memoDF, ct) =>
+        if (ct.skipWhenPossible && memoDF.containsColumns(ct.addedColumns: _*)) {
+          memoDF
+        } else {
           memoDF.trans(ct)
         }
       }
