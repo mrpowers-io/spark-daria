@@ -12,13 +12,13 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 
 name := "spark-daria"
 
-version := "2.3.0_0.24.0"
+version := "2.1.0_0.24.0"
 
 scalaVersion := "2.11.12"
-sparkVersion := "2.3.0"
+sparkVersion := "2.1.0"
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.3.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.1.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.1.0" % "provided"
 
 spName := "mrpowers/spark-daria"
 
