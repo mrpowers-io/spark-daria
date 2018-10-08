@@ -12,7 +12,7 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 
 name := "spark-daria"
 
-version := "2.3.1_0.24.0"
+version := "2.3.1_0.25.0"
 
 scalaVersion := "2.11.12"
 sparkVersion := "2.3.1"
