@@ -1,6 +1,8 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.expressions.Window
+import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
@@ -239,6 +241,16 @@ object DataFrameExt {
           memoDF.trans(ct)
         }
       }
+    }
+
+    def killDuplicates(cols: Column*): DataFrame = {
+      df
+        .withColumn(
+          "my_super_secret_count",
+          count("*").over(Window.partitionBy(cols: _*))
+        )
+        .where(col("my_super_secret_count") === 1)
+        .drop(col("my_super_secret_count"))
     }
 
   }

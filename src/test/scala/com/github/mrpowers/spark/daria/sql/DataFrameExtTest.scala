@@ -813,6 +813,71 @@ object DataFrameExtTest
 
     }
 
+    'killDuplicates - {
+
+      "removes any rows that have a duplicate" - {
+
+        val df = spark.createDF(
+          List(
+            ("a", "b", 1),
+            ("a", "b", 2),
+            ("a", "b", 3),
+            ("z", "b", 4),
+            ("a", "x", 5)
+          ), List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        ).killDuplicates(col("letter1"), col("letter2"))
+
+        val expectedDF = spark.createDF(
+          List(
+            ("z", "b", 4),
+            ("a", "x", 5)
+          ), List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF, orderedComparison = false)
+
+      }
+
+      "works with a single column too" - {
+
+        val df = spark.createDF(
+          List(
+            ("a", "b", 1),
+            ("a", "b", 2),
+            ("a", "b", 3),
+            ("z", "b", 4),
+            ("a", "x", 5)
+          ), List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        ).killDuplicates(col("letter1"))
+
+        val expectedDF = spark.createDF(
+          List(
+            ("z", "b", 4)
+          ), List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(df, expectedDF, orderedComparison = false)
+
+      }
+
+    }
+
   }
 
 }
