@@ -252,4 +252,12 @@ object transformations {
     df.withColumn(outputColName, from_json(col(colName), jsonSchema))
   }
 
+  def withRowAsStruct(outputColName: String = "row_as_struct")(df: DataFrame): DataFrame = {
+    val colNames = df.columns.map(col)
+    df.withColumn(
+      outputColName,
+      struct(colNames: _*)
+    )
+  }
+
 }

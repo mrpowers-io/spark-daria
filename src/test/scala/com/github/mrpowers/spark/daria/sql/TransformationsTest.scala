@@ -1,11 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
+import org.apache.spark.sql.types._
 import utest._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import com.github.mrpowers.spark.fast.tests.ColumnComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
+import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import org.apache.spark.sql.Row
 
 object TransformationsTest
@@ -464,6 +465,32 @@ object TransformationsTest
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
       }
+    }
+
+    'withRowAsStruct - {
+
+      "collects an entire row intro a StructType column" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            ("pablo", 3, "polo", 1.0),
+            (null, 3, "polo", 5.5)
+          ), List(
+            ("name", StringType, true),
+            ("age", IntegerType, true),
+            ("sport", StringType, true),
+            ("a_number", DoubleType, true)
+          )
+        ).transform(transformations.withRowAsStruct())
+
+        //        sourceDF.show()
+
+        // HACK - don't have a good way to test this yet
+        // Need to add assertStructTypeColumnEquality: https://github.com/MrPowers/spark-fast-tests/issues/38
+        // Or update assertSmallDataFrameEquality to work with DataFrames that have StructType columns: https://github.com/MrPowers/spark-fast-tests/issues/37
+
+      }
+
     }
 
   }
