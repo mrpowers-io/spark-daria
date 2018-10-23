@@ -17,7 +17,7 @@ Fetch the JAR file from Maven.
 ```scala
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
-libraryDependencies += "mrpowers" % "spark-daria" % "2.2.0_0.12.0"
+libraryDependencies += "mrpowers" % "spark-daria" % "0.26.0"
 ```
 
 **Option 2: JitPack**
@@ -26,11 +26,21 @@ Update your `build.sbt` file as follows.
 
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v2.2.0_0.17.1"
+libraryDependencies += "com.github.mrpowers" % "spark-daria" % "0.26.0"
 ```
 **Accessing spark-daria versions for different Spark versions**
 
-Message me if you need spark-daria to be compiled with a different Spark version and I'll help you out :wink:
+Different spark-daria versions are compatible with different Spark versions.  In general, the latest spark-daria versions are always compatible with the latest Spark versions.
+
+|       | 0.26.0             |
+|-------|--------------------|
+| 2.0.0 | :x:                |
+| 2.1.0 | :white_check_mark: |
+| 2.2.2 | :white_check_mark: |
+| 2.3.0 | :white_check_mark: |
+| 2.3.1 | :white_check_mark: |
+
+Email me if you need a custom spark-daria version and I'll help you out :wink:
 
 ## Usage
 
