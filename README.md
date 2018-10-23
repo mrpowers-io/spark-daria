@@ -26,7 +26,7 @@ Update your `build.sbt` file as follows.
 
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.mrpowers" % "spark-daria" % "0.26.0"
+libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v0.26.0"
 ```
 **Accessing spark-daria versions for different Spark versions**
 
