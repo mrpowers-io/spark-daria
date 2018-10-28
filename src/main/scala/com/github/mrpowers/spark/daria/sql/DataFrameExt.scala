@@ -243,9 +243,9 @@ object DataFrameExt {
     }
 
     /**
-      * Completely removes all duplicates from a DataFrame
-      *
-      */
+     * Completely removes all duplicates from a DataFrame
+     *
+     */
     def killDuplicates(cols: Column*): DataFrame = {
       df
         .withColumn(
