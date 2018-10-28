@@ -1,8 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, Column}
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
@@ -243,6 +242,10 @@ object DataFrameExt {
       }
     }
 
+    /**
+      * Completely removes all duplicates from a DataFrame
+      *
+      */
     def killDuplicates(cols: Column*): DataFrame = {
       df
         .withColumn(

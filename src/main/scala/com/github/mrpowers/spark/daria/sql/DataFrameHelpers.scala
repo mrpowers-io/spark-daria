@@ -1,7 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.types.{IntegerType, LongType, StructField, StructType}
+import org.apache.spark.sql.types.{LongType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 
 import scala.reflect.runtime.universe._

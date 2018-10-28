@@ -127,6 +127,7 @@ object ColumnExt {
 
     /**
      * Returns true if the current expression is true
+     * Returns false if the current expression is null
      *
      * @group expr_ops
      */
@@ -136,6 +137,7 @@ object ColumnExt {
 
     /**
      * Returns true if the col is false
+     * Returns false if the current expression is false
      *
      * @group expr_ops
      */

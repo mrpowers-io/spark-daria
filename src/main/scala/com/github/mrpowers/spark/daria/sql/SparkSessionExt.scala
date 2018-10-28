@@ -1,7 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.Row
+import org.apache.spark.sql.{DataFrame, SparkSession, Row}
 import org.apache.spark.sql.types.{DataType, StructField, StructType}
 
 object SparkSessionExt {
