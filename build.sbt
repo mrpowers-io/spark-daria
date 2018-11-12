@@ -15,10 +15,10 @@ name := "spark-daria"
 version := "0.26.0"
 
 scalaVersion := "2.11.12"
-sparkVersion := "2.3.1"
+sparkVersion := "2.4.0"
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.1" % "provided"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.3.1" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.0" % "provided"
 
 spName := "mrpowers/spark-daria"
 
@@ -26,7 +26,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-libraryDependencies += "MrPowers" % "spark-fast-tests" % "2.3.1_0.15.0" % "test"
+libraryDependencies += "MrPowers" % "spark-fast-tests" % "0.17.0" % "test"
 
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
