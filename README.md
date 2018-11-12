@@ -39,6 +39,7 @@ Different spark-daria versions are compatible with different Spark versions.  In
 | 2.2.2 | :white_check_mark: |
 | 2.3.0 | :white_check_mark: |
 | 2.3.1 | :white_check_mark: |
+| 2.4.0 | :white_check_mark: |
 
 Email me if you need a custom spark-daria version and I'll help you out :wink:
 
