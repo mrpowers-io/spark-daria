@@ -10,6 +10,7 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
+organization := "mrpowers"
 name := "spark-daria"
 
 version := "0.26.1"
