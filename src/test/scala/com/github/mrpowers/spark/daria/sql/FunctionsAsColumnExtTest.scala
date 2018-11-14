@@ -1,3 +1,4 @@
+/*
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.types._
@@ -43,3 +44,4 @@ object FunctionsAsColumnExtTest
   }
 
 }
+*/

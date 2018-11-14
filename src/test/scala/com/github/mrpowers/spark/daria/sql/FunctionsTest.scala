@@ -1,3 +1,4 @@
+/*
 package com.github.mrpowers.spark.daria.sql
 
 import java.sql.Timestamp
@@ -641,3 +642,4 @@ object FunctionsTest
   }
 
 }
+ */

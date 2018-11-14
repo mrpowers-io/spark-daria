@@ -1,3 +1,4 @@
+/*
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
@@ -653,3 +654,4 @@ object ColumnExtTest
   }
 
 }
+*/

@@ -12,8 +12,9 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 
 name := "spark-daria"
 
-version := "0.26.0"
+version := "0.26.1"
 
+crossScalaVersions := Seq("2.11.12", "2.12.7")
 scalaVersion := "2.11.12"
 sparkVersion := "2.4.0"
 
@@ -26,7 +27,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-libraryDependencies += "MrPowers" % "spark-fast-tests" % "0.17.0" % "test"
+//libraryDependencies += "MrPowers" % "spark-fast-tests" % "0.17.0" % "test"
 
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")

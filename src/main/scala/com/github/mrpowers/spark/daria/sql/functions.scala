@@ -125,8 +125,7 @@ object functions {
           previousLetter = letter
           letter.toLower
         }
-      }
-    )
+      })
   }
 
   /**
@@ -332,8 +331,7 @@ object functions {
     buckets: Array[(Any, Any)],
     inclusiveBoundries: Boolean = false,
     lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false
-  ): Column = {
+    highestBoundGte: Boolean = false): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
     val lowerBoundLteCol = lit(lowestBoundLte)
@@ -342,32 +340,25 @@ object functions {
     val b = buckets.map { res: (Any, Any) =>
       when(
         col.isNull,
-        lit(null)
-      )
+        lit(null))
         .when(
           lowerBoundLteCol === false && lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
-          lit(s"<${res._2}")
-        )
+          lit(s"<${res._2}"))
         .when(
           lowerBoundLteCol === true && lit(res._1).isNull && lit(res._2).isNotNull && col <= lit(res._2),
-          lit(s"<=${res._2}")
-        )
+          lit(s"<=${res._2}"))
         .when(
           upperBoundGteCol === false && lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
-          lit(s">${res._1}")
-        )
+          lit(s">${res._1}"))
         .when(
           upperBoundGteCol === true && lit(res._1).isNotNull && lit(res._2).isNull && col >= lit(res._1),
-          lit(s">=${res._1}")
-        )
+          lit(s">=${res._1}"))
         .when(
           inclusiveBoundriesCol === true && col.between(res._1, res._2),
-          lit(s"${res._1}-${res._2}")
-        )
+          lit(s"${res._1}-${res._2}"))
         .when(
           inclusiveBoundriesCol === false && col.gt(res._1) && col.lt(res._2),
-          lit(s"${res._1}-${res._2}")
-        )
+          lit(s"${res._1}-${res._2}"))
     }
 
     coalesce(b: _*)

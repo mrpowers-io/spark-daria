@@ -1,3 +1,4 @@
+/*
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.functions._
@@ -496,3 +497,4 @@ object TransformationsTest
   }
 
 }
+*/

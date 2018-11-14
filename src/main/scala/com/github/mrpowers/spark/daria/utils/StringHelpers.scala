@@ -16,8 +16,7 @@ object StringHelpers {
    */
   def escapeForSqlRegexp(
     str: String,
-    charsToEscape: List[String] = sqlCharsToEscape
-  ): Option[String] = {
+    charsToEscape: List[String] = sqlCharsToEscape): Option[String] = {
     val s = Option(str).getOrElse(return None)
     Some(charsToEscape.foldLeft(str) {
       case (res, pattern) =>

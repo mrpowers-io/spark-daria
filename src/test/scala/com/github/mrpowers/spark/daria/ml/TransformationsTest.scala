@@ -1,3 +1,4 @@
+/*
 package com.github.mrpowers.spark.daria.ml
 
 import com.github.mrpowers.spark.daria.sql.SparkSessionTestWrapper
@@ -74,3 +75,4 @@ object TransformationsTest
   }
 
 }
+*/

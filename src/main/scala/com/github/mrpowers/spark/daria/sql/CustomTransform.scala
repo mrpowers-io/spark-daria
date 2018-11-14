@@ -7,5 +7,4 @@ case class CustomTransform(
   requiredColumns: Seq[String] = Seq.empty[String],
   addedColumns: Seq[String] = Seq.empty[String],
   removedColumns: Seq[String] = Seq.empty[String],
-  skipWhenPossible: Boolean = true
-)
+  skipWhenPossible: Boolean = true)
