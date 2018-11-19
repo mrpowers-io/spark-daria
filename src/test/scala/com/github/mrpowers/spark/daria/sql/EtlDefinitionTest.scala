@@ -1,4 +1,3 @@
-/*
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
@@ -21,19 +20,15 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)
-          ), List(
+            ("liz", 20)), List(
             ("name", StringType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
           write = EtlHelpers.someWriter(),
-          metadata = scala.collection.mutable.Map("hidden" -> true)
-        )
+          metadata = scala.collection.mutable.Map("hidden" -> true))
 
         assert(etlDefinition.metadata("hidden") == true)
 
@@ -44,18 +39,14 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)
-          ), List(
+            ("liz", 20)), List(
             ("name", StringType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter()
-        )
+          write = EtlHelpers.someWriter())
 
       }
 
@@ -68,18 +59,14 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)
-          ), List(
+            ("liz", 20)), List(
             ("name", StringType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter()
-        )
+          write = EtlHelpers.someWriter())
 
         etlDefinition.process()
 
@@ -94,18 +81,14 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)
-          ), List(
+            ("liz", 20)), List(
             ("name", StringType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter()
-        )
+          write = EtlHelpers.someWriter())
 
         val etls = scala.collection.mutable.Map[String, EtlDefinition]("example" -> etlDefinition)
 
@@ -120,4 +103,3 @@ object EtlDefinitionTest
   }
 
 }
-*/

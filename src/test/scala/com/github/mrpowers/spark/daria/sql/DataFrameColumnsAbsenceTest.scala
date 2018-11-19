@@ -18,12 +18,9 @@ object DataFrameColumnsAbsenceTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -38,12 +35,9 @@ object DataFrameColumnsAbsenceTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("ttt", "zzz")
 
@@ -62,12 +56,9 @@ object DataFrameColumnsAbsenceTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -88,12 +79,9 @@ object DataFrameColumnsAbsenceTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -110,12 +98,9 @@ object DataFrameColumnsAbsenceTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("ttt", "zzz")
 

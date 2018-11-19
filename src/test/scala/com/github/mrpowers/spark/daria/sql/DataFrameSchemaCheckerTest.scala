@@ -18,26 +18,21 @@ object DataFrameSchemaCheckerTest
           Row(1, 1),
           Row(-8, 8),
           Row(-5, 5),
-          Row(null, null)
-        )
+          Row(null, null))
 
         val sourceSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val sourceDF = spark.createDataFrame(
           spark.sparkContext.parallelize(sourceData),
-          StructType(sourceSchema)
-        )
+          StructType(sourceSchema))
 
         val requiredSchema = StructType(
           List(
             StructField("num1", IntegerType, true),
             StructField("num2", IntegerType, true),
-            StructField("name", StringType, true)
-          )
-        )
+            StructField("name", StringType, true)))
 
         val c = new DataFrameSchemaChecker(sourceDF, requiredSchema)
 
@@ -51,24 +46,19 @@ object DataFrameSchemaCheckerTest
           Row(1, 1),
           Row(-8, 8),
           Row(-5, 5),
-          Row(null, null)
-        )
+          Row(null, null))
 
         val sourceSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val sourceDF = spark.createDataFrame(
           spark.sparkContext.parallelize(sourceData),
-          StructType(sourceSchema)
-        )
+          StructType(sourceSchema))
 
         val requiredSchema = StructType(
           List(
-            StructField("num1", IntegerType, true)
-          )
-        )
+            StructField("num1", IntegerType, true)))
 
         val c = new DataFrameSchemaChecker(sourceDF, requiredSchema)
 
@@ -86,26 +76,21 @@ object DataFrameSchemaCheckerTest
           Row(1, 1),
           Row(-8, 8),
           Row(-5, 5),
-          Row(null, null)
-        )
+          Row(null, null))
 
         val sourceSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val sourceDF = spark.createDataFrame(
           spark.sparkContext.parallelize(sourceData),
-          StructType(sourceSchema)
-        )
+          StructType(sourceSchema))
 
         val requiredSchema = StructType(
           List(
             StructField("num1", IntegerType, true),
             StructField("num2", IntegerType, true),
-            StructField("name", StringType, true)
-          )
-        )
+            StructField("name", StringType, true)))
 
         val c = new DataFrameSchemaChecker(sourceDF, requiredSchema)
 
@@ -125,26 +110,21 @@ object DataFrameSchemaCheckerTest
           Row(1, 1),
           Row(-8, 8),
           Row(-5, 5),
-          Row(null, null)
-        )
+          Row(null, null))
 
         val sourceSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val sourceDF = spark.createDataFrame(
           spark.sparkContext.parallelize(sourceData),
-          StructType(sourceSchema)
-        )
+          StructType(sourceSchema))
 
         val requiredSchema = StructType(
           List(
             StructField("num1", IntegerType, true),
             StructField("num2", IntegerType, true),
-            StructField("name", StringType, true)
-          )
-        )
+            StructField("name", StringType, true)))
 
         val c = new DataFrameSchemaChecker(sourceDF, requiredSchema)
 
@@ -160,24 +140,19 @@ object DataFrameSchemaCheckerTest
           Row(1, 1),
           Row(-8, 8),
           Row(-5, 5),
-          Row(null, null)
-        )
+          Row(null, null))
 
         val sourceSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val sourceDF = spark.createDataFrame(
           spark.sparkContext.parallelize(sourceData),
-          StructType(sourceSchema)
-        )
+          StructType(sourceSchema))
 
         val requiredSchema = StructType(
           List(
-            StructField("num1", IntegerType, true)
-          )
-        )
+            StructField("num1", IntegerType, true)))
 
         val c = new DataFrameSchemaChecker(sourceDF, requiredSchema)
 

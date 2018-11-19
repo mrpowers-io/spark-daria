@@ -17,12 +17,9 @@ object DataFrameColumnsCheckerTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -37,12 +34,9 @@ object DataFrameColumnsCheckerTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team")
 
@@ -61,12 +55,9 @@ object DataFrameColumnsCheckerTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -87,12 +78,9 @@ object DataFrameColumnsCheckerTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -109,12 +97,9 @@ object DataFrameColumnsCheckerTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team")
 

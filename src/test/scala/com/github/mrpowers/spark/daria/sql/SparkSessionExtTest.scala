@@ -1,4 +1,3 @@
-/*
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
@@ -21,27 +20,21 @@ object SparkSessionExtTest
 
         val actualDF = spark.createDF(
           List(
-            Row(1, 2)
-          ),
+            Row(1, 2)),
           List(
             StructField("num1", IntegerType, true),
-            StructField("num2", IntegerType, true)
-          )
-        )
+            StructField("num2", IntegerType, true)))
 
         val expectedData = List(
-          Row(1, 2)
-        )
+          Row(1, 2))
 
         val expectedSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val expectedDF = spark.createDataFrame(
           spark.sparkContext.parallelize(expectedData),
-          StructType(expectedSchema)
-        )
+          StructType(expectedSchema))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -51,27 +44,21 @@ object SparkSessionExtTest
 
         val actualDF = spark.createDF(
           List(
-            Row(1, 2)
-          ),
+            Row(1, 2)),
           List(
             ("num1", IntegerType, true),
-            ("num2", IntegerType, true)
-          )
-        )
+            ("num2", IntegerType, true)))
 
         val expectedData = List(
-          Row(1, 2)
-        )
+          Row(1, 2))
 
         val expectedSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val expectedDF = spark.createDataFrame(
           spark.sparkContext.parallelize(expectedData),
-          StructType(expectedSchema)
-        )
+          StructType(expectedSchema))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -81,27 +68,21 @@ object SparkSessionExtTest
 
         val actualDF = spark.createDF(
           List(
-            (1, 2)
-          ),
+            (1, 2)),
           List(
             ("num1", IntegerType, true),
-            ("num2", IntegerType, true)
-          )
-        )
+            ("num2", IntegerType, true)))
 
         val expectedData = List(
-          Row(1, 2)
-        )
+          Row(1, 2))
 
         val expectedSchema = List(
           StructField("num1", IntegerType, true),
-          StructField("num2", IntegerType, true)
-        )
+          StructField("num2", IntegerType, true))
 
         val expectedDF = spark.createDataFrame(
           spark.sparkContext.parallelize(expectedData),
-          StructType(expectedSchema)
-        )
+          StructType(expectedSchema))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -112,26 +93,20 @@ object SparkSessionExtTest
         val actualDF = spark.createDF(
           List(
             1,
-            2
-          ),
+            2),
           List(
-            ("num1", IntegerType, true)
-          )
-        )
+            ("num1", IntegerType, true)))
 
         val expectedData = List(
           Row(1),
-          Row(2)
-        )
+          Row(2))
 
         val expectedSchema = List(
-          StructField("num1", IntegerType, true)
-        )
+          StructField("num1", IntegerType, true))
 
         val expectedDF = spark.createDataFrame(
           spark.sparkContext.parallelize(expectedData),
-          StructType(expectedSchema)
-        )
+          StructType(expectedSchema))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -142,4 +117,3 @@ object SparkSessionExtTest
   }
 
 }
-*/

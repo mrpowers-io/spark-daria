@@ -1,4 +1,3 @@
-/*
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
@@ -20,23 +19,18 @@ object DataFrameHelpersTest
         val sourceDF = spark.createDF(
           List(
             ("boracay", 7),
-            ("long island", 9)
-          ), List(
+            ("long island", 9)), List(
             ("island", StringType, true),
-            ("fun_level", IntegerType, true)
-          )
-        )
+            ("fun_level", IntegerType, true)))
 
         val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
           sourceDF,
           "island",
-          "fun_level"
-        )
+          "fun_level")
 
         val expected = Map(
           "boracay" -> 7,
-          "long island" -> 9
-        )
+          "long island" -> 9)
 
         assert(actual == expected)
 
@@ -52,11 +46,8 @@ object DataFrameHelpersTest
           List(
             1,
             2,
-            3
-          ), List(
-            ("num", IntegerType, true)
-          )
-        )
+            3), List(
+            ("num", IntegerType, true)))
 
         val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
 
@@ -74,11 +65,8 @@ object DataFrameHelpersTest
           List(
             1,
             2,
-            3
-          ), List(
-            ("num", IntegerType, true)
-          )
-        )
+            3), List(
+            ("num", IntegerType, true)))
 
         val actual = DataFrameHelpers.columnToList[Int](sourceDF, "num")
 
@@ -95,20 +83,16 @@ object DataFrameHelpersTest
         val sourceDF = spark.createDF(
           List(
             ("doctor", 4, "high"),
-            ("dentist", 10, "high")
-          ), List(
+            ("dentist", 10, "high")), List(
             ("profession", StringType, true),
             ("some_number", IntegerType, true),
-            ("pay_grade", StringType, true)
-          )
-        )
+            ("pay_grade", StringType, true)))
 
         val actual = DataFrameHelpers.toArrayOfMaps(sourceDF)
 
         val expected = Array(
           Map("profession" -> "doctor", "some_number" -> 4, "pay_grade" -> "high"),
-          Map("profession" -> "dentist", "some_number" -> 10, "pay_grade" -> "high")
-        )
+          Map("profession" -> "dentist", "some_number" -> 10, "pay_grade" -> "high"))
 
         actual ==> expected
 
@@ -119,4 +103,3 @@ object DataFrameHelpersTest
   }
 
 }
-*/
