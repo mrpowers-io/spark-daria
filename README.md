@@ -17,7 +17,11 @@ Fetch the JAR file from Maven.
 ```scala
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
-libraryDependencies += "mrpowers" % "spark-daria" % "0.26.0"
+// Scala 2.11
+libraryDependencies += "mrpowers" % "spark-daria" % "0.26.1-s_2.11"
+
+// Scala 2.12, Spark 2.4+
+libraryDependencies += "mrpowers" % "spark-daria" % "0.26.1-s_2.12"
 ```
 
 **Option 2: JitPack**
