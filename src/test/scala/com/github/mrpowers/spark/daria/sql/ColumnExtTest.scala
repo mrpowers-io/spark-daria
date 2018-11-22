@@ -24,27 +24,20 @@ object ColumnExtTest
           List(
             ("Batman  "),
             ("  CATWOMAN"),
-            (" pikachu ")
-          ), List(
-            ("word", StringType, true)
-          )
-        )
+            (" pikachu ")), List(
+            ("word", StringType, true)))
 
         val actualDF = wordsDF.withColumn(
           "cleaned_word",
-          col("word").chain(lower).chain(trim)
-        )
+          col("word").chain(lower).chain(trim))
 
         val expectedDF = spark.createDF(
           List(
             ("Batman  ", "batman"),
             ("  CATWOMAN", "catwoman"),
-            (" pikachu ", "pikachu")
-          ), List(
+            (" pikachu ", "pikachu")), List(
             ("word", StringType, true),
-            ("cleaned_word", StringType, true)
-          )
-        )
+            ("cleaned_word", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -55,26 +48,19 @@ object ColumnExtTest
         val wordsDF = spark.createDF(
           List(
             ("hi  "),
-            ("  ok")
-          ), List(
-            ("word", StringType, true)
-          )
-        )
+            ("  ok")), List(
+            ("word", StringType, true)))
 
         val actualDF = wordsDF.withColumn(
           "diff_word",
-          col("word").chain(trim).chain(rpad(_, 5, "x"))
-        )
+          col("word").chain(trim).chain(rpad(_, 5, "x")))
 
         val expectedDF = spark.createDF(
           List(
             ("hi  ", "hixxx"),
-            ("  ok", "okxxx")
-          ), List(
+            ("  ok", "okxxx")), List(
             ("word", StringType, true),
-            ("diff_word", StringType, true)
-          )
-        )
+            ("diff_word", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -101,26 +87,19 @@ object ColumnExtTest
         val hobbiesDF = spark.createDF(
           List(
             ("dance"),
-            ("sing")
-          ), List(
-            ("word", StringType, true)
-          )
-        )
+            ("sing")), List(
+            ("word", StringType, true)))
 
         val actualDF = hobbiesDF.withColumn(
           "fun",
-          col("word").chainUDF("appendZUdf").chainUDF("prependAUdf")
-        )
+          col("word").chainUDF("appendZUdf").chainUDF("prependAUdf"))
 
         val expectedDF = spark.createDF(
           List(
             ("dance", "AdanceZ"),
-            ("sing", "AsingZ")
-          ), List(
+            ("sing", "AsingZ")), List(
             ("word", StringType, true),
-            ("fun", StringType, true)
-          )
-        )
+            ("fun", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -143,26 +122,19 @@ object ColumnExtTest
         val hobbiesDF = spark.createDF(
           List(
             ("dance"),
-            ("sing")
-          ), List(
-            ("word", StringType, true)
-          )
-        )
+            ("sing")), List(
+            ("word", StringType, true)))
 
         val actualDF = hobbiesDF.withColumn(
           "fun",
-          col("word").chainUDF("appendZUdf").chainUDF("appendWordUdf", lit("cool"))
-        )
+          col("word").chainUDF("appendZUdf").chainUDF("appendWordUdf", lit("cool")))
 
         val expectedDF = spark.createDF(
           List(
             ("dance", "danceZcool"),
-            ("sing", "singZcool")
-          ), List(
+            ("sing", "singZcool")), List(
             ("word", StringType, true),
-            ("fun", StringType, true)
-          )
-        )
+            ("fun", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -184,27 +156,20 @@ object ColumnExtTest
           List(
             ("Batman  "),
             ("  CATWOMAN"),
-            (" pikachu ")
-          ), List(
-            ("word", StringType, true)
-          )
-        )
+            (" pikachu ")), List(
+            ("word", StringType, true)))
 
         val actualDF = wordsDF.withColumn(
           "cleaned_word",
-          col("word").chain(lower).chain(trim).chainUDF("appendZUdf")
-        )
+          col("word").chain(lower).chain(trim).chainUDF("appendZUdf"))
 
         val expectedDF = spark.createDF(
           List(
             ("Batman  ", "batmanZ"),
             ("  CATWOMAN", "catwomanZ"),
-            (" pikachu ", "pikachuZ")
-          ), List(
+            (" pikachu ", "pikachuZ")), List(
             ("word", StringType, true),
-            ("cleaned_word", StringType, true)
-          )
-        )
+            ("cleaned_word", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -225,18 +190,14 @@ object ColumnExtTest
             (10, 15, 11),
             (null, null, 11),
             (3, 5, null),
-            (null, null, null)
-          ), List(
+            (null, null, null)), List(
             ("lower_age", IntegerType, true),
             ("upper_age", IntegerType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val actualDF = sourceDF.withColumn(
           "is_between",
-          col("age").nullBetween(col("lower_age"), col("upper_age"))
-        )
+          col("age").nullBetween(col("lower_age"), col("upper_age")))
 
         val expectedDF = spark.createDF(
           List(
@@ -247,14 +208,11 @@ object ColumnExtTest
             (10, 15, 11, true),
             (null, null, 11, false),
             (3, 5, null, false),
-            (null, null, null, false)
-          ), List(
+            (null, null, null, false)), List(
             ("lower_age", IntegerType, true),
             ("upper_age", IntegerType, true),
             ("age", IntegerType, true),
-            ("is_between", BooleanType, true)
-          )
-        )
+            ("is_between", BooleanType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -267,51 +225,39 @@ object ColumnExtTest
             ("lil", "tball", 5),
             ("strawberry", "mets", 42),
             ("maddux", "braves", 45),
-            ("frank", "noteam", null)
-          ), List(
+            ("frank", "noteam", null)), List(
             ("last_name", StringType, true),
             ("team", StringType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val rangesDF = spark.createDF(
           List(
             (null, 20, "too_young"),
             (21, 40, "prime"),
-            (41, null, "retired")
-          ), List(
+            (41, null, "retired")), List(
             ("lower_age", IntegerType, true),
             ("upper_age", IntegerType, true),
-            ("playing_status", StringType, true)
-          )
-        )
+            ("playing_status", StringType, true)))
 
         val actualDF = playersDF.join(
           broadcast(rangesDF),
           playersDF("age").nullBetween(
             rangesDF("lower_age"),
-            rangesDF("upper_age")
-          ),
-          "leftouter"
-        ).drop(
+            rangesDF("upper_age")),
+          "leftouter").drop(
             "lower_age",
-            "upper_age"
-          )
+            "upper_age")
 
         val expectedDF = spark.createDF(
           List(
             ("lil", "tball", 5, "too_young"),
             ("strawberry", "mets", 42, "retired"),
             ("maddux", "braves", 45, "retired"),
-            ("frank", "noteam", null, null)
-          ), List(
+            ("frank", "noteam", null, null)), List(
             ("last_name", StringType, true),
             ("team", StringType, true),
             ("age", IntegerType, true),
-            ("playing_status", StringType, true)
-          )
-        )
+            ("playing_status", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -323,35 +269,27 @@ object ColumnExtTest
           List(
             (10, 15, 11),
             (17, null, 94),
-            (null, 10, 5)
-          ), List(
+            (null, 10, 5)), List(
             ("lower_bound", IntegerType, true),
             ("upper_bound", IntegerType, true),
-            ("age", IntegerType, true)
-          )
-        )
+            ("age", IntegerType, true)))
 
         val actualDF = sourceDF.withColumn(
           "between",
-          col("age").between(col("lower_bound"), col("upper_bound"))
-        ).withColumn(
+          col("age").between(col("lower_bound"), col("upper_bound"))).withColumn(
             "nullBetween",
-            col("age").nullBetween(col("lower_bound"), col("upper_bound"))
-          )
+            col("age").nullBetween(col("lower_bound"), col("upper_bound")))
 
         val expectedDF = spark.createDF(
           List(
             (10, 15, 11, true, true),
             (17, null, 94, null, true),
-            (null, 10, 5, null, true)
-          ), List(
+            (null, 10, 5, null, true)), List(
             ("lower_bound", IntegerType, true),
             ("upper_bound", IntegerType, true),
             ("age", IntegerType, true),
             ("between", BooleanType, true),
-            ("nullBetween", BooleanType, true)
-          )
-        )
+            ("nullBetween", BooleanType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -367,15 +305,11 @@ object ColumnExtTest
           List(
             (true, true),
             (false, false),
-            (null, false)
-          ), List(
+            (null, false)), List(
             ("is_fun", BooleanType, true),
-            ("expected_is_fun_true", BooleanType, true)
-          )
-        ).withColumn(
+            ("expected_is_fun_true", BooleanType, true))).withColumn(
             "is_fun_true",
-            col("is_fun").isTrue
-          )
+            col("is_fun").isTrue)
 
         assertColumnEquality(df, "expected_is_fun_true", "is_fun_true")
 
@@ -391,15 +325,11 @@ object ColumnExtTest
           List(
             (true, false),
             (false, true),
-            (null, false)
-          ), List(
+            (null, false)), List(
             ("is_fun", BooleanType, true),
-            ("expected_is_fun_false", BooleanType, true)
-          )
-        ).withColumn(
+            ("expected_is_fun_false", BooleanType, true))).withColumn(
             "is_fun_false",
-            col("is_fun").isFalse
-          )
+            col("is_fun").isFalse)
 
         assertColumnEquality(df, "expected_is_fun_false", "is_fun_false")
 
@@ -415,11 +345,8 @@ object ColumnExtTest
           List(
             (true),
             (false),
-            (null)
-          ), List(
-            ("is_fun", BooleanType, true)
-          )
-        )
+            (null)), List(
+            ("is_fun", BooleanType, true)))
 
         val actualDF = sourceDF.withColumn("is_fun_truthy", col("is_fun").isTruthy)
 
@@ -427,12 +354,9 @@ object ColumnExtTest
           List(
             (true, true),
             (false, false),
-            (null, false)
-          ), List(
+            (null, false)), List(
             ("is_fun", BooleanType, true),
-            ("is_fun_truthy", BooleanType, false)
-          )
-        )
+            ("is_fun_truthy", BooleanType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -444,11 +368,8 @@ object ColumnExtTest
           List(
             ("dog"),
             ("cat"),
-            (null)
-          ), List(
-            ("animal_type", StringType, true)
-          )
-        )
+            (null)), List(
+            ("animal_type", StringType, true)))
 
         val actualDF = sourceDF.withColumn("animal_type_truthy", col("animal_type").isTruthy)
 
@@ -456,12 +377,9 @@ object ColumnExtTest
           List(
             ("dog", true),
             ("cat", true),
-            (null, false)
-          ), List(
+            (null, false)), List(
             ("animal_type", StringType, true),
-            ("animal_type_truthy", BooleanType, false)
-          )
-        )
+            ("animal_type_truthy", BooleanType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -477,11 +395,8 @@ object ColumnExtTest
           List(
             (true),
             (false),
-            (null)
-          ), List(
-            ("is_fun", BooleanType, true)
-          )
-        )
+            (null)), List(
+            ("is_fun", BooleanType, true)))
 
         val actualDF = sourceDF.withColumn("is_fun_falsy", col("is_fun").isFalsy)
 
@@ -489,12 +404,9 @@ object ColumnExtTest
           List(
             (true, false),
             (false, true),
-            (null, true)
-          ), List(
+            (null, true)), List(
             ("is_fun", BooleanType, true),
-            ("is_fun_falsy", BooleanType, false)
-          )
-        )
+            ("is_fun_falsy", BooleanType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -506,27 +418,20 @@ object ColumnExtTest
           List(
             ("dog"),
             ("cat"),
-            (null)
-          ), List(
-            ("animal_type", StringType, true)
-          )
-        )
+            (null)), List(
+            ("animal_type", StringType, true)))
 
         val actualDF = sourceDF.withColumn(
           "animal_type_falsy",
-          col("animal_type").isFalsy
-        )
+          col("animal_type").isFalsy)
 
         val expectedDF = spark.createDF(
           List(
             ("dog", false),
             ("cat", false),
-            (null, true)
-          ), List(
+            (null, true)), List(
             ("animal_type", StringType, true),
-            ("animal_type_falsy", BooleanType, false)
-          )
-        )
+            ("animal_type_falsy", BooleanType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -543,28 +448,21 @@ object ColumnExtTest
             ("dog"),
             (null),
             (""),
-            ("   ")
-          ), List(
-            ("animal_type", StringType, true)
-          )
-        )
+            ("   ")), List(
+            ("animal_type", StringType, true)))
 
         val actualDF = sourceDF.withColumn(
           "animal_type_is_null_or_blank",
-          col("animal_type").isNullOrBlank
-        )
+          col("animal_type").isNullOrBlank)
 
         val expectedDF = spark.createDF(
           List(
             ("dog", false),
             (null, true),
             ("", true),
-            ("   ", true)
-          ), List(
+            ("   ", true)), List(
             ("animal_type", StringType, true),
-            ("animal_type_is_null_or_blank", BooleanType, true)
-          )
-        )
+            ("animal_type_is_null_or_blank", BooleanType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -581,28 +479,21 @@ object ColumnExtTest
             "notnullhere",
             null,
             "",
-            "   "
-          ), List(
-            ("testColumn", StringType, true)
-          )
-        )
+            "   "), List(
+            ("testColumn", StringType, true)))
 
         val actualDF = sourceDF.withColumn(
           "testColumn_is_not_null_or_blank",
-          col("testColumn").isNotNullOrBlank
-        )
+          col("testColumn").isNotNullOrBlank)
 
         val expectedDF = spark.createDF(
           List(
             ("notnullhere", true),
             (null, false),
             ("", false),
-            ("   ", false)
-          ), List(
+            ("   ", false)), List(
             ("testColumn", StringType, true),
-            ("testColumn_is_not_null_or_blank", BooleanType, true)
-          )
-        )
+            ("testColumn_is_not_null_or_blank", BooleanType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -619,30 +510,23 @@ object ColumnExtTest
             ("dog"),
             ("shoes"),
             ("laces"),
-            (null)
-          ), List(
-            ("stuff", StringType, true)
-          )
-        )
+            (null)), List(
+            ("stuff", StringType, true)))
 
         val footwearRelated = Seq("laces", "shoes")
 
         val actualDF = sourceDF.withColumn(
           "is_not_footwear_related",
-          col("stuff").isNotIn(footwearRelated: _*)
-        )
+          col("stuff").isNotIn(footwearRelated: _*))
 
         val expectedDF = spark.createDF(
           List(
             ("dog", true),
             ("shoes", false),
             ("laces", false),
-            (null, null)
-          ), List(
+            (null, null)), List(
             ("stuff", StringType, true),
-            ("is_not_footwear_related", BooleanType, true)
-          )
-        )
+            ("is_not_footwear_related", BooleanType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 

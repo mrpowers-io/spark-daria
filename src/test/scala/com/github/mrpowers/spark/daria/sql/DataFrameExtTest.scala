@@ -21,13 +21,10 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football", 45),
-            ("nacional", "soccer", 10)
-          ), List(
+            ("nacional", "soccer", 10)), List(
             ("team", StringType, true),
             ("sport", StringType, true),
-            ("goals_for", IntegerType, true)
-          )
-        )
+            ("goals_for", IntegerType, true)))
 
         //      uncomment the next line if you want to check out the console output
         //      sourceDF.printSchemaInCodeFormat()
@@ -41,29 +38,22 @@ object DataFrameExtTest
       val sourceDF = spark.createDF(
         List(
           ("jets"),
-          ("nacional")
-        ), List(
-          ("team", StringType, true)
-        )
-      )
+          ("nacional")), List(
+          ("team", StringType, true)))
 
       val expectedDF = spark.createDF(
         List(
           ("jets", "hello world", "sandy meow"),
-          ("nacional", "hello world", "sandy meow")
-        ), List(
+          ("nacional", "hello world", "sandy meow")), List(
           ("team", StringType, true),
           ("greeting", StringType, false),
-          ("cats", StringType, false)
-        )
-      )
+          ("cats", StringType, false)))
 
       "runs a list of transforms" - {
 
         val transforms = List(
           ExampleTransforms.withGreeting()(_),
-          ExampleTransforms.withCat("sandy")(_)
-        )
+          ExampleTransforms.withCat("sandy")(_))
 
         val actualDF = sourceDF.composeTransforms(transforms)
 
@@ -75,8 +65,7 @@ object DataFrameExtTest
 
         val actualDF = sourceDF.composeTransforms(
           ExampleTransforms.withGreeting(),
-          ExampleTransforms.withCat("sandy")
-        )
+          ExampleTransforms.withCat("sandy"))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -91,28 +80,21 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "hello", "sandy"),
-            ("nacional", "hello", "sandy")
-          ), List(
+            ("nacional", "hello", "sandy")), List(
             ("team", StringType, true),
             ("greeting", StringType, false),
-            ("cats", StringType, false)
-          )
-        )
+            ("cats", StringType, false)))
 
         val actualDF = sourceDF.reorderColumns(
-          Seq("greeting", "team", "cats")
-        )
+          Seq("greeting", "team", "cats"))
 
         val expectedDF = spark.createDF(
           List(
             ("hello", "jets", "sandy"),
-            ("hello", "nacional", "sandy")
-          ), List(
+            ("hello", "nacional", "sandy")), List(
             ("greeting", StringType, false),
             ("team", StringType, true),
-            ("cats", StringType, false)
-          )
-        )
+            ("cats", StringType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -123,38 +105,28 @@ object DataFrameExtTest
         val df1 = spark.createDF(
           List(
             ("jets", "hello", "sandy"),
-            ("nacional", "hello", "sandy")
-          ), List(
+            ("nacional", "hello", "sandy")), List(
             ("team", StringType, true),
             ("greeting", StringType, false),
-            ("cats", StringType, false)
-          )
-        )
+            ("cats", StringType, false)))
 
         val df2 = spark.createDF(
           List(
-            ("AAA", "BBB", "CCC")
-          ), List(
+            ("AAA", "BBB", "CCC")), List(
             ("cats", StringType, false),
             ("greeting", StringType, false),
-            ("team", StringType, true)
-          )
-        )
+            ("team", StringType, true)))
 
         val actualDF = df1.reorderColumns(
-          df2.columns
-        )
+          df2.columns)
 
         val expectedDF = spark.createDF(
           List(
             ("sandy", "hello", "jets"),
-            ("sandy", "hello", "nacional")
-          ), List(
+            ("sandy", "hello", "nacional")), List(
             ("cats", StringType, false),
             ("greeting", StringType, false),
-            ("team", StringType, true)
-          )
-        )
+            ("team", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -169,11 +141,8 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         assert(sourceDF.containsColumn("team") == true)
         assert(sourceDF.containsColumn("blah") == false)
@@ -185,11 +154,8 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         assert(sourceDF.containsColumn(StructField("team", StringType, true)) == true)
         assert(sourceDF.containsColumn(StructField("blah", StringType, true)) == false)
@@ -205,12 +171,9 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "blah"),
-            ("nacional", "meow")
-          ), List(
+            ("nacional", "meow")), List(
             ("team", StringType, true),
-            ("sound", StringType, true)
-          )
-        )
+            ("sound", StringType, true)))
 
         assert(sourceDF.containsColumns("team", "sound") == true)
         assert(sourceDF.containsColumns("team", "hi") == false)
@@ -228,21 +191,15 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "USA"),
-            ("nacional", "Colombia")
-          ), List(
+            ("nacional", "Colombia")), List(
             ("team", StringType, true),
-            ("country", StringType, true)
-          )
-        )
+            ("country", StringType, true)))
 
         val otherDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         val cols = sourceDF.columnDiff(otherDF)
 
@@ -259,28 +216,21 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.withGreeting(),
-          addedColumns = Seq("greeting")
-        )
+          addedColumns = Seq("greeting"))
 
         val actualDF = sourceDF.trans(ct)
 
         val expectedDF = spark.createDF(
           List(
             ("jets", "hello world"),
-            ("nacional", "hello world")
-          ), List(
+            ("nacional", "hello world")), List(
             ("team", StringType, true),
-            ("greeting", StringType, false)
-          )
-        )
+            ("greeting", StringType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -291,17 +241,13 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "hi"),
-            ("nacional", "hey")
-          ), List(
+            ("nacional", "hey")), List(
             ("team", StringType, true),
-            ("greeting", StringType, true)
-          )
-        )
+            ("greeting", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.withGreeting(),
-          addedColumns = Seq("greeting")
-        )
+          addedColumns = Seq("greeting"))
 
         val e = intercept[DataFrameColumnsException] {
           sourceDF.trans(ct)
@@ -314,17 +260,13 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.withGreeting(),
           addedColumns = Seq("greeting"),
-          removedColumns = Seq("foo")
-        )
+          removedColumns = Seq("foo"))
 
         val e = intercept[DataFrameColumnsException] {
           sourceDF.trans(ct)
@@ -336,16 +278,12 @@ object DataFrameExtTest
 
         val sourceDF = spark.createDF(
           List(
-            ("jets", "hi")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("jets", "hi")), List(
+            ("team", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.withCat("sandy"),
-          addedColumns = Seq("greeting")
-        )
+          addedColumns = Seq("greeting"))
 
         val e = intercept[DataFrameColumnsException] {
           sourceDF.trans(ct)
@@ -358,29 +296,21 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         val actualDF = sourceDF.trans(
           CustomTransform(
             transform = ExampleTransforms.withGreeting(),
             addedColumns = Seq("greeting"),
-            requiredColumns = Seq("team")
-          )
-        )
+            requiredColumns = Seq("team")))
 
         val expectedDF = spark.createDF(
           List(
             ("jets", "hello world"),
-            ("nacional", "hello world")
-          ), List(
+            ("nacional", "hello world")), List(
             ("team", StringType, true),
-            ("greeting", StringType, false)
-          )
-        )
+            ("greeting", StringType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -391,20 +321,15 @@ object DataFrameExtTest
         val sourceDF = spark.createDF(
           List(
             ("jets"),
-            ("nacional")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("nacional")), List(
+            ("team", StringType, true)))
 
         val e = intercept[MissingDataFrameColumnsException] {
           sourceDF.trans(
             CustomTransform(
               transform = ExampleTransforms.withGreeting(),
               addedColumns = Seq("greeting"),
-              requiredColumns = Seq("something")
-            )
-          )
+              requiredColumns = Seq("something")))
         }
 
       }
@@ -413,42 +338,30 @@ object DataFrameExtTest
 
         val sourceDF = spark.createDF(
           List(
-            ("jets", "car")
-          ), List(
+            ("jets", "car")), List(
             ("team", StringType, true),
-            ("word", StringType, true)
-          )
-        )
+            ("word", StringType, true)))
 
         val actualDF = sourceDF
           .trans(
             CustomTransform(
               transform = ExampleTransforms.withGreeting(),
-              addedColumns = Seq("greeting")
-            )
-          )
+              addedColumns = Seq("greeting")))
           .trans(
             CustomTransform(
               transform = ExampleTransforms.withCat("spanky"),
-              addedColumns = Seq("cats")
-            )
-          )
+              addedColumns = Seq("cats")))
           .trans(
             CustomTransform(
               transform = ExampleTransforms.dropWordCol(),
-              removedColumns = Seq("word")
-            )
-          )
+              removedColumns = Seq("word")))
 
         val expectedDF = spark.createDF(
           List(
-            ("jets", "hello world", "spanky meow")
-          ), List(
+            ("jets", "hello world", "spanky meow")), List(
             ("team", StringType, true),
             ("greeting", StringType, false),
-            ("cats", StringType, false)
-          )
-        )
+            ("cats", StringType, false)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -458,18 +371,14 @@ object DataFrameExtTest
 
         val sourceDF = spark.createDF(
           List(
-            ("jets", "hi")
-          ), List(
+            ("jets", "hi")), List(
             ("team", StringType, true),
-            ("word", StringType, true)
-          )
-        )
+            ("word", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.withGreeting(),
           addedColumns = Seq("greeting"),
-          removedColumns = Seq("word")
-        )
+          removedColumns = Seq("word"))
 
         val e = intercept[DataFrameColumnsException] {
           sourceDF.trans(ct)
@@ -481,27 +390,20 @@ object DataFrameExtTest
 
         val sourceDF = spark.createDF(
           List(
-            ("jets", "hi")
-          ), List(
+            ("jets", "hi")), List(
             ("team", StringType, true),
-            ("word", StringType, true)
-          )
-        )
+            ("word", StringType, true)))
 
         val ct = CustomTransform(
           transform = ExampleTransforms.dropWordCol(),
-          removedColumns = Seq("word")
-        )
+          removedColumns = Seq("word"))
 
         val actualDF = sourceDF.trans(ct)
 
         val expectedDF = spark.createDF(
           List(
-            ("jets")
-          ), List(
-            ("team", StringType, true)
-          )
-        )
+            ("jets")), List(
+            ("team", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -514,8 +416,7 @@ object DataFrameExtTest
       "uses the StackOverflow answer format" - {
 
         val data = Seq(
-          Row(Row("this", "is"), "something", "cool", ";)")
-        )
+          Row(Row("this", "is"), "something", "cool", ";)"))
 
         val schema = StructType(
           Seq(
@@ -524,33 +425,24 @@ object DataFrameExtTest
               StructType(
                 Seq(
                   StructField("bar", StringType, true),
-                  StructField("baz", StringType, true)
-                )
-              ),
-              true
-            ),
+                  StructField("baz", StringType, true))),
+              true),
             StructField("x", StringType, true),
             StructField("y", StringType, true),
-            StructField("z", StringType, true)
-          )
-        )
+            StructField("z", StringType, true)))
 
         val df = spark.createDataFrame(
           spark.sparkContext.parallelize(data),
-          StructType(schema)
-        ).flattenSchema("_")
+          StructType(schema)).flattenSchema("_")
 
         val expectedDF = spark.createDF(
           List(
-            ("this", "is", "something", "cool", ";)")
-          ), List(
+            ("this", "is", "something", "cool", ";)")), List(
             ("foo_bar", StringType, true),
             ("foo_baz", StringType, true),
             ("x", StringType, true),
             ("y", StringType, true),
-            ("z", StringType, true)
-          )
-        )
+            ("z", StringType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF)
 
@@ -559,8 +451,7 @@ object DataFrameExtTest
       "flattens schema with the default delimiter" - {
 
         val data = Seq(
-          Row("this", "is", Row("something", "cool"))
-        )
+          Row("this", "is", Row("something", "cool")))
 
         val schema = StructType(
           Seq(
@@ -571,29 +462,20 @@ object DataFrameExtTest
               StructType(
                 Seq(
                   StructField("foo", StringType, true),
-                  StructField("bar", StringType, true)
-                )
-              ),
-              true
-            )
-          )
-        )
+                  StructField("bar", StringType, true))),
+              true)))
 
         val df = spark.createDataFrame(
           spark.sparkContext.parallelize(data),
-          StructType(schema)
-        ).flattenSchema()
+          StructType(schema)).flattenSchema()
 
         val expectedDF = spark.createDF(
           List(
-            ("this", "is", "something", "cool")
-          ), List(
+            ("this", "is", "something", "cool")), List(
             ("a", StringType, true),
             ("b", StringType, true),
             ("c.foo", StringType, true),
-            ("c.bar", StringType, true)
-          )
-        )
+            ("c.bar", StringType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF)
 
@@ -602,8 +484,7 @@ object DataFrameExtTest
       "flattens deeply nested schemas" - {
 
         val data = Seq(
-          Row("this", "is", Row("something", "cool", Row("i", "promise")))
-        )
+          Row("this", "is", Row("something", "cool", Row("i", "promise"))))
 
         val schema = StructType(
           Seq(
@@ -620,34 +501,22 @@ object DataFrameExtTest
                     StructType(
                       Seq(
                         StructField("crazy", StringType, true),
-                        StructField("deep", StringType, true)
-                      )
-                    )
-                  )
-                )
-              ),
-              true
-            )
-          )
-        )
+                        StructField("deep", StringType, true)))))),
+              true)))
 
         val df = spark.createDataFrame(
           spark.sparkContext.parallelize(data),
-          StructType(schema)
-        ).flattenSchema()
+          StructType(schema)).flattenSchema()
 
         val expectedDF = spark.createDF(
           List(
-            ("this", "is", "something", "cool", "i", "promise")
-          ), List(
+            ("this", "is", "something", "cool", "i", "promise")), List(
             ("a", StringType, true),
             ("b", StringType, true),
             ("c.foo", StringType, true),
             ("c.bar", StringType, true),
             ("c.d.crazy", StringType, true),
-            ("c.d.deep", StringType, true)
-          )
-        )
+            ("c.d.deep", StringType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF)
 
@@ -656,8 +525,7 @@ object DataFrameExtTest
       "allows for different column delimiters" - {
 
         val data = Seq(
-          Row("this", "is", Row("something", "cool"))
-        )
+          Row("this", "is", Row("something", "cool")))
 
         val schema = StructType(
           Seq(
@@ -668,29 +536,20 @@ object DataFrameExtTest
               StructType(
                 Seq(
                   StructField("foo", StringType, true),
-                  StructField("bar", StringType, true)
-                )
-              ),
-              true
-            )
-          )
-        )
+                  StructField("bar", StringType, true))),
+              true)))
 
         val df = spark.createDataFrame(
           spark.sparkContext.parallelize(data),
-          StructType(schema)
-        ).flattenSchema(delimiter = "_")
+          StructType(schema)).flattenSchema(delimiter = "_")
 
         val expectedDF = spark.createDF(
           List(
-            ("this", "is", "something", "cool")
-          ), List(
+            ("this", "is", "something", "cool")), List(
             ("a", StringType, true),
             ("b", StringType, true),
             ("c_foo", StringType, true),
-            ("c_bar", StringType, true)
-          )
-        )
+            ("c_bar", StringType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF)
       }
@@ -704,8 +563,7 @@ object DataFrameExtTest
           "country",
           when(col("city") === "Calgary", "Canada")
             .when(col("city") === "Buenos Aires", "Argentina")
-            .when(col("city") === "Cape Town", "South Africa")
-        )
+            .when(col("city") === "Cape Town", "South Africa"))
       }
 
       def withHemisphere()(df: DataFrame): DataFrame = {
@@ -713,8 +571,7 @@ object DataFrameExtTest
           "hemisphere",
           when(col("country") === "Canada", "Northern Hemisphere")
             .when(col("country") === "Argentina", "Southern Hemisphere")
-            .when(col("country") === "South Africa", "Southern Hemisphere")
-        )
+            .when(col("country") === "South Africa", "Southern Hemisphere"))
       }
 
       "executes a series of CustomTransforms" - {
@@ -723,41 +580,32 @@ object DataFrameExtTest
           List(
             ("Calgary"),
             ("Buenos Aires"),
-            ("Cape Town")
-          ), List(
-            ("city", StringType, true)
-          )
-        )
+            ("Cape Town")), List(
+            ("city", StringType, true)))
 
         val countryCT = CustomTransform(
           transform = withCountry(),
           requiredColumns = Seq("city"),
           addedColumns = Seq("country"),
-          skipWhenPossible = false
-        )
+          skipWhenPossible = false)
 
         val hemisphereCT = CustomTransform(
           transform = withHemisphere(),
           requiredColumns = Seq("country"),
           addedColumns = Seq("hemisphere"),
-          skipWhenPossible = false
-        )
+          skipWhenPossible = false)
 
         val actualDF = df.composeTrans(
-          List(countryCT, hemisphereCT)
-        )
+          List(countryCT, hemisphereCT))
 
         val expectedDF = spark.createDF(
           List(
             ("Calgary", "Canada", "Northern Hemisphere"),
             ("Buenos Aires", "Argentina", "Southern Hemisphere"),
-            ("Cape Town", "South Africa", "Southern Hemisphere")
-          ), List(
+            ("Cape Town", "South Africa", "Southern Hemisphere")), List(
             ("city", StringType, true),
             ("country", StringType, true),
-            ("hemisphere", StringType, true)
-          )
-        )
+            ("hemisphere", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -769,26 +617,21 @@ object DataFrameExtTest
           List(
             ("Calgary", "Canada"),
             ("Buenos Aires", "Argentina"),
-            ("Cape Town", "South Africa")
-          ), List(
+            ("Cape Town", "South Africa")), List(
             ("city", StringType, true),
-            ("country", StringType, true)
-          )
-        )
+            ("country", StringType, true)))
 
         val countryCT = CustomTransform(
           transform = withCountry(),
           requiredColumns = Seq("city"),
           addedColumns = Seq("country"),
-          skipWhenPossible = true
-        )
+          skipWhenPossible = true)
 
         val hemisphereCT = CustomTransform(
           transform = withHemisphere(),
           requiredColumns = Seq("country"),
           addedColumns = Seq("hemisphere"),
-          skipWhenPossible = true
-        )
+          skipWhenPossible = true)
 
         val actualDF = df.composeTrans(List(countryCT, hemisphereCT))
 
@@ -799,13 +642,10 @@ object DataFrameExtTest
           List(
             ("Calgary", "Canada", "Northern Hemisphere"),
             ("Buenos Aires", "Argentina", "Southern Hemisphere"),
-            ("Cape Town", "South Africa", "Southern Hemisphere")
-          ), List(
+            ("Cape Town", "South Africa", "Southern Hemisphere")), List(
             ("city", StringType, true),
             ("country", StringType, true),
-            ("hemisphere", StringType, true)
-          )
-        )
+            ("hemisphere", StringType, true)))
 
         assertSmallDataFrameEquality(actualDF, expectedDF)
 
@@ -823,24 +663,18 @@ object DataFrameExtTest
             ("a", "b", 2),
             ("a", "b", 3),
             ("z", "b", 4),
-            ("a", "x", 5)
-          ), List(
+            ("a", "x", 5)), List(
             ("letter1", StringType, true),
             ("letter2", StringType, true),
-            ("number1", IntegerType, true)
-          )
-        ).killDuplicates(col("letter1"), col("letter2"))
+            ("number1", IntegerType, true))).killDuplicates(col("letter1"), col("letter2"))
 
         val expectedDF = spark.createDF(
           List(
             ("z", "b", 4),
-            ("a", "x", 5)
-          ), List(
+            ("a", "x", 5)), List(
             ("letter1", StringType, true),
             ("letter2", StringType, true),
-            ("number1", IntegerType, true)
-          )
-        )
+            ("number1", IntegerType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF, orderedComparison = false)
 
@@ -854,23 +688,17 @@ object DataFrameExtTest
             ("a", "b", 2),
             ("a", "b", 3),
             ("z", "b", 4),
-            ("a", "x", 5)
-          ), List(
+            ("a", "x", 5)), List(
             ("letter1", StringType, true),
             ("letter2", StringType, true),
-            ("number1", IntegerType, true)
-          )
-        ).killDuplicates(col("letter1"))
+            ("number1", IntegerType, true))).killDuplicates(col("letter1"))
 
         val expectedDF = spark.createDF(
           List(
-            ("z", "b", 4)
-          ), List(
+            ("z", "b", 4)), List(
             ("letter1", StringType, true),
             ("letter2", StringType, true),
-            ("number1", IntegerType, true)
-          )
-        )
+            ("number1", IntegerType, true)))
 
         assertSmallDataFrameEquality(df, expectedDF, orderedComparison = false)
 

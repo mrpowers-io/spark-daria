@@ -221,8 +221,7 @@ object DataFrameExt {
      */
     def flattenSchema(delimiter: String = ".", prefix: String = null): DataFrame = {
       df.select(
-        StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*
-      )
+        StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*)
     }
 
     /**
@@ -231,8 +230,7 @@ object DataFrameExt {
      *
      */
     def composeTrans(
-      customTransforms: List[CustomTransform]
-    ): DataFrame = {
+      customTransforms: List[CustomTransform]): DataFrame = {
       customTransforms.foldLeft(df) { (memoDF, ct) =>
         if (ct.skipWhenPossible && memoDF.containsColumns(ct.addedColumns: _*)) {
           memoDF
@@ -250,8 +248,7 @@ object DataFrameExt {
       df
         .withColumn(
           "my_super_secret_count",
-          count("*").over(Window.partitionBy(cols: _*))
-        )
+          count("*").over(Window.partitionBy(cols: _*)))
         .where(col("my_super_secret_count") === 1)
         .drop(col("my_super_secret_count"))
     }

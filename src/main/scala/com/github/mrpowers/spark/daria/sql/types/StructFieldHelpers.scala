@@ -7,8 +7,7 @@ object StructFieldHelpers {
   def customEquals(
     s1: StructField,
     s2: StructField,
-    ignoreNullable: Boolean = false
-  ): Boolean = {
+    ignoreNullable: Boolean = false): Boolean = {
     if (ignoreNullable) {
       s1.name == s2.name &&
         s1.dataType == s2.dataType

@@ -54,8 +54,7 @@ object SparkSessionExt {
     def createDF[U, T](rowData: List[U], fields: List[T]): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.parallelize(asRows(rowData)),
-        StructType(asSchema(fields))
-      )
+        StructType(asSchema(fields)))
     }
 
   }

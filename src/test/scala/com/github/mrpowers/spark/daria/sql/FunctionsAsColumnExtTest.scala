@@ -24,15 +24,11 @@ object FunctionsAsColumnExtTest
           List(
             ("ThIS is COOL", "this is cool"),
             ("HAPPy", "happy"),
-            (null, null)
-          ), List(
+            (null, null)), List(
             ("some_string", StringType, true),
-            ("expected", StringType, true)
-          )
-        ).withColumn(
+            ("expected", StringType, true))).withColumn(
             "some_string_lower",
-            col("some_string").lower()
-          )
+            col("some_string").lower())
 
         assertColumnEquality(df, "expected", "some_string_lower")
 

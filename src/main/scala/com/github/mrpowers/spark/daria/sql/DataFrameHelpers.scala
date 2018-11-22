@@ -47,8 +47,7 @@ object DataFrameHelpers extends DataFrameValidator {
   def twoColumnsToMap[keyType: TypeTag, valueType: TypeTag](
     df: DataFrame,
     keyColName: String,
-    valueColName: String
-  ): Map[keyType, valueType] = {
+    valueColName: String): Map[keyType, valueType] = {
     validatePresenceOfColumns(df, Seq(keyColName, valueColName))
     df
       .select(keyColName, valueColName)
@@ -87,8 +86,7 @@ object DataFrameHelpers extends DataFrameValidator {
    */
   def columnToArray[T: ClassTag](
     df: DataFrame,
-    colName: String
-  ): Array[T] = {
+    colName: String): Array[T] = {
     df.select(colName).collect().map(r => r(0).asInstanceOf[T])
   }
 
@@ -122,8 +120,7 @@ object DataFrameHelpers extends DataFrameValidator {
    */
   def columnToList[T: ClassTag](
     df: DataFrame,
-    colName: String
-  ): List[T] = {
+    colName: String): List[T] = {
     columnToArray[T](df, colName).toList
   }
 

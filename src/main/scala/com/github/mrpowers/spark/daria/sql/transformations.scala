@@ -128,14 +128,12 @@ object transformations {
   def multiRegexpReplace(
     cols: List[Column],
     pattern: String = "\u0000",
-    replacement: String = ""
-  )(df: DataFrame): DataFrame = {
+    replacement: String = "")(df: DataFrame): DataFrame = {
     cols.foldLeft(df) { (memoDF, col) =>
       memoDF
         .withColumn(
           col.toString(),
-          regexp_replace(col, pattern, replacement)
-        )
+          regexp_replace(col, pattern, replacement))
     }
   }
 
@@ -154,8 +152,7 @@ object transformations {
    */
   def bulkRegexpReplace(
     pattern: String = "\u0000",
-    replacement: String = ""
-  )(df: DataFrame): DataFrame = {
+    replacement: String = "")(df: DataFrame): DataFrame = {
     val cols = df.schema.filter { (s: StructField) =>
       s.dataType.simpleString == "string"
     }.map { (s: StructField) =>
@@ -181,8 +178,7 @@ object transformations {
    * Limits the `"person"` column to 2 characters and the `"phone"` column to 3 characters.
    */
   def truncateColumns(
-    columnLengths: Map[String, Int]
-  )(df: DataFrame): DataFrame = {
+    columnLengths: Map[String, Int])(df: DataFrame): DataFrame = {
     columnLengths.foldLeft(df) {
       case (memoDF, (colName, length)) =>
         if (memoDF.containsColumn(colName)) {
@@ -202,8 +198,7 @@ object transformations {
     buckets: Array[(Any, Any)],
     inclusiveBoundries: Boolean = false,
     lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false
-  )(df: DataFrame) = {
+    highestBoundGte: Boolean = false)(df: DataFrame) = {
     df.withColumn(
       outputColName,
       functions.bucketFinder(
@@ -211,9 +206,7 @@ object transformations {
         buckets,
         inclusiveBoundries,
         lowestBoundLte,
-        highestBoundGte
-      )
-    )
+        highestBoundGte))
   }
 
   /**
@@ -256,8 +249,7 @@ object transformations {
     val colNames = df.columns.map(col)
     df.withColumn(
       outputColName,
-      struct(colNames: _*)
-    )
+      struct(colNames: _*))
   }
 
 }

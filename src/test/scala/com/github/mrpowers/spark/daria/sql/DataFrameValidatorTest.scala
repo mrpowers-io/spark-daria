@@ -20,12 +20,9 @@ object DataFrameValidatorTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team", "sport", "country", "city")
 
@@ -40,12 +37,9 @@ object DataFrameValidatorTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val requiredColNames = Seq("team")
 
@@ -64,20 +58,15 @@ object DataFrameValidatorTest
             Row(1, 1),
             Row(-8, 8),
             Row(-5, 5),
-            Row(null, null)
-          ), List(
+            Row(null, null)), List(
             ("num1", IntegerType, true),
-            ("num2", IntegerType, true)
-          )
-        )
+            ("num2", IntegerType, true)))
 
         val requiredSchema = StructType(
           List(
             StructField("num1", IntegerType, true),
             StructField("num2", IntegerType, true),
-            StructField("name", StringType, true)
-          )
-        )
+            StructField("name", StringType, true)))
 
         val e = intercept[InvalidDataFrameSchemaException] {
           validateSchema(sourceDF, requiredSchema)
@@ -92,18 +81,13 @@ object DataFrameValidatorTest
             Row(1, 1),
             Row(-8, 8),
             Row(-5, 5),
-            Row(null, null)
-          ), List(
+            Row(null, null)), List(
             ("num1", IntegerType, true),
-            ("num2", IntegerType, true)
-          )
-        )
+            ("num2", IntegerType, true)))
 
         val requiredSchema = StructType(
           List(
-            StructField("num1", IntegerType, true)
-          )
-        )
+            StructField("num1", IntegerType, true)))
 
         validateSchema(sourceDF, requiredSchema)
 
@@ -118,12 +102,9 @@ object DataFrameValidatorTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("team", "sport", "country", "city")
 
@@ -138,12 +119,9 @@ object DataFrameValidatorTest
         val sourceDF = spark.createDF(
           List(
             ("jets", "football"),
-            ("nacional", "soccer")
-          ), List(
+            ("nacional", "soccer")), List(
             ("team", StringType, true),
-            ("sport", StringType, true)
-          )
-        )
+            ("sport", StringType, true)))
 
         val prohibitedColNames = Seq("ttt", "zzz")
 
