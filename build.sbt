@@ -28,8 +28,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "0.17.1" % "test"
-
+libraryDependencies += "MrPowers" % "spark-fast-tests" % "0.17.1-s_2.11"
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 
