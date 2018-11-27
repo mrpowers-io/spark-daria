@@ -9,11 +9,7 @@ import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import org.apache.spark.sql.Row
 
-object TransformationsTest
-    extends TestSuite
-    with DataFrameComparer
-    with ColumnComparer
-    with SparkSessionTestWrapper {
+object TransformationsTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
   val tests = Tests {
 
@@ -22,55 +18,71 @@ object TransformationsTest
       "sorts the columns in a DataFrame in ascending order" - {
 
         val sourceDF = spark.createDF(
+          List(("pablo", 3, "polo")),
           List(
-            ("pablo", 3, "polo")), List(
             ("name", StringType, true),
             ("age", IntegerType, true),
-            ("sport", StringType, true)))
+            ("sport", StringType, true)
+          )
+        )
 
         val actualDF = sourceDF.transform(transformations.sortColumns())
 
         val expectedDF = spark.createDF(
+          List((3, "pablo", "polo")),
           List(
-            (3, "pablo", "polo")), List(
             ("age", IntegerType, true),
             ("name", StringType, true),
-            ("sport", StringType, true)))
+            ("sport", StringType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
       "sorts the columns in a DataFrame in descending order" - {
 
         val sourceDF = spark.createDF(
+          List(("pablo", 3, "polo")),
           List(
-            ("pablo", 3, "polo")), List(
             ("name", StringType, true),
             ("age", IntegerType, true),
-            ("sport", StringType, true)))
+            ("sport", StringType, true)
+          )
+        )
 
         val actualDF = sourceDF.transform(transformations.sortColumns("desc"))
 
         val expectedDF = spark.createDF(
+          List(("polo", "pablo", 3)),
           List(
-            ("polo", "pablo", 3)), List(
             ("sport", StringType, true),
             ("name", StringType, true),
-            ("age", IntegerType, true)))
+            ("age", IntegerType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
       "throws an error if the sort order is invalid" - {
 
         val sourceDF = spark.createDF(
+          List(("pablo", 3, "polo")),
           List(
-            ("pablo", 3, "polo")), List(
             ("name", StringType, true),
             ("age", IntegerType, true),
-            ("sport", StringType, true)))
+            ("sport", StringType, true)
+          )
+        )
 
         val e = intercept[InvalidColumnSortOrderException] {
           sourceDF.transform(transformations.sortColumns("cats"))
@@ -85,22 +97,29 @@ object TransformationsTest
       "snake_cases the columns of a DataFrame" - {
 
         val sourceDF = spark.createDF(
+          List(("funny", "joke", "person")),
           List(
-            ("funny", "joke", "person")), List(
             ("A b C", StringType, true),
             ("de F", StringType, true),
-            ("cr   ay", StringType, true)))
+            ("cr   ay", StringType, true)
+          )
+        )
 
         val actualDF = sourceDF.transform(transformations.snakeCaseColumns())
 
         val expectedDF = spark.createDF(
+          List(("funny", "joke", "person")),
           List(
-            ("funny", "joke", "person")), List(
             ("a_b_c", StringType, true),
             ("de_f", StringType, true),
-            ("cr_ay", StringType, true)))
+            ("cr_ay", StringType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -110,21 +129,30 @@ object TransformationsTest
 
       "Title Case the columns of a DataFrame" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("funny", "joke")), List(
-            ("This is a simple text", StringType, true),
-            ("this is anoTher teXt", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(("funny", "joke")),
+            List(
+              ("This is a simple text", StringType, true),
+              ("this is anoTher teXt", StringType, true)
+            )
+          )
 
         val actualDF = sourceDF.transform(transformations.titleCaseColumns())
 
-        val expectedDF = spark.createDF(
-          List(
-            ("funny", "joke")), List(
-            ("This Is A Simple Text", StringType, true),
-            ("This Is Another Text", StringType, true)))
+        val expectedDF =
+          spark.createDF(
+            List(("funny", "joke")),
+            List(
+              ("This Is A Simple Text", StringType, true),
+              ("This Is Another Text", StringType, true)
+            )
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -134,50 +162,73 @@ object TransformationsTest
 
       "remove characters that match a regular expression in the columns of a DataFrame" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("\u0000StringTest", 123)), List(
-            ("StringTypeCol", StringType, true),
-            ("IntegerTypeCol", IntegerType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(("\u0000StringTest", 123)),
+            List(
+              ("StringTypeCol", StringType, true),
+              ("IntegerTypeCol", IntegerType, true)
+            )
+          )
 
         val actualDF = sourceDF.transform(
           transformations.multiRegexpReplace(
-            List(
-              col("StringTypeCol")),
+            List(col("StringTypeCol")),
             "\u0000",
-            "ThisIsA"))
+            "ThisIsA"
+          )
+        )
 
-        val expectedDF = spark.createDF(
-          List(
-            ("ThisIsAStringTest", 123)), List(
-            ("StringTypeCol", StringType, true),
-            ("IntegerTypeCol", IntegerType, true)))
+        val expectedDF =
+          spark.createDF(
+            List(("ThisIsAStringTest", 123)),
+            List(
+              ("StringTypeCol", StringType, true),
+              ("IntegerTypeCol", IntegerType, true)
+            )
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
       "removes \\x00 in the columns of a DataFrame" - {
 
         val sourceDF = spark.createDF(
+          List(("\\x00", 123)),
           List(
-            ("\\x00", 123)), List(
             ("StringTypeCol", StringType, true),
-            ("num", IntegerType, true)))
+            ("num", IntegerType, true)
+          )
+        )
 
         val actualDF = sourceDF.transform(
           transformations.multiRegexpReplace(
-            List(col("StringTypeCol"), col("num")),
+            List(
+              col("StringTypeCol"),
+              col("num")
+            ),
             "\\\\x00",
-            ""))
+            ""
+          )
+        )
 
-        val expectedDF = spark.createDF(
-          List(
-            ("", "123")), List(
-            ("StringTypeCol", StringType, true),
-            ("num", StringType, true)))
+        val expectedDF =
+          spark.createDF(
+            List(("", "123")),
+            List(
+              ("StringTypeCol", StringType, true),
+              ("num", StringType, true)
+            )
+          )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -186,24 +237,40 @@ object TransformationsTest
         val sourceDF = spark.createDF(
           List(
             ("Bart cool", "moto cool"),
-            ("cool James", "droid fun")), List(
+            ("cool James", "droid fun")
+          ),
+          List(
             ("person", StringType, true),
-            ("phone", StringType, true)))
+            ("phone", StringType, true)
+          )
+        )
 
         val actualDF = sourceDF.transform(
           transformations.multiRegexpReplace(
-            List(col("person"), col("phone")),
+            List(
+              col("person"),
+              col("phone")
+            ),
             "cool",
-            "dude"))
+            "dude"
+          )
+        )
 
         val expectedDF = spark.createDF(
           List(
             ("Bart dude", "moto dude"),
-            ("dude James", "droid fun")), List(
+            ("dude James", "droid fun")
+          ),
+          List(
             ("person", StringType, true),
-            ("phone", StringType, true)))
+            ("phone", StringType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -216,25 +283,39 @@ object TransformationsTest
         val sourceDF = spark.createDF(
           List(
             ("Bart cool", "moto cool", 5),
-            ("cool James", "droid fun", 10)), List(
+            ("cool James", "droid fun", 10)
+          ),
+          List(
             ("person", StringType, true),
             ("phone", StringType, true),
-            ("num", IntegerType, true)))
+            ("num", IntegerType, true)
+          )
+        )
 
-        val actualDF = sourceDF.transform(
-          transformations.bulkRegexpReplace(
-            "cool",
-            "dude"))
+        val actualDF =
+          sourceDF.transform(
+            transformations.bulkRegexpReplace(
+              "cool",
+              "dude"
+            )
+          )
 
         val expectedDF = spark.createDF(
           List(
             ("Bart dude", "moto dude", 5),
-            ("dude James", "droid fun", 10)), List(
+            ("dude James", "droid fun", 10)
+          ),
+          List(
             ("person", StringType, true),
             ("phone", StringType, true),
-            ("num", IntegerType, true)))
+            ("num", IntegerType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -248,27 +329,41 @@ object TransformationsTest
           List(
             ("Bart cool", "moto cool"),
             ("cool James", "droid fun"),
-            (null, null)), List(
-            ("person", StringType, true),
-            ("phone", StringType, true)))
-
-        val columnLengths: Map[String, Int] = Map(
-          "person" -> 2,
-          "phone" -> 3,
-          "whatever" -> 50000)
-
-        val actualDF = sourceDF.transform(
-          transformations.truncateColumns(columnLengths))
-
-        val expectedDF = spark.createDF(
+            (null, null)
+          ),
           List(
-            ("Ba", "mot"),
-            ("co", "dro"),
-            (null, null)), List(
             ("person", StringType, true),
-            ("phone", StringType, true)))
+            ("phone", StringType, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        val columnLengths: Map[String, Int] =
+          Map(
+            "person"   -> 2,
+            "phone"    -> 3,
+            "whatever" -> 50000
+          )
+
+        val actualDF =
+          sourceDF.transform(transformations.truncateColumns(columnLengths))
+
+        val expectedDF =
+          spark.createDF(
+            List(
+              ("Ba", "mot"),
+              ("co", "dro"),
+              (null, null)
+            ),
+            List(
+              ("person", StringType, true),
+              ("phone", StringType, true)
+            )
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
 
       }
 
@@ -278,20 +373,25 @@ object TransformationsTest
 
       "buckets a numeric column" - {
 
-        val df = spark.createDF(
-          List(
-            (20, "10-20"),
-            (50, "41-50"),
-            (10, "10-20"),
-            (40, "31-40"),
-            (50, "41-50"),
-            (72, ">70"),
-            (9, "<10"),
-            (null, null),
-            (62, null)),
-          List(
-            ("some_num", IntegerType, true),
-            ("expected", StringType, true))).transform(
+        val df = spark
+          .createDF(
+            List(
+              (20, "10-20"),
+              (50, "41-50"),
+              (10, "10-20"),
+              (40, "31-40"),
+              (50, "41-50"),
+              (72, ">70"),
+              (9, "<10"),
+              (null, null),
+              (62, null)
+            ),
+            List(
+              ("some_num", IntegerType, true),
+              ("expected", StringType, true)
+            )
+          )
+          .transform(
             transformations.withColBucket(
               colName = "some_num",
               outputColName = "my_bucket",
@@ -301,10 +401,17 @@ object TransformationsTest
                 (21, 30),
                 (31, 40),
                 (41, 50),
-                (70, null)),
-              inclusiveBoundries = true))
+                (70, null)
+              ),
+              inclusiveBoundries = true
+            )
+          )
 
-        assertColumnEquality(df, "expected", "my_bucket")
+        assertColumnEquality(
+          df,
+          "expected",
+          "my_bucket"
+        )
 
       }
 
@@ -315,63 +422,139 @@ object TransformationsTest
       val sourceDF = spark.createDF(
         List(
           (10, """{"name": "Bart cool", "age": 25}"""),
-          (20, """{"name": "Lisa frost", "age": 27}""")), List(
+          (20, """{"name": "Lisa frost", "age": 27}""")
+        ),
+        List(
           ("id", IntegerType, true),
-          ("person", StringType, true)))
+          ("person", StringType, true)
+        )
+      )
 
       'extractTheCompleteSchema - {
-        val personSchema = StructType(List(
-          StructField("name", StringType),
-          StructField("age", IntegerType)))
+        val personSchema = StructType(
+          List(
+            StructField(
+              "name",
+              StringType
+            ),
+            StructField(
+              "age",
+              IntegerType
+            )
+          )
+        )
 
         val actualDF = sourceDF.transform(
-          transformations.extractFromJson("person", "personData", personSchema))
+          transformations.extractFromJson(
+            "person",
+            "personData",
+            personSchema
+          )
+        )
 
         val expectedDF = spark.createDF(
           List(
-            (10, """{"name": "Bart cool", "age": 25}""", Row("Bart cool", 25)),
-            (20, """{"name": "Lisa frost", "age": 27}""", Row("Lisa frost", 27))), List(
+            (
+              10,
+              """{"name": "Bart cool", "age": 25}""",
+              Row(
+                "Bart cool",
+                25
+              )
+            ),
+            (
+              20,
+              """{"name": "Lisa frost", "age": 27}""",
+              Row(
+                "Lisa frost",
+                27
+              )
+            )
+          ),
+          List(
             ("id", IntegerType, true),
             ("person", StringType, true),
-            ("personData", personSchema, true)))
+            ("personData", personSchema, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
       }
 
       'extractPartialSchema - {
-        val personNameSchema = StructType(List(
-          StructField("name", StringType)))
+        val personNameSchema = StructType(
+          List(
+            StructField(
+              "name",
+              StringType
+            )
+          )
+        )
 
         val actualDF = sourceDF.transform(
-          transformations.extractFromJson("person", "personData", personNameSchema))
+          transformations.extractFromJson(
+            "person",
+            "personData",
+            personNameSchema
+          )
+        )
 
         val expectedDF = spark.createDF(
           List(
             (10, """{"name": "Bart cool", "age": 25}""", Row("Bart cool")),
-            (20, """{"name": "Lisa frost", "age": 27}""", Row("Lisa frost"))), List(
+            (20, """{"name": "Lisa frost", "age": 27}""", Row("Lisa frost"))
+          ),
+          List(
             ("id", IntegerType, true),
             ("person", StringType, true),
-            ("personData", personNameSchema, true)))
+            ("personData", personNameSchema, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
       }
 
       'extractNonExistingSchema - {
-        val wrongSchema = StructType(List(
-          StructField("wrong_field", StringType)))
+        val wrongSchema =
+          StructType(
+            List(
+              StructField(
+                "wrong_field",
+                StringType
+              )
+            )
+          )
 
         val actualDF = sourceDF.transform(
-          transformations.extractFromJson("person", "personData", wrongSchema))
+          transformations.extractFromJson(
+            "person",
+            "personData",
+            wrongSchema
+          )
+        )
 
         val expectedDF = spark.createDF(
           List(
             (10, """{"name": "Bart cool", "age": 25}""", Row(None.orNull)),
-            (20, """{"name": "Lisa frost", "age": 27}""", Row(None.orNull))), List(
+            (20, """{"name": "Lisa frost", "age": 27}""", Row(None.orNull))
+          ),
+          List(
             ("id", IntegerType, true),
             ("person", StringType, true),
-            ("personData", wrongSchema, true)))
+            ("personData", wrongSchema, true)
+          )
+        )
 
-        assertSmallDataFrameEquality(actualDF, expectedDF)
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
       }
     }
 
@@ -379,14 +562,20 @@ object TransformationsTest
 
       "collects an entire row intro a StructType column" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("pablo", 3, "polo", 1.0),
-            (null, 3, "polo", 5.5)), List(
-            ("name", StringType, true),
-            ("age", IntegerType, true),
-            ("sport", StringType, true),
-            ("a_number", DoubleType, true))).transform(transformations.withRowAsStruct())
+        val sourceDF = spark
+          .createDF(
+            List(
+              ("pablo", 3, "polo", 1.0),
+              (null, 3, "polo", 5.5)
+            ),
+            List(
+              ("name", StringType, true),
+              ("age", IntegerType, true),
+              ("sport", StringType, true),
+              ("a_number", DoubleType, true)
+            )
+          )
+          .transform(transformations.withRowAsStruct())
 
         //        sourceDF.show()
 

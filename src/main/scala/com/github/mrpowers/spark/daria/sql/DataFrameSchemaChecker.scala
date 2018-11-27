@@ -20,4 +20,3 @@ private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructT
   }
 
 }
-

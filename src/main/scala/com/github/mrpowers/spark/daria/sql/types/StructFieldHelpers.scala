@@ -4,17 +4,14 @@ import org.apache.spark.sql.types.StructField
 
 object StructFieldHelpers {
 
-  def customEquals(
-    s1: StructField,
-    s2: StructField,
-    ignoreNullable: Boolean = false): Boolean = {
+  def customEquals(s1: StructField, s2: StructField, ignoreNullable: Boolean = false): Boolean = {
     if (ignoreNullable) {
       s1.name == s2.name &&
-        s1.dataType == s2.dataType
+      s1.dataType == s2.dataType
     } else {
       s1.name == s2.name &&
-        s1.dataType == s2.dataType &&
-        s1.nullable == s2.nullable
+      s1.dataType == s2.dataType &&
+      s1.nullable == s2.nullable
     }
   }
 

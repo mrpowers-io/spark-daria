@@ -13,7 +13,6 @@ import org.apache.spark.sql.DataFrame
  *
  * The `EtlDefinition` class is generic and can be molded to suit all ETL situations.  For example, it can read a CSV file from S3, run transformations, and write out Parquet files on your local filesystem.
  */
-
 case class EtlDefinition(
   sourceDF: DataFrame,
   transform: (DataFrame => DataFrame),
@@ -59,4 +58,3 @@ case class EtlDefinition(
   }
 
 }
-

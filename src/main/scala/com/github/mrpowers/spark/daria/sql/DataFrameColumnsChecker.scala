@@ -10,7 +10,7 @@ private[sql] class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[
 
   def missingColumnsMessage(): String = {
     val missingColNames = missingColumns.mkString(", ")
-    val allColNames = df.columns.mkString(", ")
+    val allColNames     = df.columns.mkString(", ")
     s"The [${missingColNames}] columns are not included in the DataFrame with the following columns [${allColNames}]"
   }
 
@@ -21,4 +21,3 @@ private[sql] class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[
   }
 
 }
-

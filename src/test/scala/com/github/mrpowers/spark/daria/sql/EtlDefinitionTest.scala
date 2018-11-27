@@ -6,10 +6,7 @@ import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 import org.apache.spark.sql.types.{IntegerType, StringType}
 
-object EtlDefinitionTest
-    extends TestSuite
-    with SparkSessionTestWrapper
-    with DataFrameComparer {
+object EtlDefinitionTest extends TestSuite with SparkSessionTestWrapper with DataFrameComparer {
 
   val tests = Tests {
 
@@ -20,15 +17,21 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)), List(
+            ("liz", 20)
+          ),
+          List(
             ("name", StringType, true),
-            ("age", IntegerType, true)))
+            ("age", IntegerType, true)
+          )
+        )
 
-        val etlDefinition = new EtlDefinition(
-          sourceDF = sourceDF,
-          transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter(),
-          metadata = scala.collection.mutable.Map("hidden" -> true))
+        val etlDefinition =
+          new EtlDefinition(
+            sourceDF = sourceDF,
+            transform = EtlHelpers.someTransform(),
+            write = EtlHelpers.someWriter(),
+            metadata = scala.collection.mutable.Map("hidden" -> true)
+          )
 
         assert(etlDefinition.metadata("hidden") == true)
 
@@ -39,14 +42,19 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)), List(
+            ("liz", 20)
+          ),
+          List(
             ("name", StringType, true),
-            ("age", IntegerType, true)))
+            ("age", IntegerType, true)
+          )
+        )
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter())
+          write = EtlHelpers.someWriter()
+        )
 
       }
 
@@ -59,14 +67,19 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)), List(
+            ("liz", 20)
+          ),
+          List(
             ("name", StringType, true),
-            ("age", IntegerType, true)))
+            ("age", IntegerType, true)
+          )
+        )
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter())
+          write = EtlHelpers.someWriter()
+        )
 
         etlDefinition.process()
 
@@ -81,16 +94,22 @@ object EtlDefinitionTest
         val sourceDF = spark.createDF(
           List(
             ("bob", 14),
-            ("liz", 20)), List(
+            ("liz", 20)
+          ),
+          List(
             ("name", StringType, true),
-            ("age", IntegerType, true)))
+            ("age", IntegerType, true)
+          )
+        )
 
         val etlDefinition = new EtlDefinition(
           sourceDF = sourceDF,
           transform = EtlHelpers.someTransform(),
-          write = EtlHelpers.someWriter())
+          write = EtlHelpers.someWriter()
+        )
 
-        val etls = scala.collection.mutable.Map[String, EtlDefinition]("example" -> etlDefinition)
+        val etls = scala.collection.mutable
+          .Map[String, EtlDefinition]("example" -> etlDefinition)
 
         etls += ("ex2" -> etlDefinition)
 

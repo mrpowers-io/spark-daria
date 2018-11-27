@@ -9,10 +9,7 @@ import FunctionsAsColumnExt._
 import utest._
 
 object FunctionsAsColumnExtTest
-    extends TestSuite
-    with DataFrameComparer
-    with ColumnComparer
-    with SparkSessionTestWrapper {
+    extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
   val tests = Tests {
 
@@ -20,17 +17,28 @@ object FunctionsAsColumnExtTest
 
       "lower cases a column" - {
 
-        val df = spark.createDF(
-          List(
-            ("ThIS is COOL", "this is cool"),
-            ("HAPPy", "happy"),
-            (null, null)), List(
-            ("some_string", StringType, true),
-            ("expected", StringType, true))).withColumn(
+        val df = spark
+          .createDF(
+            List(
+              ("ThIS is COOL", "this is cool"),
+              ("HAPPy", "happy"),
+              (null, null)
+            ),
+            List(
+              ("some_string", StringType, true),
+              ("expected", StringType, true)
+            )
+          )
+          .withColumn(
             "some_string_lower",
-            col("some_string").lower())
+            col("some_string").lower()
+          )
 
-        assertColumnEquality(df, "expected", "some_string_lower")
+        assertColumnEquality(
+          df,
+          "expected",
+          "some_string_lower"
+        )
 
       }
 

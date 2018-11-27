@@ -17,7 +17,6 @@ case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
  *
  * It's convenient to work with DataFrames that have snake_case column names.  Column names with spaces make it harder to write SQL queries.
  */
-
 object transformations {
 
   /**
@@ -56,7 +55,8 @@ object transformations {
     } else if (order == "desc") {
       df.columns.sorted.reverse
     } else {
-      val message = s"The sort order must be 'asc' or 'desc'.  Your sort order was '$order'."
+      val message =
+        s"The sort order must be 'asc' or 'desc'.  Your sort order was '$order'."
       throw new InvalidColumnSortOrderException(message)
     }
     df.reorderColumns(cols)
@@ -86,13 +86,19 @@ object transformations {
    */
   def snakeCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(colName, toSnakeCase(colName))
+      memoDF.withColumnRenamed(
+        colName,
+        toSnakeCase(colName)
+      )
     }
   }
 
   private def toSnakeCase(str: String): String = {
     str
-      .replaceAll("\\s+", "_")
+      .replaceAll(
+        "\\s+",
+        "_"
+      )
       .toLowerCase
   }
 
@@ -101,13 +107,19 @@ object transformations {
    */
   def titleCaseColumns()(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(colName, colName.toLowerCase().split(' ').map(_.capitalize).mkString(" "))
+      memoDF.withColumnRenamed(
+        colName,
+        colName.toLowerCase().split(' ').map(_.capitalize).mkString(" ")
+      )
     }
   }
 
   def prependToColName(str: String)(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(colName, str + colName)
+      memoDF.withColumnRenamed(
+        colName,
+        str + colName
+      )
     }
   }
 
@@ -128,12 +140,19 @@ object transformations {
   def multiRegexpReplace(
     cols: List[Column],
     pattern: String = "\u0000",
-    replacement: String = "")(df: DataFrame): DataFrame = {
+    replacement: String = ""
+  )(df: DataFrame
+  ): DataFrame = {
     cols.foldLeft(df) { (memoDF, col) =>
       memoDF
         .withColumn(
           col.toString(),
-          regexp_replace(col, pattern, replacement))
+          regexp_replace(
+            col,
+            pattern,
+            replacement
+          )
+        )
     }
   }
 
@@ -150,16 +169,18 @@ object transformations {
    *
    * Replaces all `"cool"` strings in all the `sourceDF` columns of `StringType` with the string `"dude"`.
    */
-  def bulkRegexpReplace(
-    pattern: String = "\u0000",
-    replacement: String = "")(df: DataFrame): DataFrame = {
+  def bulkRegexpReplace(pattern: String = "\u0000", replacement: String = "")(df: DataFrame): DataFrame = {
     val cols = df.schema.filter { (s: StructField) =>
       s.dataType.simpleString == "string"
     }.map { (s: StructField) =>
       col(s.name)
     }.toList
 
-    multiRegexpReplace(cols, pattern, replacement)(df)
+    multiRegexpReplace(
+      cols,
+      pattern,
+      replacement
+    )(df)
   }
 
   /**
@@ -177,12 +198,17 @@ object transformations {
    *
    * Limits the `"person"` column to 2 characters and the `"phone"` column to 3 characters.
    */
-  def truncateColumns(
-    columnLengths: Map[String, Int])(df: DataFrame): DataFrame = {
+  def truncateColumns(columnLengths: Map[String, Int])(df: DataFrame): DataFrame = {
     columnLengths.foldLeft(df) {
       case (memoDF, (colName, length)) =>
         if (memoDF.containsColumn(colName)) {
-          memoDF.withColumn(colName, truncate(col(colName), length))
+          memoDF.withColumn(
+            colName,
+            truncate(
+              col(colName),
+              length
+            )
+          )
         } else {
           memoDF
         }
@@ -198,7 +224,9 @@ object transformations {
     buckets: Array[(Any, Any)],
     inclusiveBoundries: Boolean = false,
     lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false)(df: DataFrame) = {
+    highestBoundGte: Boolean = false
+  )(df: DataFrame
+  ) = {
     df.withColumn(
       outputColName,
       functions.bucketFinder(
@@ -206,7 +234,9 @@ object transformations {
         buckets,
         inclusiveBoundries,
         lowestBoundLte,
-        highestBoundGte))
+        highestBoundGte
+      )
+    )
   }
 
   /**
@@ -242,14 +272,21 @@ object transformations {
    * }}}
    */
   def extractFromJson(colName: String, outputColName: String, jsonSchema: StructType)(df: DataFrame): DataFrame = {
-    df.withColumn(outputColName, from_json(col(colName), jsonSchema))
+    df.withColumn(
+      outputColName,
+      from_json(
+        col(colName),
+        jsonSchema
+      )
+    )
   }
 
   def withRowAsStruct(outputColName: String = "row_as_struct")(df: DataFrame): DataFrame = {
     val colNames = df.columns.map(col)
     df.withColumn(
       outputColName,
-      struct(colNames: _*))
+      struct(colNames: _*)
+    )
   }
 
 }

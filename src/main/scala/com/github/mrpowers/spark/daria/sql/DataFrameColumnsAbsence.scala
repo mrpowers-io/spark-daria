@@ -10,7 +10,7 @@ private[sql] class DataFrameColumnsAbsence(df: DataFrame, prohibitedColNames: Se
 
   def extraColumnsMessage(): String = {
     val extra = extraColNames.mkString(", ")
-    val all = df.columns.mkString(", ")
+    val all   = df.columns.mkString(", ")
     s"The [${extra}] columns are not allowed to be included in the DataFrame with the following columns [${all}]"
   }
 

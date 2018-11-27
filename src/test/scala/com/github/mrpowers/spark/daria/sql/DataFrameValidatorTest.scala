@@ -6,10 +6,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import SparkSessionExt._
 
-object DataFrameValidatorTest
-    extends TestSuite
-    with SparkSessionTestWrapper
-    with DataFrameValidator {
+object DataFrameValidatorTest extends TestSuite with SparkSessionTestWrapper with DataFrameValidator {
 
   val tests = Tests {
 
@@ -17,33 +14,54 @@ object DataFrameValidatorTest
 
       "throws an exception if columns are missing from a DataFrame" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("jets", "football"),
-            ("nacional", "soccer")), List(
-            ("team", StringType, true),
-            ("sport", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              ("jets", "football"),
+              ("nacional", "soccer")
+            ),
+            List(
+              ("team", StringType, true),
+              ("sport", StringType, true)
+            )
+          )
 
-        val requiredColNames = Seq("team", "sport", "country", "city")
+        val requiredColNames = Seq(
+          "team",
+          "sport",
+          "country",
+          "city"
+        )
 
         val e = intercept[MissingDataFrameColumnsException] {
-          validatePresenceOfColumns(sourceDF, requiredColNames)
+          validatePresenceOfColumns(
+            sourceDF,
+            requiredColNames
+          )
         }
 
       }
 
       "does nothing if columns aren't missing" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("jets", "football"),
-            ("nacional", "soccer")), List(
-            ("team", StringType, true),
-            ("sport", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              ("jets", "football"),
+              ("nacional", "soccer")
+            ),
+            List(
+              ("team", StringType, true),
+              ("sport", StringType, true)
+            )
+          )
 
         val requiredColNames = Seq("team")
 
-        validatePresenceOfColumns(sourceDF, requiredColNames)
+        validatePresenceOfColumns(
+          sourceDF,
+          requiredColNames
+        )
 
       }
 
@@ -55,21 +73,54 @@ object DataFrameValidatorTest
 
         val sourceDF = spark.createDF(
           List(
-            Row(1, 1),
-            Row(-8, 8),
-            Row(-5, 5),
-            Row(null, null)), List(
+            Row(
+              1,
+              1
+            ),
+            Row(
+              -8,
+              8
+            ),
+            Row(
+              -5,
+              5
+            ),
+            Row(
+              null,
+              null
+            )
+          ),
+          List(
             ("num1", IntegerType, true),
-            ("num2", IntegerType, true)))
+            ("num2", IntegerType, true)
+          )
+        )
 
         val requiredSchema = StructType(
           List(
-            StructField("num1", IntegerType, true),
-            StructField("num2", IntegerType, true),
-            StructField("name", StringType, true)))
+            StructField(
+              "num1",
+              IntegerType,
+              true
+            ),
+            StructField(
+              "num2",
+              IntegerType,
+              true
+            ),
+            StructField(
+              "name",
+              StringType,
+              true
+            )
+          )
+        )
 
         val e = intercept[InvalidDataFrameSchemaException] {
-          validateSchema(sourceDF, requiredSchema)
+          validateSchema(
+            sourceDF,
+            requiredSchema
+          )
         }
 
       }
@@ -78,18 +129,44 @@ object DataFrameValidatorTest
 
         val sourceDF = spark.createDF(
           List(
-            Row(1, 1),
-            Row(-8, 8),
-            Row(-5, 5),
-            Row(null, null)), List(
-            ("num1", IntegerType, true),
-            ("num2", IntegerType, true)))
-
-        val requiredSchema = StructType(
+            Row(
+              1,
+              1
+            ),
+            Row(
+              -8,
+              8
+            ),
+            Row(
+              -5,
+              5
+            ),
+            Row(
+              null,
+              null
+            )
+          ),
           List(
-            StructField("num1", IntegerType, true)))
+            ("num1", IntegerType, true),
+            ("num2", IntegerType, true)
+          )
+        )
 
-        validateSchema(sourceDF, requiredSchema)
+        val requiredSchema =
+          StructType(
+            List(
+              StructField(
+                "num1",
+                IntegerType,
+                true
+              )
+            )
+          )
+
+        validateSchema(
+          sourceDF,
+          requiredSchema
+        )
 
       }
 
@@ -99,33 +176,57 @@ object DataFrameValidatorTest
 
       "throws an exception if prohibited columns are included in the DataFrame" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("jets", "football"),
-            ("nacional", "soccer")), List(
-            ("team", StringType, true),
-            ("sport", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              ("jets", "football"),
+              ("nacional", "soccer")
+            ),
+            List(
+              ("team", StringType, true),
+              ("sport", StringType, true)
+            )
+          )
 
-        val prohibitedColNames = Seq("team", "sport", "country", "city")
+        val prohibitedColNames = Seq(
+          "team",
+          "sport",
+          "country",
+          "city"
+        )
 
         val e = intercept[ProhibitedDataFrameColumnsException] {
-          validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+          validateAbsenceOfColumns(
+            sourceDF,
+            prohibitedColNames
+          )
         }
 
       }
 
       "does nothing if columns aren't missing" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("jets", "football"),
-            ("nacional", "soccer")), List(
-            ("team", StringType, true),
-            ("sport", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              ("jets", "football"),
+              ("nacional", "soccer")
+            ),
+            List(
+              ("team", StringType, true),
+              ("sport", StringType, true)
+            )
+          )
 
-        val prohibitedColNames = Seq("ttt", "zzz")
+        val prohibitedColNames = Seq(
+          "ttt",
+          "zzz"
+        )
 
-        validateAbsenceOfColumns(sourceDF, prohibitedColNames)
+        validateAbsenceOfColumns(
+          sourceDF,
+          prohibitedColNames
+        )
 
       }
 

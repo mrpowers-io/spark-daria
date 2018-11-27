@@ -26,7 +26,10 @@ trait DataFrameValidator {
    *
    */
   def validatePresenceOfColumns(df: DataFrame, requiredColNames: Seq[String]): Unit = {
-    val c = new DataFrameColumnsChecker(df, requiredColNames)
+    val c = new DataFrameColumnsChecker(
+      df,
+      requiredColNames
+    )
     c.validatePresenceOfColumns()
   }
 
@@ -69,7 +72,10 @@ trait DataFrameValidator {
    * > com.github.mrpowers.spark.daria.sql.InvalidDataFrameSchemaException: The [StructField(name,StringType,true)] StructFields are not included in the DataFrame with the following StructFields [StructType(StructField(num1,IntegerType,true), StructField(num2,IntegerType,true))]
    */
   def validateSchema(df: DataFrame, requiredSchema: StructType): Unit = {
-    val c = new DataFrameSchemaChecker(df, requiredSchema)
+    val c = new DataFrameSchemaChecker(
+      df,
+      requiredSchema
+    )
     c.validateSchema()
   }
 
@@ -93,7 +99,10 @@ trait DataFrameValidator {
    * > com.github.mrpowers.spark.daria.sql.ProhibitedDataFrameColumnsException: The [team, sport] columns are not allowed to be included in the DataFrame with the following columns [team, sport]
    */
   def validateAbsenceOfColumns(df: DataFrame, prohibitedColNames: Seq[String]): Unit = {
-    val c = new DataFrameColumnsAbsence(df, prohibitedColNames)
+    val c = new DataFrameColumnsAbsence(
+      df,
+      prohibitedColNames
+    )
     c.validateAbsenceOfColumns()
   }
 

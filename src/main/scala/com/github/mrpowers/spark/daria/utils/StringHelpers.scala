@@ -14,13 +14,14 @@ object StringHelpers {
    * Escapes all the special characters in a string for a SQL regexp expression
    *
    */
-  def escapeForSqlRegexp(
-    str: String,
-    charsToEscape: List[String] = sqlCharsToEscape): Option[String] = {
+  def escapeForSqlRegexp(str: String, charsToEscape: List[String] = sqlCharsToEscape): Option[String] = {
     val s = Option(str).getOrElse(return None)
     Some(charsToEscape.foldLeft(str) {
       case (res, pattern) =>
-        res.replaceAll(pattern, "\\" + pattern)
+        res.replaceAll(
+          pattern,
+          "\\" + pattern
+        )
     })
   }
 

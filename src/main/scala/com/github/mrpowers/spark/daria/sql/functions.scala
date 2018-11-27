@@ -14,7 +14,6 @@ import scala.reflect.runtime.universe._
  * @groupname misc_funcs Misc functions
  * @groupname Ungrouped Support functions for DataFrames
  */
-
 object functions {
 
   /**
@@ -31,7 +30,13 @@ object functions {
    * @group string_funcs
    */
   def singleSpace(col: Column): Column = {
-    trim(regexp_replace(col, " +", " "))
+    trim(
+      regexp_replace(
+        col,
+        " +",
+        " "
+      )
+    )
   }
 
   /**
@@ -49,7 +54,11 @@ object functions {
    * @since 0.16.0
    */
   def removeAllWhitespace(col: Column): Column = {
-    regexp_replace(col, "\\s+", "")
+    regexp_replace(
+      col,
+      "\\s+",
+      ""
+    )
   }
 
   /**
@@ -65,7 +74,11 @@ object functions {
    * @since 0.16.0
    */
   def removeAllWhitespace(colName: String): Column = {
-    regexp_replace(col(colName), "\\s+", "")
+    regexp_replace(
+      col(colName),
+      "\\s+",
+      ""
+    )
   }
 
   /**
@@ -83,7 +96,11 @@ object functions {
    * @group string_funcs
    */
   def antiTrim(col: Column): Column = {
-    regexp_replace(col, "\\b\\s+\\b", "")
+    regexp_replace(
+      col,
+      "\\b\\s+\\b",
+      ""
+    )
   }
 
   /**
@@ -101,7 +118,11 @@ object functions {
    * @group string_funcs
    */
   def removeNonWordCharacters(col: Column): Column = {
-    regexp_replace(col, "[^\\w\\s]+", "")
+    regexp_replace(
+      col,
+      "[^\\w\\s]+",
+      ""
+    )
   }
 
   /**
@@ -116,16 +137,15 @@ object functions {
     val c = Option(colName).getOrElse(return None)
     // initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
     var previousLetter: Char = '\0'
-    Some(
-      c.map { (letter: Char) =>
-        if (d.contains(previousLetter) || previousLetter.equals('\0')) {
-          previousLetter = letter
-          letter.toUpper
-        } else {
-          previousLetter = letter
-          letter.toLower
-        }
-      })
+    Some(c.map { (letter: Char) =>
+      if (d.contains(previousLetter) || previousLetter.equals('\0')) {
+        previousLetter = letter
+        letter.toUpper
+      } else {
+        previousLetter = letter
+        letter.toLower
+      }
+    })
   }
 
   /**
@@ -142,7 +162,11 @@ object functions {
    * @group string_funcs
    */
   def truncate(col: Column, len: Int): Column = {
-    substring(col, 0, len)
+    substring(
+      col,
+      0,
+      len
+    )
   }
 
   /**
@@ -184,8 +208,8 @@ object functions {
    *
    * @group collection_funcs
    */
-  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
-    (arr: Seq[T]) => arr.exists(f(_))
+  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
+    arr.exists(f(_))
   }
 
   /**
@@ -226,8 +250,8 @@ object functions {
    *
    * @group collection_funcs
    */
-  def forall[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] {
-    (arr: Seq[T]) => arr.forall(f(_))
+  def forall[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
+    arr.forall(f(_))
   }
 
   /**
@@ -236,7 +260,13 @@ object functions {
    * @group collection_funcs
    */
   def arrayExNull(cols: Column*): Column = {
-    split(concat_ws(",,,", cols: _*), ",,,")
+    split(
+      concat_ws(
+        ",,,",
+        cols: _*
+      ),
+      ",,,"
+    )
   }
 
   /**
@@ -323,7 +353,10 @@ object functions {
    * @group datetime_funcs
    */
   def yeardiff(end: Column, start: Column): Column = {
-    datediff(end, start) / 365
+    datediff(
+      end,
+      start
+    ) / 365
   }
 
   def bucketFinder(
@@ -331,34 +364,44 @@ object functions {
     buckets: Array[(Any, Any)],
     inclusiveBoundries: Boolean = false,
     lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false): Column = {
+    highestBoundGte: Boolean = false
+  ): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
-    val lowerBoundLteCol = lit(lowestBoundLte)
-    val upperBoundGteCol = lit(highestBoundGte)
+    val lowerBoundLteCol      = lit(lowestBoundLte)
+    val upperBoundGteCol      = lit(highestBoundGte)
 
     val b = buckets.map { res: (Any, Any) =>
       when(
         col.isNull,
-        lit(null))
-        .when(
+        lit(null)
+      ).when(
           lowerBoundLteCol === false && lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
-          lit(s"<${res._2}"))
+          lit(s"<${res._2}")
+        )
         .when(
           lowerBoundLteCol === true && lit(res._1).isNull && lit(res._2).isNotNull && col <= lit(res._2),
-          lit(s"<=${res._2}"))
+          lit(s"<=${res._2}")
+        )
         .when(
           upperBoundGteCol === false && lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
-          lit(s">${res._1}"))
+          lit(s">${res._1}")
+        )
         .when(
           upperBoundGteCol === true && lit(res._1).isNotNull && lit(res._2).isNull && col >= lit(res._1),
-          lit(s">=${res._1}"))
+          lit(s">=${res._1}")
+        )
         .when(
-          inclusiveBoundriesCol === true && col.between(res._1, res._2),
-          lit(s"${res._1}-${res._2}"))
+          inclusiveBoundriesCol === true && col.between(
+            res._1,
+            res._2
+          ),
+          lit(s"${res._1}-${res._2}")
+        )
         .when(
           inclusiveBoundriesCol === false && col.gt(res._1) && col.lt(res._2),
-          lit(s"${res._1}-${res._2}"))
+          lit(s"${res._1}-${res._2}")
+        )
     }
 
     coalesce(b: _*)

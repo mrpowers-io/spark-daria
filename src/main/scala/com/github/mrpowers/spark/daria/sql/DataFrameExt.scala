@@ -1,6 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.{DataFrame, Column}
+import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
@@ -185,16 +185,29 @@ object DataFrameExt {
     def trans(customTransform: CustomTransform): DataFrame = {
       // make sure df doesn't already have the columns that will be added
       if (df.columns.toSeq.exists((c: String) => customTransform.addedColumns.contains(c))) {
-        throw new DataFrameColumnsException(s"The DataFrame already contains the columns your transformation will add. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will add these columns: [${customTransform.addedColumns.mkString(", ")}]")
+        throw new DataFrameColumnsException(
+          s"The DataFrame already contains the columns your transformation will add. The DataFrame has these columns: [${df.columns
+            .mkString(", ")}]. You've asserted that your transformation will add these columns: [${customTransform.addedColumns
+            .mkString(", ")}]"
+        )
       }
 
       // make sure df isn't missing the columns that will be dropped
-      if (!customTransform.removedColumns.isEmpty && df.columns.toSeq.intersect(customTransform.removedColumns).isEmpty) {
-        throw new DataFrameColumnsException(s"The DataFrame does not contain the columns your transformation will drop. The DataFrame has these columns: [${df.columns.mkString(", ")}]. You've asserted that your transformation will drop these columns: [${customTransform.removedColumns.mkString(", ")}]")
+      if (!customTransform.removedColumns.isEmpty && df.columns.toSeq
+            .intersect(customTransform.removedColumns)
+            .isEmpty) {
+        throw new DataFrameColumnsException(
+          s"The DataFrame does not contain the columns your transformation will drop. The DataFrame has these columns: [${df.columns
+            .mkString(", ")}]. You've asserted that your transformation will drop these columns: [${customTransform.removedColumns
+            .mkString(", ")}]"
+        )
       }
 
       // validate presence of columns
-      val c = new DataFrameColumnsChecker(df, customTransform.requiredColumns)
+      val c = new DataFrameColumnsChecker(
+        df,
+        customTransform.requiredColumns
+      )
       c.validatePresenceOfColumns()
 
       val transformedDF = df.transform(customTransform.transform)
@@ -202,13 +215,19 @@ object DataFrameExt {
       // make sure the columns have been added
       val actualColumnsAdded = transformedDF.columnDiff(df)
       if (!actualColumnsAdded.equals(customTransform.addedColumns)) {
-        throw new DataFrameColumnsException(s"The [${actualColumnsAdded.mkString(", ")}] columns were actually added, but you specified that these columns should have been added [${customTransform.addedColumns.mkString(", ")}]")
+        throw new DataFrameColumnsException(
+          s"The [${actualColumnsAdded.mkString(", ")}] columns were actually added, but you specified that these columns should have been added [${customTransform.addedColumns
+            .mkString(", ")}]"
+        )
       }
 
       // make sure the columns have been removed
       val actualColumnsRemoved = df.columnDiff(transformedDF)
       if (!actualColumnsRemoved.equals(customTransform.removedColumns)) {
-        throw new DataFrameColumnsException(s"The [${actualColumnsRemoved.mkString(", ")}] columns were actually removed, but you specified that these columns should have been removed [${customTransform.removedColumns.mkString(", ")}]")
+        throw new DataFrameColumnsException(
+          s"The [${actualColumnsRemoved.mkString(", ")}] columns were actually removed, but you specified that these columns should have been removed [${customTransform.removedColumns
+            .mkString(", ")}]"
+        )
       }
 
       transformedDF
@@ -221,7 +240,12 @@ object DataFrameExt {
      */
     def flattenSchema(delimiter: String = ".", prefix: String = null): DataFrame = {
       df.select(
-        StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*)
+        StructTypeHelpers.flattenSchema(
+          df.schema,
+          delimiter,
+          prefix
+        ): _*
+      )
     }
 
     /**
@@ -229,8 +253,7 @@ object DataFrameExt {
      * Uses function composition
      *
      */
-    def composeTrans(
-      customTransforms: List[CustomTransform]): DataFrame = {
+    def composeTrans(customTransforms: List[CustomTransform]): DataFrame = {
       customTransforms.foldLeft(df) { (memoDF, ct) =>
         if (ct.skipWhenPossible && memoDF.containsColumns(ct.addedColumns: _*)) {
           memoDF
@@ -245,10 +268,10 @@ object DataFrameExt {
      *
      */
     def killDuplicates(cols: Column*): DataFrame = {
-      df
-        .withColumn(
+      df.withColumn(
           "my_super_secret_count",
-          count("*").over(Window.partitionBy(cols: _*)))
+          count("*").over(Window.partitionBy(cols: _*))
+        )
         .where(col("my_super_secret_count") === 1)
         .drop(col("my_super_secret_count"))
     }
@@ -256,4 +279,3 @@ object DataFrameExt {
   }
 
 }
-

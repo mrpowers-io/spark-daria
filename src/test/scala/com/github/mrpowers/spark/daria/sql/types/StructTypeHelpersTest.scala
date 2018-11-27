@@ -13,8 +13,18 @@ object StructTypeHelpersTest extends TestSuite {
 
         val schema = StructType(
           Seq(
-            StructField("a", StringType, true),
-            StructField("b", StringType, true)))
+            StructField(
+              "a",
+              StringType,
+              true
+            ),
+            StructField(
+              "b",
+              StringType,
+              true
+            )
+          )
+        )
 
         StructTypeHelpers.flattenSchema(schema)
 
@@ -24,15 +34,36 @@ object StructTypeHelpersTest extends TestSuite {
 
         val schema = StructType(
           Seq(
-            StructField("a", StringType, true),
-            StructField("b", StringType, true),
+            StructField(
+              "a",
+              StringType,
+              true
+            ),
+            StructField(
+              "b",
+              StringType,
+              true
+            ),
             StructField(
               "c",
               StructType(
                 Seq(
-                  StructField("foo", StringType, true),
-                  StructField("bar", StringType, true))),
-              true)))
+                  StructField(
+                    "foo",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bar",
+                    StringType,
+                    true
+                  )
+                )
+              ),
+              true
+            )
+          )
+        )
 
         StructTypeHelpers.flattenSchema(schema)
 

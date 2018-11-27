@@ -5,10 +5,7 @@ import org.apache.spark.sql.types.{IntegerType, LongType, StringType}
 import SparkSessionExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
-object DataFrameHelpersTest
-    extends TestSuite
-    with SparkSessionTestWrapper
-    with DataFrameComparer {
+object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with DataFrameComparer {
 
   val tests = Tests {
 
@@ -19,18 +16,25 @@ object DataFrameHelpersTest
         val sourceDF = spark.createDF(
           List(
             ("boracay", 7),
-            ("long island", 9)), List(
+            ("long island", 9)
+          ),
+          List(
             ("island", StringType, true),
-            ("fun_level", IntegerType, true)))
+            ("fun_level", IntegerType, true)
+          )
+        )
 
-        val actual = DataFrameHelpers.twoColumnsToMap[String, Integer](
-          sourceDF,
-          "island",
-          "fun_level")
+        val actual =
+          DataFrameHelpers.twoColumnsToMap[String, Integer](
+            sourceDF,
+            "island",
+            "fun_level"
+          )
 
         val expected = Map(
-          "boracay" -> 7,
-          "long island" -> 9)
+          "boracay"     -> 7,
+          "long island" -> 9
+        )
 
         assert(actual == expected)
 
@@ -42,16 +46,26 @@ object DataFrameHelpersTest
 
       "converts a column to an array" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            1,
-            2,
-            3), List(
-            ("num", IntegerType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              1,
+              2,
+              3
+            ),
+            List(("num", IntegerType, true))
+          )
 
-        val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
+        val actual = DataFrameHelpers.columnToArray[Int](
+          sourceDF,
+          "num"
+        )
 
-        actual ==> Array(1, 2, 3)
+        actual ==> Array(
+          1,
+          2,
+          3
+        )
 
       }
 
@@ -61,16 +75,26 @@ object DataFrameHelpersTest
 
       "converts a column to a list" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            1,
-            2,
-            3), List(
-            ("num", IntegerType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              1,
+              2,
+              3
+            ),
+            List(("num", IntegerType, true))
+          )
 
-        val actual = DataFrameHelpers.columnToList[Int](sourceDF, "num")
+        val actual = DataFrameHelpers.columnToList[Int](
+          sourceDF,
+          "num"
+        )
 
-        actual ==> List(1, 2, 3)
+        actual ==> List(
+          1,
+          2,
+          3
+        )
 
       }
 
@@ -80,19 +104,33 @@ object DataFrameHelpersTest
 
       "converts a DataFrame into an array of maps" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("doctor", 4, "high"),
-            ("dentist", 10, "high")), List(
-            ("profession", StringType, true),
-            ("some_number", IntegerType, true),
-            ("pay_grade", StringType, true)))
+        val sourceDF =
+          spark.createDF(
+            List(
+              ("doctor", 4, "high"),
+              ("dentist", 10, "high")
+            ),
+            List(
+              ("profession", StringType, true),
+              ("some_number", IntegerType, true),
+              ("pay_grade", StringType, true)
+            )
+          )
 
         val actual = DataFrameHelpers.toArrayOfMaps(sourceDF)
 
         val expected = Array(
-          Map("profession" -> "doctor", "some_number" -> 4, "pay_grade" -> "high"),
-          Map("profession" -> "dentist", "some_number" -> 10, "pay_grade" -> "high"))
+          Map(
+            "profession"  -> "doctor",
+            "some_number" -> 4,
+            "pay_grade"   -> "high"
+          ),
+          Map(
+            "profession"  -> "dentist",
+            "some_number" -> 10,
+            "pay_grade"   -> "high"
+          )
+        )
 
         actual ==> expected
 

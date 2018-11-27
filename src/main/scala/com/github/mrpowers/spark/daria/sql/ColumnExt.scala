@@ -12,7 +12,6 @@ import org.apache.spark.sql.functions._
  *
  * @since 0.0.1
  */
-
 object ColumnExt {
 
   implicit class ColumnMethods(col: Column) {
@@ -85,7 +84,10 @@ object ColumnExt {
      * @group expr_ops
      */
     def chainUDF(udfName: String, cols: Column*): Column = {
-      callUDF(udfName, col +: cols: _*)
+      callUDF(
+        udfName,
+        col +: cols: _*
+      )
     }
 
     /**
@@ -114,11 +116,30 @@ object ColumnExt {
      * @group expr_ops
      */
     def nullBetween(lowerCol: Column, upperCol: Column): Column = {
-      when(lowerCol.isNull && upperCol.isNull, false).otherwise(
-        when(col.isNull, false).otherwise(
-          when(lowerCol.isNull && upperCol.isNotNull && col.leq(upperCol), true).otherwise(
-            when(lowerCol.isNotNull && upperCol.isNull && col.geq(lowerCol), true).otherwise(
-              col.between(lowerCol, upperCol)))))
+      when(
+        lowerCol.isNull && upperCol.isNull,
+        false
+      ).otherwise(
+        when(
+          col.isNull,
+          false
+        ).otherwise(
+          when(
+            lowerCol.isNull && upperCol.isNotNull && col.leq(upperCol),
+            true
+          ).otherwise(
+              when(
+                lowerCol.isNotNull && upperCol.isNull && col.geq(lowerCol),
+                true
+              ).otherwise(
+                col.between(
+                  lowerCol,
+                  upperCol
+                )
+              )
+            )
+        )
+      )
     }
 
     /**
@@ -128,7 +149,10 @@ object ColumnExt {
      * @group expr_ops
      */
     def isTrue: Column = {
-      when(col.isNull, false).otherwise(col === true)
+      when(
+        col.isNull,
+        false
+      ).otherwise(col === true)
     }
 
     /**
@@ -138,7 +162,10 @@ object ColumnExt {
      * @group expr_ops
      */
     def isFalse: Column = {
-      when(col.isNull, false).otherwise(col === false)
+      when(
+        col.isNull,
+        false
+      ).otherwise(col === false)
     }
 
     /**
@@ -179,7 +206,10 @@ object ColumnExt {
      * @group expr_ops
      */
     def isFalsy: Column = {
-      when(col.isNull || col === lit(false), true).otherwise(false)
+      when(
+        col.isNull || col === lit(false),
+        true
+      ).otherwise(false)
     }
 
     /**

@@ -11,16 +11,16 @@ object transformations {
    */
   def withVectorizedFeatures(
     featureColNames: Array[String],
-    outputColName: String = "features")(df: DataFrame): DataFrame = {
+    outputColName: String = "features"
+  )(df: DataFrame
+  ): DataFrame = {
     val assembler: VectorAssembler = new VectorAssembler()
       .setInputCols(featureColNames)
       .setOutputCol(outputColName)
     assembler.transform(df)
   }
 
-  def withLabel(
-    inputColName: String,
-    outputColName: String = "label")(df: DataFrame) = {
+  def withLabel(inputColName: String, outputColName: String = "label")(df: DataFrame) = {
     val labelIndexer: StringIndexer = new StringIndexer()
       .setInputCol(inputColName)
       .setOutputCol(outputColName)
