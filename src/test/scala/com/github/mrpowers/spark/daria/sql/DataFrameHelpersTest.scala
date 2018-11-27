@@ -25,7 +25,7 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
         )
 
         val actual =
-          DataFrameHelpers.twoColumnsToMap[String, Integer](
+          DataFrameHelpers.twoColumnsToMap[String, Int](
             sourceDF,
             "island",
             "fun_level"
@@ -36,7 +36,7 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
           "long island" -> 9
         )
 
-        assert(actual == expected)
+        actual ==> expected
 
       }
 
@@ -53,7 +53,9 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
               2,
               3
             ),
-            List(("num", IntegerType, true))
+            List(
+              ("num", IntegerType, true)
+            )
           )
 
         val actual = DataFrameHelpers.columnToArray[Int](
@@ -82,7 +84,9 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
               2,
               3
             ),
-            List(("num", IntegerType, true))
+            List(
+              ("num", IntegerType, true)
+            )
           )
 
         val actual = DataFrameHelpers.columnToList[Int](

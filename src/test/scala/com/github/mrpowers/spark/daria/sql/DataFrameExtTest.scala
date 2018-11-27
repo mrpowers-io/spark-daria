@@ -11,6 +11,7 @@ import org.apache.spark.sql.functions._
 object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessionTestWrapper {
 
   val tests = Tests {
+
     'printSchemaInCodeFormat - {
 
       "prints the schema in a code friendly format" - {
@@ -190,8 +191,10 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
           List(("team", StringType, true))
         )
 
-        assert(sourceDF.containsColumn("team") == true)
-        assert(sourceDF.containsColumn("blah") == false)
+        assert(
+          sourceDF.containsColumn("team") == true,
+          sourceDF.containsColumn("blah") == false
+        )
 
       }
 
