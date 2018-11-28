@@ -289,7 +289,7 @@ object DataFrameExt {
       df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
 
     /**
-      * Convert camel case columns to sname case
+      * Convert camel case columns to snake case
       * Example: SomeColumn -> some_column
       */
     def camelCaseToSnakeCaseColumns: DataFrame =
