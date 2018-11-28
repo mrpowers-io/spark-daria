@@ -1,10 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.{Column, DataFrame}
+import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StructField
-import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
+import org.apache.spark.sql.{Column, DataFrame}
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
@@ -275,6 +275,35 @@ object DataFrameExt {
         .where(col("my_super_secret_count") === 1)
         .drop(col("my_super_secret_count"))
     }
+
+    /**
+      * Rename columns
+     */
+    def renameColumns(f: String => String): DataFrame =
+      df.columns.foldLeft(df)((tempDf, c) => tempDf.withColumnRenamed(c, f(c)))
+
+    /**
+      * Drop columns
+      */
+    def dropColumns(f: String => Boolean): DataFrame =
+      df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
+
+    /**
+      * Convert camel case columns to sname case
+      * Example: SomeColumn -> some_column
+      */
+    def camelCaseToSnakeCaseColumns: DataFrame =
+      renameColumns(_.replaceAll("([A-Z]+)", "_$1").toLowerCase.stripPrefix("_"))
+
+    /**
+      * Lowercase columns
+     */
+    def lowerCaseColumns: DataFrame = renameColumns(_.toLowerCase)
+
+    /**
+      * Trim columns
+      */
+    def trimColumns: DataFrame = renameColumns(_.trim)
 
   }
 
