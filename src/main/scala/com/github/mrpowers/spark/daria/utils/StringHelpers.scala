@@ -26,4 +26,23 @@ object StringHelpers {
     })
   }
 
+  def toSnakeCase(str: String): String = {
+    str
+      .replaceAll(
+        "\\s+",
+        "_"
+      )
+      .toLowerCase
+  }
+
+  def camelCaseToSnakeCase(str: String): String = {
+    str
+      .replaceAll(
+        "([A-Z]+)",
+        "_$1"
+      )
+      .toLowerCase
+      .stripPrefix("_")
+  }
+
 }
