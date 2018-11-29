@@ -278,6 +278,8 @@ object DataFrameExt {
 
     /**
      * Rename columns
+     * Here is how to lowercase all the columns df.renameColumns(_.toLowerCase)
+     * Here is how to trim all the columns df.renameColumns(_.trim)
      */
     def renameColumns(f: String => String): DataFrame =
       df.columns.foldLeft(df)(

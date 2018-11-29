@@ -1114,6 +1114,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
     }
 
     'renameColumns - {
+
       "change dash or space to underscore" - {
 
         val df = spark
@@ -1149,6 +1150,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
           )
         assert(df.columns.toSet == expectedDF.columns.toSet)
       }
+
     }
 
   }
