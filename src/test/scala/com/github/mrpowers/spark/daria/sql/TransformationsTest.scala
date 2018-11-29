@@ -125,6 +125,41 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
 
     }
 
+    'camelCaseToSnakeCaseColumns - {
+      "convert camel case columns to snake case" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("John", 1, 101),
+              ("Paul", 2, 102),
+              ("Jane", 3, 103)
+            ),
+            List(
+              ("userName", StringType, true),
+              ("userId", IntegerType, true),
+              ("internalUserId", IntegerType, true)
+            )
+          )
+          .transform(transformations.camelCaseToSnakeCaseColumns())
+
+        val expectedDF = spark
+          .createDF(
+            List(
+              ("John", 1, 101),
+              ("Paul", 2, 102),
+              ("Jane", 3, 103)
+            ),
+            List(
+              ("user_name", StringType, true),
+              ("user_id", IntegerType, true),
+              ("internal_user_id", IntegerType, true)
+            )
+          )
+        assert(df.columns.toSet == expectedDF.columns.toSet)
+      }
+    }
+
     'titleCaseColumns - {
 
       "Title Case the columns of a DataFrame" - {
