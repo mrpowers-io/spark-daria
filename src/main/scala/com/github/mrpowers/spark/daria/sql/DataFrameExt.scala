@@ -277,33 +277,16 @@ object DataFrameExt {
     }
 
     /**
-      * Rename columns
+     * Rename columns
      */
     def renameColumns(f: String => String): DataFrame =
-      df.columns.foldLeft(df)((tempDf, c) => tempDf.withColumnRenamed(c, f(c)))
-
-    /**
-      * Drop columns
-      */
-    def dropColumns(f: String => Boolean): DataFrame =
-      df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
-
-    /**
-      * Convert camel case columns to snake case
-      * Example: SomeColumn -> some_column
-      */
-    def camelCaseToSnakeCaseColumns: DataFrame =
-      renameColumns(_.replaceAll("([A-Z]+)", "_$1").toLowerCase.stripPrefix("_"))
-
-    /**
-      * Lowercase columns
-     */
-    def lowerCaseColumns: DataFrame = renameColumns(_.toLowerCase)
-
-    /**
-      * Trim columns
-      */
-    def trimColumns: DataFrame = renameColumns(_.trim)
+      df.columns.foldLeft(df)(
+        (tempDf, c) =>
+          tempDf.withColumnRenamed(
+            c,
+            f(c)
+        )
+      )
 
   }
 

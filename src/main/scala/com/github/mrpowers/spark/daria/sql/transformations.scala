@@ -93,6 +93,18 @@ object transformations {
     }
   }
 
+  /**
+   * Convert camel case columns to snake case
+   * Example: SomeColumn -> some_column
+   */
+  def camelCaseToSnakeCaseColumns()(df: DataFrame): DataFrame =
+    df.renameColumns(
+      _.replaceAll(
+        "([A-Z]+)",
+        "_$1"
+      ).toLowerCase.stripPrefix("_")
+    )
+
   private def toSnakeCase(str: String): String = {
     str
       .replaceAll(

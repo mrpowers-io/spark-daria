@@ -1117,103 +1117,36 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
       "change dash or space to underscore" - {
 
         val df = spark
-            .createDF(
-              List(
-                ("John", 1),
-                ("Paul", 2),
-                ("Jane", 3)
-              ),
-              List(
-                ("user-name", StringType, true),
-                ("user id", IntegerType, true)
-              )
-            ).renameColumns(_.trim.replaceAll("[\\s-]+", "_"))
+          .createDF(
+            List(
+              ("John", 1),
+              ("Paul", 2),
+              ("Jane", 3)
+            ),
+            List(
+              ("user-name", StringType, true),
+              ("user id", IntegerType, true)
+            )
+          )
+          .renameColumns(
+            _.trim.replaceAll(
+              "[\\s-]+",
+              "_"
+            )
+          )
 
         val expectedDF = spark
-            .createDF(
-              List(
-                ("John", 1),
-                ("Paul", 2),
-                ("Jane", 3)
-              ),
-              List(
-                ("user_name", StringType, true),
-                ("user_id", IntegerType, true)
-              )
+          .createDF(
+            List(
+              ("John", 1),
+              ("Paul", 2),
+              ("Jane", 3)
+            ),
+            List(
+              ("user_name", StringType, true),
+              ("user_id", IntegerType, true)
             )
-       assert(df.columns.toSet == expectedDF.columns.toSet)
-      }
-    }
-
-
-    'dropColumns - {
-      "drop columns which start with underscore" - {
-
-        val df = spark
-            .createDF(
-              List(
-                ("John", 1, 101),
-                ("Paul", 2, 102),
-                ("Jane", 3, 103)
-              ),
-              List(
-                ("name", StringType, true),
-                ("id", IntegerType, true),
-                ("_internal_id", IntegerType, true)
-              )
-            ).dropColumns(_.startsWith("_"))
-
-        val expectedDF = spark
-            .createDF(
-              List(
-                ("John", 1),
-                ("Paul", 2),
-                ("Jane", 3)
-              ),
-              List(
-                ("name", StringType, true),
-                ("id", IntegerType, true)
-              )
-            )
-        assert(df.columns.toSet == expectedDF.columns.toSet)
-        assertSmallDataFrameEquality(
-          df,
-          expectedDF,
-          orderedComparison = false
-        )
-      }
-    }
-
-    'camelCaseToSnakeCaseColumns - {
-      "convert camel case columns to snake case" - {
-
-        val df = spark
-            .createDF(
-              List(
-                ("John", 1, 101),
-                ("Paul", 2, 102),
-                ("Jane", 3, 103)
-              ),
-              List(
-                ("userName", StringType, true),
-                ("userId", IntegerType, true),
-                ("internalUserId", IntegerType, true)
-              )
-            ).camelCaseToSnakeCaseColumns
-
-        val expectedDF = spark
-            .createDF(
-              List(
-                ("John", 1, 101),
-                ("Paul", 2, 102),
-                ("Jane", 3, 103)
-              ),
-              List(
-                ("user_name", StringType, true),
-                ("user_id", IntegerType, true),
-                ("internal_user_id", IntegerType, true)
-              )
-            )
+          )
         assert(df.columns.toSet == expectedDF.columns.toSet)
       }
     }
