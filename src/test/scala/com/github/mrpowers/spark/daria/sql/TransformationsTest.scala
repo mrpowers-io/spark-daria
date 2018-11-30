@@ -1,13 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
+import utest._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-import utest._
+import org.apache.spark.sql.Row
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import com.github.mrpowers.spark.fast.tests.ColumnComparer
 import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
-import com.github.mrpowers.spark.daria.sql.DataFrameExt._
-import org.apache.spark.sql.Row
 
 object TransformationsTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 

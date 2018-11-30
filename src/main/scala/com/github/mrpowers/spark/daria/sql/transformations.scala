@@ -1,12 +1,9 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.github.mrpowers.spark.daria.sql.DataFrameExt._
 import com.github.mrpowers.spark.daria.sql.functions.truncate
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{StructField, StructType}
-import org.apache.spark.sql.{Column, DataFrame, Row, SparkSession}
+import org.apache.spark.sql.{Column, DataFrame}
 
 case class InvalidColumnSortOrderException(smth: String) extends Exception(smth)
 
@@ -50,7 +47,7 @@ object transformations {
    * }}}
    */
   def sortColumns(order: String = "asc")(df: DataFrame): DataFrame = {
-    val cols = if (order == "asc") {
+    val colNames = if (order == "asc") {
       df.columns.sorted
     } else if (order == "desc") {
       df.columns.sorted.reverse
@@ -59,7 +56,8 @@ object transformations {
         s"The sort order must be 'asc' or 'desc'.  Your sort order was '$order'."
       throw new InvalidColumnSortOrderException(message)
     }
-    df.reorderColumns(cols)
+    val cols = colNames.map(col(_))
+    df.select(cols: _*)
   }
 
   /**
@@ -88,7 +86,7 @@ object transformations {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(
         colName,
-        toSnakeCase(colName)
+        com.github.mrpowers.spark.daria.utils.StringHelpers.toSnakeCase(colName)
       )
     }
   }
@@ -98,21 +96,12 @@ object transformations {
    * Example: SomeColumn -> some_column
    */
   def camelCaseToSnakeCaseColumns()(df: DataFrame): DataFrame =
-    df.renameColumns(
-      _.replaceAll(
-        "([A-Z]+)",
-        "_$1"
-      ).toLowerCase.stripPrefix("_")
-    )
-
-  private def toSnakeCase(str: String): String = {
-    str
-      .replaceAll(
-        "\\s+",
-        "_"
+    df.columns.foldLeft(df) { (memoDF, colName) =>
+      memoDF.withColumnRenamed(
+        colName,
+        com.github.mrpowers.spark.daria.utils.StringHelpers.camelCaseToSnakeCase(colName)
       )
-      .toLowerCase
-  }
+    }
 
   /**
    * Title Cases all the columns of a DataFrame
@@ -213,7 +202,7 @@ object transformations {
   def truncateColumns(columnLengths: Map[String, Int])(df: DataFrame): DataFrame = {
     columnLengths.foldLeft(df) {
       case (memoDF, (colName, length)) =>
-        if (memoDF.containsColumn(colName)) {
+        if (memoDF.schema.fieldNames.contains(colName)) {
           memoDF.withColumn(
             colName,
             truncate(
