@@ -4,7 +4,6 @@ import java.security.MessageDigest
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
-import org.spark_project.dmg.pmml.OutputField.Algorithm
 
 import scala.reflect.runtime.universe._
 

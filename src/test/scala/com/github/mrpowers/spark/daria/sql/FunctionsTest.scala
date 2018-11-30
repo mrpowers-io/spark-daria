@@ -2,12 +2,11 @@ package com.github.mrpowers.spark.daria.sql
 
 import java.sql.Timestamp
 
-import utest._
+import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
-import SparkSessionExt._
-import com.github.mrpowers.spark.daria.sql.DataFrameExtTest.spark
+import utest._
 
 object FunctionsTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
