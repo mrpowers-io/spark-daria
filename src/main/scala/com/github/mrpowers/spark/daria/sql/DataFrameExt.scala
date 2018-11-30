@@ -290,6 +290,9 @@ object DataFrameExt {
         )
       )
 
+    def dropColumns(f: String => Boolean): DataFrame =
+      df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
+
   }
 
 }

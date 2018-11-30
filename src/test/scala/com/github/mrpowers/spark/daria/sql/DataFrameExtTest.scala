@@ -1153,6 +1153,48 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
     }
 
+    'dropColumns - {
+
+      "drop columns which start with underscore" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("John", 1, 101),
+              ("Paul", 2, 102),
+              ("Jane", 3, 103)
+            ),
+            List(
+              ("name", StringType, true),
+              ("id", IntegerType, true),
+              ("_internal_id", IntegerType, true)
+            )
+          )
+          .dropColumns(_.startsWith("_"))
+
+        val expectedDF = spark
+          .createDF(
+            List(
+              ("John", 1),
+              ("Paul", 2),
+              ("Jane", 3)
+            ),
+            List(
+              ("name", StringType, true),
+              ("id", IntegerType, true)
+            )
+          )
+        assert(df.columns.toSet == expectedDF.columns.toSet)
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          orderedComparison = false
+        )
+
+      }
+
+    }
+
   }
 
 }
