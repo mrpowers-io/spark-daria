@@ -3,11 +3,11 @@ package com.github.mrpowers.spark.daria.sql
 import java.sql.Timestamp
 
 import utest._
-
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import SparkSessionExt._
+import com.github.mrpowers.spark.daria.sql.DataFrameExtTest.spark
 
 object FunctionsTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
@@ -813,6 +813,110 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
         "is_something_luhn",
         "expected"
       )
+
+    }
+
+    'hash - {
+
+      "sha1" - {
+        val df = spark
+          .createDF(
+            List(
+              ("John", "johnsecret"),
+              ("Paul", "paulsecret"),
+              ("Jones", "jonessecret")
+            ),
+            List(
+              ("username", StringType, true),
+              ("password", StringType, true)
+            )
+          ).withColumn("password", functions.sha1(col("password")))
+
+        val expectedDF = spark
+          .createDF(
+            List(
+              ("John", "d12226e0ac2dc7a0ea39e97c05cd105b52cd06a1"),
+              ("Paul", "1a6a11d2c58883f449f424f2320f1583237309c4"),
+              ("Jones", "d273091b57f0166250e5447909199e0e1036af36")
+            ),
+            List(
+              ("username", StringType, true),
+              ("password", StringType, true)
+            )
+          )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF
+        )
+      }
+
+      "sha256" - {
+        val df = spark
+            .createDF(
+              List(
+                ("John", "johnsecret"),
+                ("Paul", "paulsecret"),
+                ("Jones", "jonessecret")
+              ),
+              List(
+                ("username", StringType, true),
+                ("password", StringType, true)
+              )
+            ).withColumn("password", functions.sha256(col("password")))
+
+        val expectedDF = spark
+            .createDF(
+              List(
+                ("John", "ccb235374b8466e42a869e1eabee5027caa2f5fb9fa7a74891124bfa0061276a"),
+                ("Paul", "0a9199234a42a222041ac123af5297b4f972d46a56a542e8032fb397c011bd50"),
+                ("Jones", "4ee148affc260a225588d317f2f1e1f42ea2a913cf5724d30bf0caeded623a0f")
+              ),
+              List(
+                ("username", StringType, true),
+                ("password", StringType, true)
+              )
+            )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF
+        )
+      }
+
+
+      "md5" - {
+        val df = spark
+            .createDF(
+              List(
+                ("John", "johnsecret"),
+                ("Paul", "paulsecret"),
+                ("Jones", "jonessecret")
+              ),
+              List(
+                ("username", StringType, true),
+                ("password", StringType, true)
+              )
+            ).withColumn("password", functions.md5(col("password")))
+
+        val expectedDF = spark
+            .createDF(
+              List(
+                ("John", "2be2d7219e86635fed84a80586853808"),
+                ("Paul", "6747f5dd817ffd613454eaebe547429f"),
+                ("Jones", "2c417913985e25958be6ecd7166fe7b1")
+              ),
+              List(
+                ("username", StringType, true),
+                ("password", StringType, true)
+              )
+            )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF
+        )
+      }
 
     }
 

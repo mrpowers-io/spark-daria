@@ -1,7 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
+import java.security.MessageDigest
+
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
+import org.spark_project.dmg.pmml.OutputField.Algorithm
 
 import scala.reflect.runtime.universe._
 
@@ -425,5 +428,15 @@ object functions {
   }
 
   val isLuhnNumber = udf[Option[Boolean], String](isLuhn)
+
+  val sha1 = udf[String, String]((s: String) => hash(s))
+  val sha256 = udf[String, String]((s: String) => hash(s, "SHA-256"))
+  val md5 = udf[String, String]((s: String) => hash(s, "MD5"))
+
+  private def hash(s: String, algorithm: String = "SHA-1"): String = {
+    val md = MessageDigest.getInstance(algorithm)
+    md.update(s.getBytes)
+    md.digest.map(b => Integer.toString((b & 0xff) + 0x100, 16).substring(1)).mkString("")
+  }
 
 }
