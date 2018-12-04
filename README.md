@@ -36,14 +36,14 @@ libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v0.26.0"
 
 Different spark-daria versions are compatible with different Spark versions.  In general, the latest spark-daria versions are always compatible with the latest Spark versions.
 
-|       | 0.26.0             |
-|-------|--------------------|
-| 2.0.0 | :x:                |
-| 2.1.0 | :white_check_mark: |
-| 2.2.2 | :white_check_mark: |
-| 2.3.0 | :white_check_mark: |
-| 2.3.1 | :white_check_mark: |
-| 2.4.0 | :white_check_mark: |
+|       | 0.26.0             | 0.26.1             | 0.27.0             |
+|-------|--------------------|--------------------|--------------------|
+| 2.0.0 | :x:                | :x:                | :x:                |
+| 2.1.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2.2.2 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2.3.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2.3.1 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 2.4.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 Email me if you need a custom spark-daria version and I'll help you out :wink:
 
