@@ -166,4 +166,56 @@ object DataFrameHelpers extends DataFrameValidator {
     df.collect.map(r => Map(df.columns.zip(r.toSeq): _*))
   }
 
+  /**
+   * Generates a CREATE TABLE query for AWS Athena
+   *
+   * Suppose we have the following `df`:
+   *
+   * {{{
+   * +--------+--------+---------+
+   * |    team|   sport|goals_for|
+   * +--------+--------+---------+
+   * |    jets|football|       45|
+   * |nacional|  soccer|       10|
+   * +--------+--------+---------+
+   * }}}
+   *
+   * Run the code to print the CREATE TABLE query.
+   *
+   * {{{
+   * DataFrameHelpers.printAthenaCreateTable(df, "my_cool_athena_table", "s3://my-bucket/extracts/people")
+   *
+   * CREATE TABLE IF NOT EXISTS my_cool_athena_table(
+   *   team STRING,
+   *   sport STRING,
+   *   goals_for INT
+   * )
+   * STORED AS PARQUET
+   * LOCATION 's3://my-bucket/extracts/people'
+   * }}}
+   */
+  def printAthenaCreateTable(df: DataFrame, athenaTableName: String, s3location: String): Unit = {
+    val fields = df.schema.map { (f: StructField) =>
+      s"${f.name} ${sparkTypeToAthenaType(f.dataType.toString)}"
+    }
+
+    println(s"CREATE TABLE IF NOT EXISTS $athenaTableName(")
+    println("  " + fields.mkString(",\n  "))
+    println(")")
+    println("STORED AS PARQUET")
+    println(s"LOCATION '$s3location'")
+  }
+
+  private[sql] def sparkTypeToAthenaType(sparkType: String): String = {
+    sparkType match {
+      case "StringType"    => "STRING"
+      case "IntegerType"   => "INT"
+      case "DateType"      => "DATE"
+      case "DecimalType"   => "DECIMAL"
+      case "FloatType"     => "FLOAT"
+      case "TimestampType" => "TIMESTAMP"
+      case _               => "STRING"
+    }
+  }
+
 }

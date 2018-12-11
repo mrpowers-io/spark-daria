@@ -142,6 +142,33 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
 
     }
 
+    'printAthenaCreateTable - {
+
+      "prints the CREATE TABLE Athena code" - {
+
+        val df = spark.createDF(
+          List(
+            ("jets", "football", 45),
+            ("nacional", "soccer", 10)
+          ),
+          List(
+            ("team", StringType, true),
+            ("sport", StringType, true),
+            ("goals_for", IntegerType, true)
+          )
+        )
+
+        //      uncomment the next line if you want to check out the console output
+//        DataFrameHelpers.printAthenaCreateTable(
+//          df,
+//          "my_cool_athena_table",
+//          "s3://my-bucket/extracts/people"
+//        )
+
+      }
+
+    }
+
   }
 
 }
