@@ -199,7 +199,7 @@ object DataFrameHelpers extends DataFrameValidator {
       s"${f.name} ${sparkTypeToAthenaType(f.dataType.toString)}"
     }
 
-    println(s"CREATE TABLE IF NOT EXISTS $athenaTableName(")
+    println(s"CREATE EXTERNAL TABLE IF NOT EXISTS $athenaTableName(")
     println("  " + fields.mkString(",\n  "))
     println(")")
     println("STORED AS PARQUET")
@@ -213,6 +213,7 @@ object DataFrameHelpers extends DataFrameValidator {
       case "DateType"      => "DATE"
       case "DecimalType"   => "DECIMAL"
       case "FloatType"     => "FLOAT"
+      case "LongType"      => "BIGINT"
       case "TimestampType" => "TIMESTAMP"
       case _               => "STRING"
     }
