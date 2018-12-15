@@ -255,7 +255,7 @@ object functions {
   }
 
   /**
-   * Like array but doesn't include null elements
+   * Like array() function but doesn't include null elements
    *
    * @group collection_funcs
    */

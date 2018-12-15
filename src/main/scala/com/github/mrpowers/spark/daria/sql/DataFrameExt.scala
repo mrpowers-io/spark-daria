@@ -290,6 +290,11 @@ object DataFrameExt {
         )
       )
 
+    /**
+     * Drops multiple columns that satisfy the conditions of a function
+     * Here is how to drop all columns that start with an underscore
+     * df.dropColumns(_.startsWith("_"))
+     */
     def dropColumns(f: String => Boolean): DataFrame =
       df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
 
