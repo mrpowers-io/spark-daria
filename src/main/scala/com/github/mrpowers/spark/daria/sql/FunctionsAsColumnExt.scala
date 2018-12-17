@@ -6,7 +6,7 @@ import org.apache.spark.sql.{functions=>F}
 object FunctionsAsColumnExt {
 
   implicit class ColumnMethods(col: Column) {
-    def t(f: Column => Column): Column = f(col)
+    private def t(f: Column => Column): Column = f(col)
 
     def initcap(): Column = t(F.initcap)
 
