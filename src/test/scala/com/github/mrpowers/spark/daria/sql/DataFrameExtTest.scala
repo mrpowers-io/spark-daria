@@ -1195,6 +1195,39 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
     }
 
+    'schemaEvolution - {
+      import spark.implicits._
+      import org.apache.spark.sql.functions.lit
+
+      val leftDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+
+      val rightDf = Seq(
+        (1, "1")
+      ).toDF(s"id,col1".split(","): _*)
+
+      val expectedDeletionDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+
+
+      val expectedAdditionDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+        .withColumn("col1", lit(null).cast(StringType))
+        .select("col1", "id")
+
+      assertSmallDataFrameEquality(
+        rightDf.schemaEvolution(leftDf), expectedDeletionDf
+      )
+
+      assertSmallDataFrameEquality(
+        leftDf.schemaEvolution(rightDf), expectedAdditionDf
+      )
+
+    }
+
   }
 
 }

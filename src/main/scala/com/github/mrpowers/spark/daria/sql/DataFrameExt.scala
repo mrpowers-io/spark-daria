@@ -1,14 +1,47 @@
 package com.github.mrpowers.spark.daria.sql
 
-import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
+import com.github.mrpowers.spark.daria.sql.types.{CustomStructField,CustomStructType,LeftOnly,RightOnly,Matched,StructTypeHelpers}
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StructField
+import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
 object DataFrameExt {
+
+  private class DataFrameModule {
+    def schemaEvolution: (DataFrame, DataFrame) => DataFrame =
+      (leftDataframe: DataFrame, bare: DataFrame) => {
+
+        def mergeDataframesByKey(leftSchema: StructType, rightSchema: StructType)(nameMapping: StructField => String): Seq[CustomStructField] = {
+          val leftMap = leftSchema.fields.map(f => (nameMapping(f), f)).toMap
+          val rightMap = rightSchema.fields.map(f => (nameMapping(f), f)).toMap
+          val leftKeys = leftMap.keySet.diff(rightMap.keySet).toSeq
+          val rightKeys = rightMap.keySet.diff(leftMap.keySet).toSeq
+          val commonKeys = leftMap.keySet.intersect(rightMap.keySet).toSeq
+          leftKeys.map(k => LeftOnly(leftMap(k))) ++ commonKeys.map(k => Matched(leftMap(k))) ++ rightKeys.map(k => RightOnly(rightMap(k)))
+        }
+
+        def typedDifference: (StructType, StructType) => CustomStructType =
+          (leftSchema: StructType, rightSchema: StructType) =>
+            CustomStructType(
+              mergeDataframesByKey(leftSchema, rightSchema)((f: StructField) => f.name.toLowerCase).toArray
+            )
+
+
+        val columns = typedDifference(leftDataframe.schema, bare.schema).fields.foldLeft(List.empty[Column]) {
+          (acc, diff) =>
+            diff match {
+              case Matched(f) => leftDataframe(f.name) :: acc
+              case LeftOnly(_) => acc
+              case RightOnly(f) => lit(literal = null).cast(f.dataType).as(f.name) :: acc
+            }
+        }
+
+        leftDataframe.select(columns: _*)
+      }
+  }
 
   implicit class DataFrameMethods(df: DataFrame) {
 
@@ -298,6 +331,7 @@ object DataFrameExt {
     def dropColumns(f: String => Boolean): DataFrame =
       df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
 
+    def schemaEvolution: DataFrame => DataFrame = schemaBare => new DataFrameModule().schemaEvolution(df, schemaBare)
   }
 
 }
