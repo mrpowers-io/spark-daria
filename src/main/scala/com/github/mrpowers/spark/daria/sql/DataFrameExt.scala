@@ -1,45 +1,79 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{Column, DataFrame, Row, SparkSession}
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StructField
-import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
+import org.apache.spark.sql.types.{StructField, StructType}
+import com.github.mrpowers.spark.daria.sql.types._
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
 object DataFrameExt {
 
+  private class DataFrameModule {
+    def schemaEvolution: (DataFrame, DataFrame) => DataFrame =
+      (leftDataframe: DataFrame, bare: DataFrame) => {
+
+        def mergeDataframesByKey(leftSchema: StructType, rightSchema: StructType)(nameMapping: StructField => String): Seq[CustomStructField] = {
+          val leftMap = leftSchema.fields.map(f => (nameMapping(f), f)).toMap
+          val rightMap = rightSchema.fields.map(f => (nameMapping(f), f)).toMap
+          val leftKeys = leftMap.keySet.diff(rightMap.keySet).toSeq
+          val rightKeys = rightMap.keySet.diff(leftMap.keySet).toSeq
+          val commonKeys = leftMap.keySet.intersect(rightMap.keySet).toSeq
+          leftKeys.map(k => LeftOnly(leftMap(k))) ++ commonKeys.map(k => Matched(leftMap(k))) ++ rightKeys.map(k => RightOnly(rightMap(k)))
+        }
+
+        def typedDifference: (StructType, StructType) => CustomStructType =
+          (leftSchema: StructType, rightSchema: StructType) =>
+            CustomStructType(
+              mergeDataframesByKey(leftSchema, rightSchema)((f: StructField) => f.name.toLowerCase).toArray
+            )
+
+
+        val columns = typedDifference(leftDataframe.schema, bare.schema).fields.foldLeft(List.empty[Column]) {
+          (acc, diff) =>
+            diff match {
+              case Matched(f) => leftDataframe(f.name) :: acc
+              case LeftOnly(_) => acc
+              case RightOnly(f) => lit(literal = null).cast(f.dataType).as(f.name) :: acc
+            }
+        }
+
+        leftDataframe.select(columns: _*)
+      }
+  }
+
+
   implicit class DataFrameMethods(df: DataFrame) {
 
     /**
-     * Prints the schema with StructType and StructFields so it's easy to copy into code
-     * Spark has a `printSchema` method to print the schema of a DataFrame and a `schema` method that returns a `StructType` object.
-     *
-     * The `Dataset#schema` method can be easily converted into working code for small DataFrames, but it can be a lot of manual work for DataFrames with a lot of columns.
-     *
-     * The `printSchemaInCodeFormat` DataFrame extension prints the DataFrame schema as a valid `StructType` object.
-     *
-     * Suppose you have the following `sourceDF`:
-     *
-     * {{{
-     * +--------+--------+---------+
-     * |    team|   sport|goals_for|
-     * +--------+--------+---------+
-     * |    jets|football|       45|
-     * |nacional|  soccer|       10|
-     * +--------+--------+---------+
-     *
-     * `sourceDF.printSchemaInCodeFormat()` will output the following rows in the console:
-     *
-     * StructType(
-     *   List(
-     *     StructField("team", StringType, true),
-     *     StructField("sport", StringType, true),
-     *     StructField("goals_for", IntegerType, true)
-     *   )
-     * )
-     * }}}
-     */
+      * Prints the schema with StructType and StructFields so it's easy to copy into code
+      * Spark has a `printSchema` method to print the schema of a DataFrame and a `schema` method that returns a `StructType` object.
+      *
+      * The `Dataset#schema` method can be easily converted into working code for small DataFrames, but it can be a lot of manual work for DataFrames with a lot of columns.
+      *
+      * The `printSchemaInCodeFormat` DataFrame extension prints the DataFrame schema as a valid `StructType` object.
+      *
+      * Suppose you have the following `sourceDF`:
+      *
+      * {{{
+      * +--------+--------+---------+
+      * |    team|   sport|goals_for|
+      * +--------+--------+---------+
+      * |    jets|football|       45|
+      * |nacional|  soccer|       10|
+      * +--------+--------+---------+
+      *
+      * `sourceDF.printSchemaInCodeFormat()` will output the following rows in the console:
+      *
+      * StructType(
+      *   List(
+      *     StructField("team", StringType, true),
+      *     StructField("sport", StringType, true),
+      *     StructField("goals_for", IntegerType, true)
+      *   )
+      * )
+      * }}}
+      */
     def printSchemaInCodeFormat(): Unit = {
       val fields = df.schema.map { (f: StructField) =>
         s"""StructField("${f.name}", ${f.dataType}, ${f.nullable})"""
@@ -53,58 +87,58 @@ object DataFrameExt {
     }
 
     /**
-     * Executes a list of custom DataFrame transformations
-     * Uses function composition to run a list of DataFrame transformations.
-     *
-     * def withGreeting()(df: DataFrame): DataFrame = {
-     *   df.withColumn("greeting", lit("hello world"))
-     * }
-     *
-     * def withCat(name: String)(df: DataFrame): DataFrame = {
-     *   df.withColumn("cats", lit(name + " meow"))
-     * }
-     *
-     * val transforms = List(
-     *   withGreeting()(_),
-     *   withCat("sandy")(_)
-     * )
-     *
-     * sourceDF.composeTransforms(transforms)
-     */
+      * Executes a list of custom DataFrame transformations
+      * Uses function composition to run a list of DataFrame transformations.
+      *
+      * def withGreeting()(df: DataFrame): DataFrame = {
+      *   df.withColumn("greeting", lit("hello world"))
+      * }
+      *
+      * def withCat(name: String)(df: DataFrame): DataFrame = {
+      *   df.withColumn("cats", lit(name + " meow"))
+      * }
+      *
+      * val transforms = List(
+      * withGreeting()(_),
+      * withCat("sandy")(_)
+      * )
+      *
+      * sourceDF.composeTransforms(transforms)
+      */
     def composeTransforms(
-      transforms: List[(DataFrame => DataFrame)]
-    ): DataFrame = {
+                           transforms: List[(DataFrame => DataFrame)]
+                         ): DataFrame = {
       transforms.foldLeft(df) { (memoDF, t) =>
         memoDF.transform(t)
       }
     }
 
     /**
-     * Reorders columns as specified
-     * Reorders the columns in a DataFrame.
-     *
-     * {{{
-     * val actualDF = sourceDF.reorderColumns(
-     *   Seq("greeting", "team", "cats")
-     * )
-     * }}}
-     *
-     * The `actualDF` will have the `greeting` column first, then the `team` column then the `cats` column.
-     */
+      * Reorders columns as specified
+      * Reorders the columns in a DataFrame.
+      *
+      * {{{
+      * val actualDF = sourceDF.reorderColumns(
+      *   Seq("greeting", "team", "cats")
+      * )
+      * }}}
+      *
+      * The `actualDF` will have the `greeting` column first, then the `team` column then the `cats` column.
+      */
     def reorderColumns(colNames: Seq[String]): DataFrame = {
       val cols = colNames.map(col(_))
       df.select(cols: _*)
     }
 
     /**
-     * Returns true if the DataFrame contains the column
-     *
-     * {{{
-     * sourceDF.containsColumn("team")
-     * }}}
-     *
-     * Returns `true` if `sourceDF` contains a column named `"team"` and false otherwise.
-     */
+      * Returns true if the DataFrame contains the column
+      *
+      * {{{
+      * sourceDF.containsColumn("team")
+      * }}}
+      *
+      * Returns `true` if `sourceDF` contains a column named `"team"` and false otherwise.
+      */
     def containsColumn(colName: String): Boolean = {
       df.schema.fieldNames.contains(colName)
     }
@@ -115,30 +149,30 @@ object DataFrameExt {
     }
 
     /**
-     * Like transform(), but for CustomTransform objects
-     * Enables you to specify the columns that should be added / removed by a custom transformations and errors out if the columns the columns that are actually added / removed are different.
-     *
-     * val actualDF = sourceDF
-     *   .trans(
-     *     CustomTransform(
-     *       transform = ExampleTransforms.withGreeting(),
-     *       addedColumns = Seq("greeting"),
-     *       requiredColumns = Seq("something")
-     *     )
-     *   )
-     *   .trans(
-     *     CustomTransform(
-     *       transform = ExampleTransforms.withCat("spanky"),
-     *       addedColumns = Seq("cats")
-     *     )
-     *   )
-     *   .trans(
-     *     CustomTransform(
-     *       transform = ExampleTransforms.dropWordCol(),
-     *       removedColumns = Seq("word")
-     *     )
-     *   )
-     */
+      * Like transform(), but for CustomTransform objects
+      * Enables you to specify the columns that should be added / removed by a custom transformations and errors out if the columns the columns that are actually added / removed are different.
+      *
+      * val actualDF = sourceDF
+      * .trans(
+      * CustomTransform(
+      * transform = ExampleTransforms.withGreeting(),
+      * addedColumns = Seq("greeting"),
+      * requiredColumns = Seq("something")
+      * )
+      * )
+      * .trans(
+      * CustomTransform(
+      * transform = ExampleTransforms.withCat("spanky"),
+      * addedColumns = Seq("cats")
+      * )
+      * )
+      * .trans(
+      * CustomTransform(
+      * transform = ExampleTransforms.dropWordCol(),
+      * removedColumns = Seq("word")
+      * )
+      * )
+      */
     def trans(customTransform: CustomTransform): DataFrame = {
       // make sure df doesn't already have the columns that will be added
       if (df.columns.toSeq.exists((c: String) => customTransform.addedColumns.contains(c))) {
@@ -176,6 +210,9 @@ object DataFrameExt {
         StructTypeHelpers.flattenSchema(df.schema, delimiter, prefix): _*
       )
     }
+
+
+    def schemaEvolution: DataFrame => DataFrame = schemaBare => new DataFrameModule().schemaEvolution(df, schemaBare)
 
   }
 

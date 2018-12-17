@@ -5,10 +5,11 @@ import SparkSessionExt._
 import org.apache.spark.sql.types.{StructType, _}
 import org.apache.spark.sql.Row
 import DataFrameExt._
+import com.github.mrpowers.spark.daria.sql.ColumnExtTest.spark
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
 object DataFrameExtTest
-    extends TestSuite
+  extends TestSuite
     with DataFrameComparer
     with SparkSessionTestWrapper {
 
@@ -643,6 +644,40 @@ object DataFrameExtTest
 
         assertSmallDataFrameEquality(df, expectedDF)
       }
+
+    }
+
+
+    'schemaEvolution - {
+      import spark.implicits._
+      import org.apache.spark.sql.functions.lit
+
+      val leftDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+
+      val rightDf = Seq(
+        (1, "1")
+      ).toDF(s"id,col1".split(","): _*)
+
+      val expectedDeletionDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+
+
+      val expectedAdditionDf = Seq(
+        (1)
+      ).toDF(s"id".split(","): _*)
+        .withColumn("col1", lit(null).cast(StringType))
+        .select("col1", "id")
+
+      assertSmallDataFrameEquality(
+        rightDf.schemaEvolution(leftDf), expectedDeletionDf
+      )
+
+      assertSmallDataFrameEquality(
+        leftDf.schemaEvolution(rightDf), expectedAdditionDf
+      )
 
     }
 
