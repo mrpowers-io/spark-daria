@@ -1,30 +1,20 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.Column
+import org.apache.spark.sql.{functions=>F}
 
 object FunctionsAsColumnExt {
 
   implicit class ColumnMethods(col: Column) {
+    def t(f: Column => Column): Column = f(col)
 
-    def initcap(): Column = {
-      org.apache.spark.sql.functions.initcap(col)
-    }
+    def initcap(): Column = t(F.initcap)
 
-    def length(): Column = {
-      org.apache.spark.sql.functions.length(col)
-    }
+    def length(): Column = t(F.length)
 
-    def lower(): Column = {
-      org.apache.spark.sql.functions.lower(col)
-    }
+    def lower(): Column = t(F.lower)
 
-    def regexp_replace(pattern: String, replacement: String): Column = {
-      org.apache.spark.sql.functions.regexp_replace(
-        col,
-        pattern,
-        replacement
-      )
-    }
+    def regexp_replace(pattern: String, replacement: String): Column = F.regexp_replace(col, pattern,replacement)
 
   }
 
