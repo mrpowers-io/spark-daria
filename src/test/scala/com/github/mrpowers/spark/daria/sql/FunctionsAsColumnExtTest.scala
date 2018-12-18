@@ -29,7 +29,7 @@ object FunctionsAsColumnExtTest
         )
         .withColumn(
           "res",
-          col("some_string").initcap()
+          col("some_string")|initcap
         )
 
       assertColumnEquality(
@@ -56,7 +56,7 @@ object FunctionsAsColumnExtTest
         )
         .withColumn(
           "res",
-          col("some_string").length()
+          col("some_string")|length
         )
 
       assertColumnEquality(
@@ -83,7 +83,7 @@ object FunctionsAsColumnExtTest
         )
         .withColumn(
           "some_string_lower",
-          col("some_string").lower()
+          col("some_string")|lower
         )
 
       assertColumnEquality(
