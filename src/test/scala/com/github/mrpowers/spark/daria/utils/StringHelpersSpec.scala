@@ -15,6 +15,7 @@ class StringHelpersSpec extends TestSuite {
         assert(StringHelpers.escapeForSqlRegexp("E|G") == Some("E\\|G"))
         assert(StringHelpers.escapeForSqlRegexp("E;;G") == Some("E;;G"))
         assert(StringHelpers.escapeForSqlRegexp("^AB-C") == Some("^AB\\-C"))
+        assert(StringHelpers.escapeForSqlRegexp("^AB+C") == Some("^AB\\+C"))
         assert(StringHelpers.escapeForSqlRegexp(null) == None)
       }
 
