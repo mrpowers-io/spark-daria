@@ -92,6 +92,36 @@ object transformations {
   }
 
   /**
+   * snakifies all the columns of a DataFrame
+   *
+   * import com.github.mrpowers.spark.daria.sql.transformations._
+   *
+   * {{{
+   * val sourceDf = Seq(
+   *   ("funny", "joke")
+   * ).toDF("ThIs", "BiH")
+   *
+   * val actualDf = sourceDf.transform(snakeCaseColumns)
+   *
+   * actualDf.show()
+   *
+   * +-----+----+
+   * |th_is|bi_h|
+   * +-----+----+
+   * |funny|joke|
+   * +-----+----+
+   * }}}
+   */
+  def snakifyColumns()(df: DataFrame): DataFrame = {
+    df.columns.foldLeft(df) { (memoDF, colName) =>
+      memoDF.withColumnRenamed(
+        colName,
+        com.github.mrpowers.spark.daria.utils.StringHelpers.snakify(colName)
+      )
+    }
+  }
+
+  /**
    * Convert camel case columns to snake case
    * Example: SomeColumn -> some_column
    */

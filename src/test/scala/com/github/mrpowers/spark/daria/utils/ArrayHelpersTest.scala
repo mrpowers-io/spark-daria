@@ -2,7 +2,7 @@ package com.github.mrpowers.spark.daria.utils
 
 import utest._
 
-class ArrayHelpersSpec extends TestSuite {
+object ArrayHelpersTest extends TestSuite {
 
   val tests = Tests {
 

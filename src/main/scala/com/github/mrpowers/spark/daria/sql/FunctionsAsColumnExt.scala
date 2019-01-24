@@ -1,7 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.Column
-import org.apache.spark.sql.{functions=>F}
+import org.apache.spark.sql.{functions => F}
 
 object FunctionsAsColumnExt {
 
@@ -14,7 +14,12 @@ object FunctionsAsColumnExt {
 
     def lower(): Column = t(F.lower)
 
-    def regexp_replace(pattern: String, replacement: String): Column = F.regexp_replace(col, pattern,replacement)
+    def regexp_replace(pattern: String, replacement: String): Column =
+      F.regexp_replace(
+        col,
+        pattern,
+        replacement
+      )
 
   }
 
