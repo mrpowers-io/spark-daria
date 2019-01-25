@@ -1,11 +1,10 @@
 package com.github.mrpowers.spark.daria.sql
 
-import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions._
-
+import com.github.mrpowers.spark.daria.sql.FunctionsAsColumnExt._
+import com.github.mrpowers.spark.daria.sql.SparkSessionExt._
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
-import SparkSessionExt._
-import FunctionsAsColumnExt._
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
 import utest._
 
 object FunctionsAsColumnExtTest
@@ -58,6 +57,33 @@ object FunctionsAsColumnExtTest
           "res",
           col("some_string")|length
         )
+
+      assertColumnEquality(
+        df,
+        "expected",
+        "res"
+      )
+
+    }
+
+    'regexp_replace - {
+
+      val df = spark
+          .createDF(
+            List(
+              ("this", "THLS"),
+              ("hi", "HL"),
+              (null, null)
+            ),
+            List(
+              ("some_string", StringType, true),
+              ("expected", StringType, true)
+            )
+          )
+          .withColumn(
+            "res",
+            col("some_string")| (regexp_replace(_, "i","l")) |upper
+          )
 
       assertColumnEquality(
         df,
