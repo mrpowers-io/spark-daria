@@ -166,3 +166,10 @@ After submitting a couple of good pull requests, you'll be added as a contributo
 
 Continued excellence will be rewarded with push access to the master branch.
 
+## Publishing
+
+Build the JAR / POM files with `sbt +spDist` as described in [this GitHub issue](https://github.com/databricks/sbt-spark-package/issues/18#issuecomment-184107369).
+
+Manually upload the zip files to [Spark Packages](https://spark-packages.org/).
+
+Make a GitHub release so the code is available via JitPack.
