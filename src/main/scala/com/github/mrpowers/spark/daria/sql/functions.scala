@@ -359,13 +359,7 @@ object functions {
     ) / 365
   }
 
-  def bucketFinder(
-    col: Column,
-    buckets: Array[(Any, Any)],
-    inclusiveBoundries: Boolean = false,
-    lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false
-  ): Column = {
+  def bucketFinder(col: Column, buckets: Array[(Any, Any)], inclusiveBoundries: Boolean = false, lowestBoundLte: Boolean = false, highestBoundGte: Boolean = false): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
     val lowerBoundLteCol      = lit(lowestBoundLte)

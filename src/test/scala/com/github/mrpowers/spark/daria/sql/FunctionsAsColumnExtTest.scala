@@ -8,8 +8,7 @@ import SparkSessionExt._
 import FunctionsAsColumnExt._
 import utest._
 
-object FunctionsAsColumnExtTest
-    extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
+object FunctionsAsColumnExtTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
   val tests = Tests {
 

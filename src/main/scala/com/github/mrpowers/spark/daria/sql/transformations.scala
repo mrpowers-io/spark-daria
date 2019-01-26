@@ -168,12 +168,7 @@ object transformations {
    *
    * Replaces all `"cool"` strings in the `person` and `phone` columns with the string `"dude"`.
    */
-  def multiRegexpReplace(
-    cols: List[Column],
-    pattern: String = "\u0000",
-    replacement: String = ""
-  )(df: DataFrame
-  ): DataFrame = {
+  def multiRegexpReplace(cols: List[Column], pattern: String = "\u0000", replacement: String = "")(df: DataFrame): DataFrame = {
     cols.foldLeft(df) { (memoDF, col) =>
       memoDF
         .withColumn(
@@ -249,15 +244,7 @@ object transformations {
   /**
    * Categorizes a numeric column in various user specified "buckets"
    */
-  def withColBucket(
-    colName: String,
-    outputColName: String,
-    buckets: Array[(Any, Any)],
-    inclusiveBoundries: Boolean = false,
-    lowestBoundLte: Boolean = false,
-    highestBoundGte: Boolean = false
-  )(df: DataFrame
-  ) = {
+  def withColBucket(colName: String, outputColName: String, buckets: Array[(Any, Any)], inclusiveBoundries: Boolean = false, lowestBoundLte: Boolean = false, highestBoundGte: Boolean = false)(df: DataFrame) = {
     df.withColumn(
       outputColName,
       functions.bucketFinder(

@@ -43,11 +43,7 @@ object DataFrameHelpers extends DataFrameValidator {
    * // )
    * }}}
    */
-  def twoColumnsToMap[keyType: TypeTag, valueType: TypeTag](
-    df: DataFrame,
-    keyColName: String,
-    valueColName: String
-  ): Map[keyType, valueType] = {
+  def twoColumnsToMap[keyType: TypeTag, valueType: TypeTag](df: DataFrame, keyColName: String, valueColName: String): Map[keyType, valueType] = {
     validatePresenceOfColumns(
       df,
       Seq(

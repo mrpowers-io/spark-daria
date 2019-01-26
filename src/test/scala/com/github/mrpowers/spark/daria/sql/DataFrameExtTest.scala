@@ -1151,6 +1151,44 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
         assert(df.columns.toSet == expectedDF.columns.toSet)
       }
 
+      "makes multiple changes" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("foo", "bar", "car")
+            ),
+            List(
+              ("SomeColumn", StringType, true),
+              ("Another Column", StringType, true),
+              ("BAR_COLUMN", StringType, true)
+            )
+          )
+          .renameColumns(
+            _.trim
+              .replaceAll(
+                "[\\s-]+",
+                "_"
+              )
+              .replaceAll(
+                "([A-Z]+)([A-Z][a-z])",
+                "$1_$2"
+              )
+              .replaceAll(
+                "([a-z\\d])([A-Z])",
+                "$1_$2"
+              )
+              .toLowerCase
+          )
+
+        df.columns.toList ==> Seq(
+          "some_column",
+          "another_column",
+          "bar_column"
+        )
+
+      }
+
     }
 
     'dropColumns - {

@@ -9,11 +9,7 @@ object transformations {
    * Converts all the features into a vector
    * All of the feature columns should be DoubleType
    */
-  def withVectorizedFeatures(
-    featureColNames: Array[String],
-    outputColName: String = "features"
-  )(df: DataFrame
-  ): DataFrame = {
+  def withVectorizedFeatures(featureColNames: Array[String], outputColName: String = "features")(df: DataFrame): DataFrame = {
     val assembler: VectorAssembler = new VectorAssembler()
       .setInputCols(featureColNames)
       .setOutputCol(outputColName)
