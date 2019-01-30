@@ -3,7 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.StructField
+import org.apache.spark.sql.types.{ArrayType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
@@ -313,6 +313,21 @@ object DataFrameExt {
     def dropColumns(f: String => Boolean): DataFrame =
       df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
 
+    /**
+      * Makes all columns nullable or vice versa
+      * @param nullable
+      * @return
+      */
+    def setNullable(nullable:Boolean): DataFrame = {
+      def loop(s:StructType): Seq[StructField] = s.map{
+        case StructField(name, dataType: StructType, _, metadata) =>
+          StructField(name, StructType(loop(dataType)), nullable, metadata)
+        case StructField(name, dataType:ArrayType, _, metadata) if dataType.elementType.isInstanceOf[ StructType] =>
+          StructField(name, ArrayType(StructType(loop(dataType.elementType.asInstanceOf[StructType]))), nullable, metadata)
+        case t @ StructField(_,_,_,_) => t.copy(nullable = nullable)
+      }
+      df.sqlContext.createDataFrame(df.rdd, StructType(loop(df.schema)))
+    }
   }
 
 }

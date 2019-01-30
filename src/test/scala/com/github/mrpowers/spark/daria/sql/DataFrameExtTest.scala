@@ -1310,6 +1310,43 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
       }
 
+      "setNullable" - {
+        val df = spark.createDataFrame(
+          spark.sparkContext.parallelize(Seq(
+            Row(1977, List(Row("John", 1))),
+            Row(1987, List(Row("Paul", 2))),
+            Row(1983, List(Row("Jack", 3)))
+          )),
+          new StructType()
+              .add("year", IntegerType, false)
+              .add("person", ArrayType(
+                new StructType()
+                    .add("name", StringType, false)
+                    .add("id", IntegerType, false)
+              ))
+        ).setNullable(true)
+
+        val expectedDF = spark.createDataFrame(
+          spark.sparkContext.parallelize(Seq(
+            Row(1977, List(Row("John", 1))),
+            Row(1987, List(Row("Paul", 2))),
+            Row(1983, List(Row("Jack", 3)))
+          )),
+          new StructType()
+              .add("year", IntegerType, true)
+              .add("person", ArrayType(
+                new StructType()
+                    .add("name", StringType, true)
+                    .add("id", IntegerType, true)
+              ))
+        )
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          orderedComparison = true
+        )
+      }
+
     }
 
   }
