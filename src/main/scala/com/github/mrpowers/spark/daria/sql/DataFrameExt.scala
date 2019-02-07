@@ -275,6 +275,21 @@ object DataFrameExt {
         .where(col("my_super_secret_count") === 1)
         .drop(col("my_super_secret_count"))
     }
+    /**
+     * Completely removes all duplicates from a DataFrame
+     *
+     */
+    def killDuplicates(col1: String, cols: String*): DataFrame = {
+      df.killDuplicates((col1 +: cols).map(col):_*)
+    }
+
+    /**
+     * Completely removes all duplicates from a DataFrame
+     *
+     */
+    def killDuplicates(): DataFrame = {
+      df.killDuplicates(df.columns.map(col):_*)
+    }
 
     /**
      * Rename columns

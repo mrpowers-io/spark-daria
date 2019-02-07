@@ -1075,6 +1075,85 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
       }
 
+      "removes any rows that have a duplicate ()" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("a", "b", 1),
+              ("a", "b", 1),
+              ("a", "b", 3),
+              ("z", "b", 4),
+              ("a", "x", 5)
+            ),
+            List(
+              ("letter1", StringType, true),
+              ("letter2", StringType, true),
+              ("number1", IntegerType, true)
+            )
+          ).killDuplicates()
+
+
+        val expectedDF = spark.createDF(
+          List(
+            ("a", "b", 3),
+            ("z", "b", 4),
+            ("a", "x", 5)
+          ),
+          List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          orderedComparison = false
+        )
+
+      }
+
+      "removes any rows that have a duplicate (str)" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("a", "b", 1),
+              ("a", "b", 2),
+              ("a", "b", 3),
+              ("z", "b", 4),
+              ("a", "x", 5)
+            ),
+            List(
+              ("letter1", StringType, true),
+              ("letter2", StringType, true),
+              ("number1", IntegerType, true)
+            )
+          ).killDuplicates("letter1", "letter2")
+        df.show
+
+        val expectedDF = spark.createDF(
+          List(
+            ("z", "b", 4),
+            ("a", "x", 5)
+          ),
+          List(
+            ("letter1", StringType, true),
+            ("letter2", StringType, true),
+            ("number1", IntegerType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          orderedComparison = false
+        )
+
+      }
+
       "works with a single column too" - {
 
         val df = spark
