@@ -314,19 +314,32 @@ object DataFrameExt {
       df.columns.foldLeft(df)((tempDf, c) => if (f(c)) tempDf.drop(c) else tempDf)
 
     /**
-      * Makes all columns nullable or vice versa
-      * @param nullable
-      * @return
-      */
-    def setNullable(nullable:Boolean): DataFrame = {
-      def loop(s:StructType): Seq[StructField] = s.map{
+     * Makes all columns nullable or vice versa
+     * @param nullable
+     * @return
+     */
+    def setNullableForAllColumns(nullable: Boolean): DataFrame = {
+      def loop(s: StructType): Seq[StructField] = s.map {
         case StructField(name, dataType: StructType, _, metadata) =>
-          StructField(name, StructType(loop(dataType)), nullable, metadata)
-        case StructField(name, dataType:ArrayType, _, metadata) if dataType.elementType.isInstanceOf[ StructType] =>
-          StructField(name, ArrayType(StructType(loop(dataType.elementType.asInstanceOf[StructType]))), nullable, metadata)
-        case t @ StructField(_,_,_,_) => t.copy(nullable = nullable)
+          StructField(
+            name,
+            StructType(loop(dataType)),
+            nullable,
+            metadata
+          )
+        case StructField(name, dataType: ArrayType, _, metadata) if dataType.elementType.isInstanceOf[StructType] =>
+          StructField(
+            name,
+            ArrayType(StructType(loop(dataType.elementType.asInstanceOf[StructType]))),
+            nullable,
+            metadata
+          )
+        case t @ StructField(_, _, _, _) => t.copy(nullable = nullable)
       }
-      df.sqlContext.createDataFrame(df.rdd, StructType(loop(df.schema)))
+      df.sqlContext.createDataFrame(
+        df.rdd,
+        StructType(loop(df.schema))
+      )
     }
   }
 
