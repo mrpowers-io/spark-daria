@@ -1,7 +1,8 @@
 package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
+import org.apache.spark.sql.types._
 
 import scala.reflect.runtime.universe._
 import scala.reflect.ClassTag
@@ -212,6 +213,76 @@ object DataFrameHelpers extends DataFrameValidator {
       case "TimestampType" => "TIMESTAMP"
       case _               => "STRING"
     }
+
+  }
+
+  lazy val spark: SparkSession = {
+    SparkSession
+      .builder()
+      .master("local")
+      .appName("spark session")
+      .getOrCreate()
+  }
+
+  def writeTimestamped(df: DataFrame, outputDirname: String, numPartitions: Option[Int] = None, overwriteLatest: Boolean = true): Unit = {
+    val timestamp: String  = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())
+    val outputPath: String = outputDirname + "/" + timestamp
+    if (numPartitions.isEmpty) {
+      df.write.parquet(outputPath)
+    } else {
+      val p = numPartitions.get
+      df.repartition(p).write.parquet(outputPath)
+    }
+
+    if (overwriteLatest) {
+      val latestData = Seq(
+        Row(
+          outputPath
+        )
+      )
+
+      val latestSchema = List(
+        StructField(
+          "latest_path",
+          StringType,
+          false
+        )
+      )
+
+      val latestDF = spark.createDataFrame(
+        spark.sparkContext.parallelize(latestData),
+        StructType(latestSchema)
+      )
+
+      latestDF.write
+        .option(
+          "header",
+          "false"
+        )
+        .option(
+          "delimiter",
+          ","
+        )
+        .mode(SaveMode.Overwrite)
+        .csv(outputDirname + "/latest")
+    }
+  }
+
+  def readTimestamped(dirname: String): DataFrame = {
+    val latestDF = spark.read
+      .option(
+        "header",
+        "false"
+      )
+      .option(
+        "delimiter",
+        ","
+      )
+      .csv(dirname + "/latest")
+
+    val latestPath = latestDF.head().getString(0)
+
+    spark.read.parquet(latestPath)
   }
 
 }

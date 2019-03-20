@@ -1091,8 +1091,8 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               ("letter2", StringType, true),
               ("number1", IntegerType, true)
             )
-          ).killDuplicates()
-
+          )
+          .killDuplicates()
 
         val expectedDF = spark.createDF(
           List(
@@ -1131,8 +1131,11 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               ("letter2", StringType, true),
               ("number1", IntegerType, true)
             )
-          ).killDuplicates("letter1", "letter2")
-        df.show
+          )
+          .killDuplicates(
+            "letter1",
+            "letter2"
+          )
 
         val expectedDF = spark.createDF(
           List(

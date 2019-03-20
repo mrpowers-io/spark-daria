@@ -169,6 +169,42 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
 
     }
 
+//    'writeTimestamped - {
+//
+//      "writes out timestamped data and a latest file" - {
+//
+//        val df = spark.createDF(
+//          List(
+//            ("giants", "football", 45),
+//            ("nacional", "soccer", 10)
+//          ),
+//          List(
+//            ("team", StringType, true),
+//            ("sport", StringType, true),
+//            ("goals_for", IntegerType, true)
+//          )
+//        )
+//
+//        DataFrameHelpers.writeTimestamped(
+//          df,
+//          "/Users/powers/Documents/tmp/daria_timestamp_ex",
+//          numPartitions = Some(3),
+//          overwriteLatest = true
+//        )
+//
+//      }
+//
+//    }
+//
+//    'readTimestamped - {
+//
+//      val df = DataFrameHelpers.readTimestamped(
+//        "/Users/powers/Documents/tmp/daria_timestamp_ex"
+//      )
+//      df.show()
+//
+//    }
+
   }
 
 }
