@@ -4,6 +4,8 @@ import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
+import scala.util.Try
+
 
 /**
  * Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
@@ -251,7 +253,7 @@ object functions {
    * @group collection_funcs
    */
   def forall[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
-    arr.forall(f(_))
+    Try(arr.forall(f(_))).toOption.getOrElse(false)
   }
 
   /**
