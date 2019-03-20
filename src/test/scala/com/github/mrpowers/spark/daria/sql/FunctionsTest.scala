@@ -357,6 +357,10 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
                   "crazy"
                 ),
                 true
+              ),
+              (
+                null,
+                false
               )
             ),
             List(
