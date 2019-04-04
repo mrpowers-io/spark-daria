@@ -47,6 +47,10 @@ Different spark-daria versions are compatible with different Spark versions.  In
 
 Email me if you need a custom spark-daria version and I'll help you out :wink:
 
+## PySpark
+
+Use [quinn](https://github.com/MrPowers/quinn) to access all these same functions in PySpark.
+
 ## Usage
 
 spark-daria provides different types of functions that will make your life as a Spark developer easier:
