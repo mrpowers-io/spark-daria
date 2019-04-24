@@ -71,6 +71,20 @@ object StructTypeHelpersTest extends TestSuite {
 
     }
 
+    'schemaFor - {
+      "gets schema from a scala Type" - {
+        val actualSchema = StructTypeHelpers.schemaFor[FooBar]
+        val expectedSchema = StructType(List(
+          StructField("foo", IntegerType, false),
+          StructField("bar", StringType),
+          StructField("foo_bar", ArrayType(IntegerType, false))
+        ))
+
+        assert(actualSchema == expectedSchema)
+      }
+    }
+
   }
 
+  case class FooBar(foo: Int, bar: String, fooBar: Array[Int])
 }
