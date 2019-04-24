@@ -200,6 +200,50 @@ object SparkSessionExtTest extends TestSuite with DataFrameComparer with SparkSe
 
     }
 
+    'createEmptyDF - {
+      "creates an empty DataFrame with a list of StructFields" - {
+        val actualDF =
+          spark.createEmptyDF(
+            List(
+              StructField(
+                "num1",
+                IntegerType,
+                true
+              ),
+              StructField(
+                "num2",
+                IntegerType,
+                true
+              )
+            )
+          )
+
+
+        val expectedSchema = List(
+          StructField(
+            "num1",
+            IntegerType,
+            true
+          ),
+          StructField(
+            "num2",
+            IntegerType,
+            true
+          )
+        )
+
+        val expectedDF =
+          spark.createDataFrame(
+            spark.sparkContext.parallelize(Seq.empty[Row]),
+            StructType(expectedSchema)
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
   }
 
 }
