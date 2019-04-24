@@ -62,6 +62,21 @@ object SparkSessionExt {
       )
     }
 
+    /**
+     * Creates an empty DataFrame given schema fields
+     *
+     * This is a handy fallback when you fail to read from a data source
+     *
+     * val schema = List(StructField("col1", IntegerType))
+     * val df = Try {
+     *   spark.read.parquet("non-existent-path")
+     * }.getOrElse(spark.createEmptyDf(schema))
+     */
+    def createEmptyDF[T](fields: List[T]): DataFrame = {
+      spark.createDataFrame(spark.sparkContext.emptyRDD[Row],
+        StructType(asSchema(fields)))
+    }
+
   }
 
 }
