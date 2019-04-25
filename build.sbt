@@ -10,8 +10,8 @@ crossScalaVersions := Seq("2.11.12", "2.12.7")
 scalaVersion := "2.11.12"
 sparkVersion := "2.4.2"
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.0" % "provided"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.2" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.2" % "provided"
 
 spName := "mrpowers/spark-daria"
 spAppendScalaVersion := true
