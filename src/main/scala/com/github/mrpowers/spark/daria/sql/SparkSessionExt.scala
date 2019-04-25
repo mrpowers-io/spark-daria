@@ -73,8 +73,10 @@ object SparkSessionExt {
      * }.getOrElse(spark.createEmptyDf(schema))
      */
     def createEmptyDF[T](fields: List[T]): DataFrame = {
-      spark.createDataFrame(spark.sparkContext.emptyRDD[Row],
-        StructType(asSchema(fields)))
+      spark.createDataFrame(
+        spark.sparkContext.emptyRDD[Row],
+        StructType(asSchema(fields))
+      )
     }
 
   }

@@ -35,14 +35,11 @@ object StructTypeHelpers {
    * transforms field names from camel case to snake case
    */
   def schemaFor[T: TypeTag]: StructType = {
-    val struct = ScalaReflection.schemaFor[T]
-      .dataType.asInstanceOf[StructType]
+    val struct = ScalaReflection.schemaFor[T].dataType.asInstanceOf[StructType]
 
-    struct.copy(fields =
-      struct.fields.map { field =>
-        field.copy(name = com.github.mrpowers.spark.daria.utils.StringHelpers.camelCaseToSnakeCase(field.name))
-      }
-    )
+    struct.copy(fields = struct.fields.map { field =>
+      field.copy(name = com.github.mrpowers.spark.daria.utils.StringHelpers.camelCaseToSnakeCase(field.name))
+    })
   }
 
 }

@@ -218,7 +218,6 @@ object SparkSessionExtTest extends TestSuite with DataFrameComparer with SparkSe
             )
           )
 
-
         val expectedSchema = List(
           StructField(
             "num1",
