@@ -816,6 +816,49 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'array_sum - {
+
+      val df = spark
+        .createDF(
+          List(
+            (
+              Array(
+                1,
+                4,
+                9
+              ),
+              true
+            ),
+            (
+              Array(
+                1,
+                3,
+                5
+              ),
+              false
+            )
+          ),
+          List(
+            (
+              "nums",
+              ArrayType(
+                IntegerType,
+                true
+              ),
+              true
+            ),
+            ("expected", BooleanType, false)
+          )
+        )
+        .withColumn(
+          "array_sum",
+          functions.array_sum(col("nums"))
+        )
+
+      df.show()
+
+    }
+
   }
 
 }

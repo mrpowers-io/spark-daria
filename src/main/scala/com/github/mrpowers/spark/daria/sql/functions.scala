@@ -420,4 +420,12 @@ object functions {
 
   val isLuhnNumber = udf[Option[Boolean], String](isLuhn)
 
+  def array_sum(col: Column): Column = {
+    aggregate(
+      col,
+      0,
+      (acc, x) -> acc + x
+    )
+  }
+
 }
