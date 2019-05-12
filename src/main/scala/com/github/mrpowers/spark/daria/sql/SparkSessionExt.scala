@@ -15,7 +15,7 @@ object SparkSessionExt {
       }
     }
 
-    private def asSchema[U](fields: List[U]): List[StructField] = {
+    private def asSchema[U <: Product](fields: List[U]): List[StructField] = {
       fields.map {
         case x: StructField => x.asInstanceOf[StructField]
         case (name: String, dataType: DataType, nullable: Boolean) =>
@@ -55,7 +55,7 @@ object SparkSessionExt {
      *   )
      * )
      */
-    def createDF[U, T](rowData: List[U], fields: List[T]): DataFrame = {
+    def createDF[U, T <: Product](rowData: List[U], fields: List[T]): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.parallelize(asRows(rowData)),
         StructType(asSchema(fields))
@@ -72,7 +72,7 @@ object SparkSessionExt {
      *   spark.read.parquet("non-existent-path")
      * }.getOrElse(spark.createEmptyDf(schema))
      */
-    def createEmptyDF[T](fields: List[T]): DataFrame = {
+    def createEmptyDF[T <: Product](fields: List[T]): DataFrame = {
       spark.createDataFrame(
         spark.sparkContext.emptyRDD[Row],
         StructType(asSchema(fields))
