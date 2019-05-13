@@ -6,6 +6,8 @@ Spark helper methods to maximize developer productivity.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c0624682b4487a3b3e5c8330f1fbe)](https://www.codacy.com/app/MrPowers/spark-daria?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrPowers/spark-daria&amp;utm_campaign=Badge_Grade)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/513fcd36d6be35191737/maintainability)](https://codeclimate.com/github/MrPowers/spark-daria/maintainability)
+
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
 ## Setup
