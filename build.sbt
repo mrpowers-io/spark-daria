@@ -39,3 +39,5 @@ javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled","-D
 
 /* Only invoked when you do `doc` in SBT */
 scalacOptions in (Compile, doc) += "-groups"
+
+coverageEnabled := true
