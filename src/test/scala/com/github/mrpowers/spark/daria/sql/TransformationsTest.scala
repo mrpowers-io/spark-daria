@@ -619,6 +619,120 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
       }
     }
 
+    'getJsonObject - {
+      val bart = """
+                  |{
+                  |  "name": "Bart cool",
+                  |  "info": {
+                  |    "age": 25,
+                  |    "gender": "male"
+                  |  }
+                  |}
+                 """.stripMargin
+
+      val lisa = """
+                  |{
+                  |  "name": "Lisa frost",
+                  |  "info": {
+                  |    "age": 27,
+                  |    "gender": "female"
+                  |  }
+                  |}
+                 """.stripMargin
+
+      val sourceDF = spark.createDF(
+        List(
+          (10, bart),
+          (20, lisa)
+        ),
+        List(
+          ("id", IntegerType, true),
+          ("person", StringType, true)
+        )
+      )
+
+      'fromOneLevelPath - {
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson(
+            "person",
+            "name",
+            "$.name"
+          )
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, bart, "Bart cool"),
+            (20, lisa, "Lisa frost")
+          ),
+          List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("name", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+
+      'fromTwoLevelPath - {
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson(
+            "person",
+            "age",
+            "$.info.age"
+          )
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, bart, "25"),
+            (20, lisa, "27")
+          ),
+          List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("age", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+
+      'fromNonExistingPath - {
+        val actualDF = sourceDF.transform(
+          transformations.extractFromJson(
+            "person",
+            "age",
+            "$.age"
+          )
+        )
+
+        val expectedDF = spark.createDF(
+          List(
+            (10, bart, null),
+            (20, lisa, null)
+          ),
+          List(
+            ("id", IntegerType, true),
+            ("person", StringType, true),
+            ("age", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
     'withRowAsStruct - {
 
       "collects an entire row intro a StructType column" - {

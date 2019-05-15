@@ -280,7 +280,7 @@ object transformations {
    *   transformations.extractFromJson("person", "personData", personSchema)
    * )
    *
-   * sourceDF.show()
+   * actualDF.show()
    * +---+---------------------------------+----------------+
    * |id |person                           |personData      |
    * +---+---------------------------------+----------------+
@@ -296,6 +296,42 @@ object transformations {
         col(colName),
         jsonSchema
       )
+    )
+  }
+
+  /**
+   * Extracts an object from a JSON field with a specified path expression
+   *
+   * {{{
+   * val sourceDF = spark.createDF(
+   *   List(
+   *     (10, """{"name": "Bart cool", "age": 25}"""),
+   *     (20, """{"name": "Lisa frost", "age": 27}""")
+   *   ), List(
+   *     ("id", IntegerType, true),
+   *     ("person", StringType, true)
+   *   )
+   * )
+   *
+   * val actualDF = sourceDF.transform(
+   *   transformations.extractFromJson("person", "name", "$.name")
+   * )
+   *
+   * actualDF.show()
+   * +---+---------------------------------+----------------+
+   * |id |person                           |name            |
+   * +---+---------------------------------+----------------+
+   * |10 |{"name": "Bart cool", "age": 25} |"Bart cool"     |
+   * |20 |{"name": "Lisa frost", "age": 27}|"Lisa frost"    |
+   * +---+---------------------------------+----------------+
+   * }}}
+   */
+  def extractFromJson(colName: String, outputColName: String, path: String)(df: DataFrame): DataFrame = {
+    df.withColumn(
+      outputColName,
+      get_json_object(
+        col(colName),
+        path)
     )
   }
 
