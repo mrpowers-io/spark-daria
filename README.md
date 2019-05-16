@@ -3,6 +3,7 @@
 Spark helper methods to maximize developer productivity.
 
 [![Build Status](https://travis-ci.org/MrPowers/spark-daria.svg?branch=master)](https://travis-ci.org/MrPowers/spark-daria) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c0624682b4487a3b3e5c8330f1fbe)](https://www.codacy.com/app/MrPowers/spark-daria?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrPowers/spark-daria&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/513fcd36d6be35191737/maintainability)](https://codeclimate.com/github/MrPowers/spark-daria/maintainability)
+[![Gitter](https://badges.gitter.im/spark-daria/community.svg)](https://gitter.im/spark-daria/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
 
