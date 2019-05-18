@@ -3,6 +3,7 @@ lib_managed/
 src_managed/
 project/boot/
 tmp/
+out/
 
 .idea
 *.iml
