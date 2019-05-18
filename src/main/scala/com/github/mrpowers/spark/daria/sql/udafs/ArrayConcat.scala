@@ -4,10 +4,17 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
-class ArraySum(elementSchema: DataType,
-    nullable: Boolean = true) extends UserDefinedAggregateFunction {
+class ArrayConcat(elementSchema: DataType, nullable: Boolean = true) extends UserDefinedAggregateFunction {
 
-  private val schema = StructType(List(StructField("value", dataType, nullable)))
+  private val schema = StructType(
+    List(
+      StructField(
+        "value",
+        dataType,
+        nullable
+      )
+    )
+  )
 
   override def inputSchema: StructType = schema
 
