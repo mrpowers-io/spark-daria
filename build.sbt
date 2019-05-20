@@ -40,5 +40,5 @@ javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled","-D
 /* Only invoked when you do `doc` in SBT */
 scalacOptions in (Compile, doc) += "-groups"
 
-// commenting this out because it was causing this error in downstream CIs: java.io.FileNotFoundException: /Users/powers/Documents/code/my_apps/spark-daria/target/scala-2.11/scoverage-data/scoverage.measurements.21
-//coverageEnabled := true
+// setting this to true causes this error in downstream CIs: java.io.FileNotFoundException: /Users/powers/Documents/code/my_apps/spark-daria/target/scala-2.11/scoverage-data/scoverage.measurements.21
+coverageEnabled := false
