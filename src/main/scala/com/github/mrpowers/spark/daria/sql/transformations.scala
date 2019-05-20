@@ -331,7 +331,8 @@ object transformations {
       outputColName,
       get_json_object(
         col(colName),
-        path)
+        path
+      )
     )
   }
 

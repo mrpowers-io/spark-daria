@@ -621,23 +621,23 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
 
     'getJsonObject - {
       val bart = """
-                  |{
-                  |  "name": "Bart cool",
-                  |  "info": {
-                  |    "age": 25,
-                  |    "gender": "male"
-                  |  }
-                  |}
+                   |{
+                   |  "name": "Bart cool",
+                   |  "info": {
+                   |    "age": 25,
+                   |    "gender": "male"
+                   |  }
+                   |}
                  """.stripMargin
 
       val lisa = """
-                  |{
-                  |  "name": "Lisa frost",
-                  |  "info": {
-                  |    "age": 27,
-                  |    "gender": "female"
-                  |  }
-                  |}
+                   |{
+                   |  "name": "Lisa frost",
+                   |  "info": {
+                   |    "age": 27,
+                   |    "gender": "female"
+                   |  }
+                   |}
                  """.stripMargin
 
       val sourceDF = spark.createDF(
