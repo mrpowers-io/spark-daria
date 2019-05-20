@@ -198,6 +198,10 @@ object SparkSessionExtTest extends TestSuite with DataFrameComparer with SparkSe
 
       }
 
+      "creates a DataFrame with a list of struct fields should have compile error" - {
+        compileError("spark.createDF(List(1,2), List(\"num1\", IntegerType, true))")
+      }
+
     }
 
     'createEmptyDF - {
