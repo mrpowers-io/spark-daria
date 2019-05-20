@@ -5,7 +5,7 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 organization := "com.github.mrpowers"
 name := "spark-daria"
 
-version := "0.31.0"
+version := "0.32.0"
 crossScalaVersions := Seq("2.11.12", "2.12.7")
 scalaVersion := "2.11.12"
 sparkVersion := "2.4.2"
