@@ -1,5 +1,8 @@
 package com.github.mrpowers.spark.daria.sql
 
+import org.apache.spark.sql.catalyst.expressions.daria._
+import org.apache.spark.sql.catalyst.expressions._
+
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
 
@@ -15,6 +18,120 @@ import scala.reflect.runtime.universe._
  * @groupname Ungrouped Support functions for DataFrames
  */
 object functions {
+  private def withExpr(e: Expression) = new Column(e)
+
+  private def expressionFunction(f: Column => Column): Expression => Expression =
+    x => f(new Column(x)).expr
+
+  private def expressionFunction(f: (Column, Column) => Column): (Expression, Expression) => Expression =
+    (x, y) =>
+      f(
+        new Column(x),
+        new Column(y)
+      ).expr
+
+  private def expressionFunction(f: (Column, Column, Column) => Column): (Expression, Expression, Expression) => Expression =
+    (x, y, z) =>
+      f(
+        new Column(x),
+        new Column(y),
+        new Column(z)
+      ).expr
+
+  /**
+   * Returns an array of elements after applying a tranformation to each element
+   * in the input array.
+   *
+   * @group collection_funcs
+   */
+  def transform(column: Column, f: Column => Column): Column = withExpr {
+    HigherOrderUtils.transform(
+      column.expr,
+      expressionFunction(f)
+    )
+  }
+
+  /**
+   * Returns an array of elements after applying a tranformation to each element
+   * in the input array.
+   *
+   * @group collection_funcs
+   */
+  def transform(column: Column, f: (Column, Column) => Column): Column = withExpr {
+    HigherOrderUtils.transform(
+      column.expr,
+      expressionFunction(f)
+    )
+  }
+
+  /**
+   * Returns whether a predicate holds for one or more elements in the array.
+   *
+   * @group collection_funcs
+   */
+  def exists(column: Column, f: Column => Column): Column = withExpr {
+    HigherOrderUtils.exists(
+      column.expr,
+      expressionFunction(f)
+    )
+  }
+
+  /**
+   * Returns an array of elements for which a predicate holds in a given array.
+   *
+   * @group collection_funcs
+   */
+  def filter(column: Column, f: Column => Column): Column = withExpr {
+    HigherOrderUtils.filter(
+      column.expr,
+      expressionFunction(f)
+    )
+  }
+
+  /**
+   * Applies a binary operator to an initial state and all elements in the array,
+   * and reduces this to a single state. The final state is converted into the final result
+   * by applying a finish function.
+   *
+   * @group collection_funcs
+   */
+  def aggregate(expr: Column, zero: Column, merge: (Column, Column) => Column, finish: Column => Column): Column = withExpr {
+    HigherOrderUtils.aggregate(
+      expr.expr,
+      zero.expr,
+      expressionFunction(merge),
+      expressionFunction(finish)
+    )
+  }
+
+  /**
+   * Applies a binary operator to an initial state and all elements in the array,
+   * and reduces this to a single state.
+   *
+   * @group collection_funcs
+   */
+  def aggregate(expr: Column, zero: Column, merge: (Column, Column) => Column): Column =
+    aggregate(
+      expr,
+      zero,
+      merge,
+      c => c
+    )
+
+  /**
+   * Merge two given arrays, element-wise, into a signle array using a function.
+   * If one array is shorter, nulls are appended at the end to match the length of the longer
+   * array, before applying the function.
+   *
+   * @group collection_funcs
+   */
+  def zip_with(left: Column, right: Column, f: (Column, Column) => Column): Column = withExpr {
+    HigherOrderUtils.zip_with(
+      left.expr,
+      right.expr,
+      expressionFunction(f)
+    )
+  }
 
   /**
    * Replaces all whitespace in a string with single spaces
