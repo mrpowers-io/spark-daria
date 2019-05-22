@@ -3,7 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{ArrayType, StructField, StructType}
+import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
@@ -11,6 +11,32 @@ case class DataFrameColumnsException(smth: String) extends Exception(smth)
 object DataFrameExt {
 
   implicit class DataFrameMethods(df: DataFrame) {
+
+    /**
+     * Returns a new `DataFrame` with the column `columnName` cast
+     * as `newType`.
+     *
+     * @param columnName the column to cast
+     * @param newType the new type for columnName
+     */
+    def withColumnCast(columnName: String, newType: String): DataFrame =
+      df.select((df.columns.map {
+        case c if c == columnName => col(c).cast(newType).as(c)
+        case c                    => col(c)
+      }): _*)
+
+    /**
+     * Returns a new `DataFrame` with the column `columnName` cast
+     * as `newType`.
+     *
+     * @param columnName the column to cast
+     * @param newType the new type for columnName
+     */
+    def withColumnCast(columnName: String, newType: DataType): DataFrame =
+      df.select((df.columns.map {
+        case c if c == columnName => col(c).cast(newType).as(c)
+        case c                    => col(c)
+      }): _*)
 
     /**
      * Prints the schema with StructType and StructFields so it's easy to copy into code

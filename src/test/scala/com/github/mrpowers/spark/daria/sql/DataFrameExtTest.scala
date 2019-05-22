@@ -12,6 +12,78 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
   val tests = Tests {
 
+    'withColumnCast - {
+      val sourceDF = spark.createDF(
+        (3.14) :: Nil,
+        ("value", DoubleType, true) :: Nil
+      )
+      val expectStringDF = spark.createDF(
+        ("3.14") :: Nil,
+        ("value", StringType, true) :: Nil
+      )
+      val expectIntDF = spark.createDF(
+        (3) :: Nil,
+        ("value", IntegerType, true) :: Nil
+      )
+      val expectBigIntDF = spark.createDF(
+        (3L) :: Nil,
+        ("value", LongType, true) :: Nil
+      )
+      "casts columns with a string specification" - {
+        val asStringDF = sourceDF.withColumnCast(
+          "value",
+          "string"
+        )
+        assertSmallDataFrameEquality(
+          asStringDF,
+          expectStringDF
+        )
+        val asIntDF = sourceDF.withColumnCast(
+          "value",
+          "integer"
+        )
+        assertSmallDataFrameEquality(
+          asIntDF,
+          expectIntDF
+        )
+        val asBigIntDF = sourceDF.withColumnCast(
+          "value",
+          "bigint"
+        )
+        assertSmallDataFrameEquality(
+          asBigIntDF,
+          expectBigIntDF
+        )
+      }
+
+      "casts columns with a datatype specification" - {
+        val asStringDF = sourceDF.withColumnCast(
+          "value",
+          StringType
+        )
+        assertSmallDataFrameEquality(
+          asStringDF,
+          expectStringDF
+        )
+        val asIntDF = sourceDF.withColumnCast(
+          "value",
+          IntegerType
+        )
+        assertSmallDataFrameEquality(
+          asIntDF,
+          expectIntDF
+        )
+        val asBigIntDF = sourceDF.withColumnCast(
+          "value",
+          LongType
+        )
+        assertSmallDataFrameEquality(
+          asBigIntDF,
+          expectBigIntDF
+        )
+      }
+    }
+
     'printSchemaInCodeFormat - {
 
       "prints the schema in a code friendly format" - {
