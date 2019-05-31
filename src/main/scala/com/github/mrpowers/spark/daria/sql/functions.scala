@@ -415,6 +415,39 @@ object functions {
     )
 
   /**
+   * Merge two given arrays, element-wise, into a signle array using a function.
+   * If one array is shorter, nulls are appended at the end to match the length of the longer
+   * array, before applying the function.
+   *
+   * {{{
+   * +---------+---------+
+   * |       a1|       a2|
+   * +---------+---------+
+   * |[1, 2, 3]|[a, b, c]|
+   * +---------+---------+
+   * }}}
+   *
+   * {{{
+   * actualDF.select(zip_with(col("a1"), col("a2"), (x, y) => struct(y, x))).show(false)
+   *
+   * +------------------------------------------------------------------------------------------------------------------------------------------------+
+   * |zip_with(a1, a2, lambdafunction(named_struct(y, namedlambdavariable(), x, namedlambdavariable()), namedlambdavariable(), namedlambdavariable()))|
+   * +------------------------------------------------------------------------------------------------------------------------------------------------+
+   * |[[a, 1], [b, 2], [c, 3]]                                                                                                                        |
+   * +------------------------------------------------------------------------------------------------------------------------------------------------+
+   * }}}
+   *
+   * @group collection_funcs
+   */
+  def zip_with(left: Column, right: Column, f: (Column, Column) => Column): Column = new Column(
+    ZipWith(
+      left.expr,
+      right.expr,
+      createLambda(f)
+    )
+  )
+
+  /**
    * Like Scala Array exists method, but for ArrayType columns
    * Scala has an Array#exists function that works like this:
    *
