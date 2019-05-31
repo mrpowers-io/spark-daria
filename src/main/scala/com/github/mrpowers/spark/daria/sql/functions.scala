@@ -341,6 +341,80 @@ object functions {
   )
 
   /**
+   * Applies a binary operator to an initial state and all elements in the array,
+   * and reduces this to a single state. The final state is converted into the final result
+   * by applying a finish function.
+   *
+   * {{{
+   * +---------+
+   * |     nums|
+   * +---------+
+   * |[1, 2, 3]|
+   * +---------+
+   * }}}
+   *
+   * {{{
+   * val actualDF = sourceDF.withColumn(
+   *   "res", aggregate(col("nums"), (acc, x) => acc + x, acc => acc * 10)
+   * )
+   *
+   * actualDF.show()
+   *
+   * +---------+----------+
+   * |     nums|       res|
+   * +---------+----------+
+   * |[1, 2, 3]|        60|
+   * +---------+----------+
+   * }}}
+   *
+   * @group collection_funcs
+   */
+  def aggregate(expr: Column, zero: Column, merge: (Column, Column) => Column, finish: Column => Column): Column = new Column(
+    ArrayAggregate(
+      expr.expr,
+      zero.expr,
+      createLambda(merge),
+      createLambda(finish)
+    )
+  )
+
+  /**
+   * Applies a binary operator to an initial state and all elements in the array,
+   * and reduces this to a single state.
+   *
+   * {{{
+   * +---------+
+   * |     nums|
+   * +---------+
+   * |[1, 2, 3]|
+   * +---------+
+   * }}}
+   *
+   * {{{
+   * val actualDF = sourceDF.withColumn(
+   *   "res", aggregate(col("nums"), (acc, x) => acc + x)
+   * )
+   *
+   * actualDF.show()
+   *
+   * +---------+----------+
+   * |     nums|       res|
+   * +---------+----------+
+   * |[1, 2, 3]|         6|
+   * +---------+----------+
+   * }}}
+   *
+   * @group collection_funcs
+   */
+  def aggregate(expr: Column, zero: Column, merge: (Column, Column) => Column): Column =
+    aggregate(
+      expr,
+      zero,
+      merge,
+      identity
+    )
+
+  /**
    * Like Scala Array exists method, but for ArrayType columns
    * Scala has an Array#exists function that works like this:
    *

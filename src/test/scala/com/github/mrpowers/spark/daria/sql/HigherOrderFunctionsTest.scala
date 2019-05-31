@@ -737,5 +737,227 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
         assert(ex3a.getMessage.contains("data type mismatch: argument 2 requires boolean type"))
       }
     }
+    "aggregate" - {
+      "handle arrays of primitive types not containing null" - {
+        val df = Seq(
+          Seq(
+            1,
+            9,
+            8,
+            7
+          ),
+          Seq(
+            5,
+            8,
+            9,
+            7,
+            2
+          ),
+          Seq.empty,
+          null
+        ).toDF("i")
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("i"),
+              lit(0),
+              (acc, x) => acc + x
+            )
+          ),
+          Seq(
+            Row(25),
+            Row(31),
+            Row(0),
+            Row(null)
+          )
+        )
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("i"),
+              lit(0),
+              (acc, x) => acc + x,
+              _ * 10
+            )
+          ),
+          Seq(
+            Row(250),
+            Row(310),
+            Row(0),
+            Row(null)
+          )
+        )
+      }
+      "handle arrays of primitive types containing null" - {
+        val df = Seq[Seq[Integer]](
+          Seq(
+            1,
+            9,
+            8,
+            7
+          ),
+          Seq(
+            5,
+            null,
+            8,
+            9,
+            7,
+            2
+          ),
+          Seq.empty,
+          null
+        ).toDF("i")
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("i"),
+              lit(0),
+              (acc, x) => acc + x
+            )
+          ),
+          Seq(
+            Row(25),
+            Row(null),
+            Row(0),
+            Row(null)
+          )
+        )
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("i"),
+              lit(0),
+              (acc, x) => acc + x,
+              acc =>
+                coalesce(
+                  acc,
+                  lit(0)
+                ) * 10
+            )
+          ),
+          Seq(
+            Row(250),
+            Row(0),
+            Row(0),
+            Row(null)
+          )
+        )
+      }
+      "handle arrays of non primitive types" - {
+        val df = Seq(
+          (
+            Seq(
+              "c",
+              "a",
+              "b"
+            ),
+            "a"
+          ),
+          (
+            Seq(
+              "b",
+              null,
+              "c",
+              null
+            ),
+            "b"
+          ),
+          (Seq.empty, "c"),
+          (null, "d")
+        ).toDF(
+          "ss",
+          "s"
+        )
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("ss"),
+              col("s"),
+              (acc, x) =>
+                concat(
+                  acc,
+                  x
+              )
+            )
+          ),
+          Seq(
+            Row("acab"),
+            Row(null),
+            Row("c"),
+            Row(null)
+          )
+        )
+        checkAnswer(
+          df.select(
+            aggregate(
+              col("ss"),
+              col("s"),
+              (acc, x) =>
+                concat(
+                  acc,
+                  x
+              ),
+              acc =>
+                coalesce(
+                  acc,
+                  lit("")
+              )
+            )
+          ),
+          Seq(
+            Row("acab"),
+            Row(""),
+            Row("c"),
+            Row(null)
+          )
+        )
+      }
+      "not handle invalid cases" - {
+        val df = Seq(
+          (
+            Seq(
+              "c",
+              "a",
+              "b"
+            ),
+            1
+          ),
+          (
+            Seq(
+              "b",
+              null,
+              "c",
+              null
+            ),
+            2
+          ),
+          (Seq.empty, 3),
+          (null, 4)
+        ).toDF(
+          "s",
+          "i"
+        )
+        val ex3a = intercept[AnalysisException] {
+          df.select(
+            aggregate(
+              col("i"),
+              lit(0),
+              (acc, x) => x
+            )
+          )
+        }
+        assert(ex3a.getMessage.contains("data type mismatch: argument 1 requires array type"))
+        val ex4a = intercept[AnalysisException] {
+          df.select(
+            aggregate(
+              col("s"),
+              lit(0),
+              (acc, x) => x
+            )
+          )
+        }
+        assert(ex4a.getMessage.contains("data type mismatch: argument 3 requires int type"))
+      }
+    }
   }
 }
