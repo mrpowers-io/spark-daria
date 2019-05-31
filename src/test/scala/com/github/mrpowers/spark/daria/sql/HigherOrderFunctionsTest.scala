@@ -571,5 +571,171 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
         assert(ex3a.getMessage.contains("data type mismatch: argument 2 requires boolean type"))
       }
     }
+    "filter" - {
+      "handle arrays of primitive types not containing null" - {
+        val df = Seq(
+          Seq(
+            1,
+            9,
+            8,
+            7
+          ),
+          Seq(
+            5,
+            8,
+            9,
+            7,
+            2
+          ),
+          Seq.empty,
+          null
+        ).toDF("i")
+        checkAnswer(
+          df.select(
+            filter(
+              col("i"),
+              _ % 2 === 0
+            )
+          ),
+          Seq(
+            Row(Seq(8)),
+            Row(
+              Seq(
+                8,
+                2
+              )
+            ),
+            Row(Seq.empty),
+            Row(null)
+          )
+        )
+      }
+      "handle arrays of primitive types containing null" - {
+        val df = Seq[Seq[Integer]](
+          Seq(
+            1,
+            9,
+            8,
+            null,
+            7
+          ),
+          Seq(
+            5,
+            null,
+            8,
+            9,
+            7,
+            2
+          ),
+          Seq.empty,
+          null
+        ).toDF("i")
+        checkAnswer(
+          df.select(
+            filter(
+              col("i"),
+              _ % 2 === 0
+            )
+          ),
+          Seq(
+            Row(Seq(8)),
+            Row(
+              Seq(
+                8,
+                2
+              )
+            ),
+            Row(Seq.empty),
+            Row(null)
+          )
+        )
+      }
+      "handle arrays of non primitive types" - {
+        val df = Seq(
+          Seq(
+            "c",
+            "a",
+            "b"
+          ),
+          Seq(
+            "b",
+            null,
+            "c",
+            null
+          ),
+          Seq.empty,
+          null
+        ).toDF("s")
+        checkAnswer(
+          df.select(
+            filter(
+              col("s"),
+              x => x.isNotNull
+            )
+          ),
+          Seq(
+            Row(
+              Seq(
+                "c",
+                "a",
+                "b"
+              )
+            ),
+            Row(
+              Seq(
+                "b",
+                "c"
+              )
+            ),
+            Row(Seq.empty),
+            Row(null)
+          )
+        )
+      }
+      "not handle invalid cases" - {
+        val df = Seq(
+          (
+            Seq(
+              "c",
+              "a",
+              "b"
+            ),
+            1
+          ),
+          (
+            Seq(
+              "b",
+              null,
+              "c",
+              null
+            ),
+            2
+          ),
+          (Seq.empty, 3),
+          (null, 4)
+        ).toDF(
+          "s",
+          "i"
+        )
+        val ex2a = intercept[AnalysisException] {
+          df.select(
+            filter(
+              col("i"),
+              x => x
+            )
+          )
+        }
+        assert(ex2a.getMessage.contains("data type mismatch: argument 1 requires array type"))
+        val ex3a = intercept[AnalysisException] {
+          df.select(
+            filter(
+              col("s"),
+              x => x
+            )
+          )
+        }
+        assert(ex3a.getMessage.contains("data type mismatch: argument 2 requires boolean type"))
+      }
+    }
   }
 }

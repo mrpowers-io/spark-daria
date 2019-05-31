@@ -307,6 +307,40 @@ object functions {
   )
 
   /**
+   * Returns an array of elements for which a predicate holds in a given array.
+   *
+   * {{{
+   * +---------+
+   * |     nums|
+   * +---------+
+   * |[1, 2, 3]|
+   * +---------+
+   * }}}
+   *
+   * {{{
+   * val actualDF = sourceDF.withColumn(
+   *   "evens", filter(col("nums"), x => x % 2 === 0)
+   * )
+   *
+   * actualDF.show()
+   *
+   * +---------+----------+
+   * |     nums|     evens|
+   * +---------+----------+
+   * |[1, 2, 3]|       [2]|
+   * +---------+----------+
+   * }}}
+   *
+   * @group collection_funcs
+   */
+  def filter(column: Column, f: Column => Column): Column = new Column(
+    ArrayFilter(
+      column.expr,
+      createLambda(f)
+    )
+  )
+
+  /**
    * Like Scala Array exists method, but for ArrayType columns
    * Scala has an Array#exists function that works like this:
    *
