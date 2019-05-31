@@ -1,5 +1,8 @@
 scalafmtOnCompile in Compile := true
 
+def binaryVersion(version: String) =
+  version.split("\\.").take(2).mkString(".")
+
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
 organization := "com.github.mrpowers"
@@ -20,7 +23,7 @@ spShortDescription := "Spark helper methods to maximize developer productivity"
 
 spDescription := "DataFrame validations, Column extensions, SparkSession extensions, sql functions, DataFrame transformations, and DataFrameHelpers."
 
-libraryDependencies += "MrPowers" % "spark-fast-tests" % "0.19.1-s_2.11" % "test"
+libraryDependencies += "MrPowers" % "spark-fast-tests" % s"0.19.1-s_${binaryVersion(scalaVersion.value)}" % "test"
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 

@@ -5,5 +5,7 @@ cache:
     - $HOME/spark
     - $HOME/.sbt/launchers
 scala:
-  - 2.11.8
+  - 2.11.12
+  - 2.12.7
 sudo: false
+script: sbt ++$TRAVIS_SCALA_VERSION test
