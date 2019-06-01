@@ -653,6 +653,60 @@ object ColumnExtTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    '<==> - {
+
+      "demonstrate the <=> operator behavior" - {
+        val df = spark
+          .createDF(
+            List(
+              ("dog", "dog", true),
+              ("shoes", "cat", false),
+              (null, null, true)
+            ),
+            List(
+              ("word", StringType, true),
+              ("other_word", StringType, true),
+              ("expected", BooleanType, true)
+            )
+          )
+          .withColumn(
+            "res",
+            col("word") <=> col("other_word")
+          )
+        assertColumnEquality(
+          df,
+          "expected",
+          "res"
+        )
+      }
+
+      "functions differently when <==> is used" - {
+        val df = spark
+          .createDF(
+            List(
+              ("dog", "dog", true),
+              ("shoes", "cat", false),
+              (null, null, false) // this is false now
+            ),
+            List(
+              ("word", StringType, true),
+              ("other_word", StringType, true),
+              ("expected", BooleanType, true)
+            )
+          )
+          .withColumn(
+            "res",
+            col("word") <==> col("other_word")
+          )
+        assertColumnEquality(
+          df,
+          "expected",
+          "res"
+        )
+      }
+
+    }
+
   }
 
 }

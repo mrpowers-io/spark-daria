@@ -385,6 +385,18 @@ object ColumnExt {
       not(col.isin(list: _*))
     }
 
+    /**
+     * Like the <=> operator, but returns false if both columns are null
+     *
+     * @group expr_ops
+     */
+    def <==>(otherCol: Column): Column = {
+      when(
+        col.isNull && otherCol.isNull,
+        false
+      ).otherwise(col <=> otherCol)
+    }
+
   }
 
 }
