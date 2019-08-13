@@ -3,8 +3,10 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.functions._
+import org.apache.spark.unsafe.types.UTF8String
 
 import scala.reflect.runtime.universe._
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.
@@ -523,4 +525,107 @@ object functions {
 
   val isLuhnNumber = udf[Option[Boolean], String](isLuhn)
 
+  private def withExpr(expr: Expression): Column = new Column(expr)
+
+  def regexp_extract_all(a: Column, b: Column, c: Column): Column = withExpr {
+    RegExpExtractAll(
+      a.expr,
+      b.expr,
+      c.expr
+    )
+  }
+
+//  expression[RegExpExtractAll]("regexp_extract_all")
+
+}
+
+case class RegExpExtractAll(subject: Expression, regexp: Expression, idx: Expression) extends TernaryExpression with ImplicitCastInputTypes {
+  def this(s: Expression, r: Expression) =
+    this(
+      s,
+      r,
+      Literal(1)
+    )
+
+  // last regex in string, we will update the pattern iff regexp value changed.
+  @transient private var lastRegex: UTF8String = _
+  // last regex pattern, we cache it for performance concern
+  @transient private var pattern: Pattern = _
+
+  override def nullSafeEval(s: Any, p: Any, r: Any): Any = {
+    if (!p.equals(lastRegex)) {
+      // regex value changed
+      lastRegex = p.asInstanceOf[UTF8String].clone()
+      pattern = Pattern.compile(lastRegex.toString)
+    }
+    val m                = pattern.matcher(s.toString)
+    var groupArrayBuffer = new ArrayBuffer[UTF8String]();
+
+    while (m.find) {
+      val mr: MatchResult = m.toMatchResult
+      val group           = mr.group(r.asInstanceOf[Int])
+      if (group == null) { // Pattern matched, but not optional group
+        groupArrayBuffer += UTF8String.EMPTY_UTF8
+      } else {
+        groupArrayBuffer += UTF8String.fromString(group)
+      }
+    }
+
+    new GenericArrayData(groupArrayBuffer.toArray.asInstanceOf[Array[Any]])
+  }
+
+  override def dataType: DataType = ArrayType(StringType)
+  override def inputTypes: Seq[AbstractDataType] =
+    Seq(
+      StringType,
+      StringType,
+      IntegerType
+    )
+  override def children: Seq[Expression] = subject :: regexp :: idx :: Nil
+  override def prettyName: String        = "regexp_extract_all"
+
+  override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = {
+    val classNamePattern = classOf[Pattern].getCanonicalName
+    val matcher          = ctx.freshName("matcher")
+    val matchResult      = ctx.freshName("matchResult")
+    val groupArray       = ctx.freshName("groupArray")
+
+    val termLastRegex = ctx.addMutableState(
+      "UTF8String",
+      "lastRegex"
+    )
+    val termPattern = ctx.addMutableState(
+      classNamePattern,
+      "pattern"
+    )
+
+    val arrayClass = classOf[GenericArrayData].getName
+
+    nullSafeCodeGen(
+      ctx,
+      ev,
+      (subject, regexp, idx) => {
+        s"""
+      if (!$regexp.equals($termLastRegex)) {
+        // regex value changed
+        $termLastRegex = $regexp.clone();
+        $termPattern = $classNamePattern.compile($termLastRegex.toString());
+      }
+      java.util.regex.Matcher $matcher =
+        $termPattern.matcher($subject.toString());
+      java.util.ArrayList $groupArray =
+        new java.util.ArrayList<UTF8String>();
+      while ($matcher.find()) {
+        java.util.regex.MatchResult $matchResult = $matcher.toMatchResult();
+        if ($matchResult.group($idx) == null) {
+          $groupArray.add(UTF8String.EMPTY_UTF8);
+        } else {
+          $groupArray.add(UTF8String.fromString($matchResult.group($idx)));
+        }
+      }
+      ${ev.value} = new $arrayClass($groupArray.toArray(new UTF8String[$groupArray.size()]));
+            """
+      }
+    )
+  }
 }
