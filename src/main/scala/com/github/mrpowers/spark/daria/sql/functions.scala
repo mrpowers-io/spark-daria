@@ -462,7 +462,11 @@ object functions {
     ) / 365
   }
 
-  def bucketFinder(col: Column, buckets: Array[(Any, Any)], inclusiveBoundries: Boolean = false, lowestBoundLte: Boolean = false, highestBoundGte: Boolean = false): Column = {
+  def bucketFinder(col: Column,
+                   buckets: Array[(Any, Any)],
+                   inclusiveBoundries: Boolean = false,
+                   lowestBoundLte: Boolean = false,
+                   highestBoundGte: Boolean = false): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
     val lowerBoundLteCol      = lit(lowestBoundLte)
@@ -522,5 +526,16 @@ object functions {
   }
 
   val isLuhnNumber = udf[Option[Boolean], String](isLuhn)
+
+  private[sql] def findAllInString(str: String, regexp: String): Option[Array[String]] = {
+    val r = regexp.r
+    val s = Option(str).getOrElse(return None)
+    if (s.isEmpty()) {
+      return Some(Array[String]())
+    }
+    Some(r.findAllIn(s).toArray)
+  }
+
+  val regexp_extract_all = udf[Option[Array[String]], String, String](findAllInString)
 
 }

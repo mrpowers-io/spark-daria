@@ -419,11 +419,11 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
             col("c1"),
             col("c2")
           ) &&
-          functions.multiEquals[Boolean](
-            false,
-            col("c3"),
-            col("c4")
-          )
+            functions.multiEquals[Boolean](
+              false,
+              col("c3"),
+              col("c4")
+            )
         )
 
         val expectedData = List(
@@ -811,6 +811,35 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
       assertColumnEquality(
         df,
         "is_something_luhn",
+        "expected"
+      )
+
+    }
+
+    'regexp_extract_all - {
+
+      val df = spark
+        .createDF(
+          List(
+            ("this 123 is 456 something", Array("123", "456")),
+            ("12", Array("12")),
+            ("i like people", Array[String]()),
+            ("", Array[String]()),
+            (null, null)
+          ),
+          List(
+            ("something", StringType, true),
+            ("expected", ArrayType(StringType, true), true)
+          )
+        )
+        .withColumn(
+          "something_numbers",
+          functions.regexp_extract_all(col("something"), lit("""\d+"""))
+        )
+
+      assertColumnEquality(
+        df,
+        "something_numbers",
         "expected"
       )
 
