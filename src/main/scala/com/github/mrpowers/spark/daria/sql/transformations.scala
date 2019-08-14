@@ -196,11 +196,14 @@ object transformations {
    * Replaces all `"cool"` strings in all the `sourceDF` columns of `StringType` with the string `"dude"`.
    */
   def bulkRegexpReplace(pattern: String = "\u0000", replacement: String = "")(df: DataFrame): DataFrame = {
-    val cols = df.schema.filter { (s: StructField) =>
-      s.dataType.simpleString == "string"
-    }.map { (s: StructField) =>
-      col(s.name)
-    }.toList
+    val cols = df.schema
+      .filter { (s: StructField) =>
+        s.dataType.simpleString == "string"
+      }
+      .map { (s: StructField) =>
+        col(s.name)
+      }
+      .toList
 
     multiRegexpReplace(
       cols,
@@ -244,7 +247,12 @@ object transformations {
   /**
    * Categorizes a numeric column in various user specified "buckets"
    */
-  def withColBucket(colName: String, outputColName: String, buckets: Array[(Any, Any)], inclusiveBoundries: Boolean = false, lowestBoundLte: Boolean = false, highestBoundGte: Boolean = false)(df: DataFrame) = {
+  def withColBucket(colName: String,
+                    outputColName: String,
+                    buckets: Array[(Any, Any)],
+                    inclusiveBoundries: Boolean = false,
+                    lowestBoundLte: Boolean = false,
+                    highestBoundGte: Boolean = false)(df: DataFrame) = {
     df.withColumn(
       outputColName,
       functions.bucketFinder(
