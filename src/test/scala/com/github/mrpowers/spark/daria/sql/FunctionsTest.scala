@@ -845,6 +845,39 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'array_groupBy - {
+
+      "works like the Scala groupBy array method" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array("snake", "rat", "cool"), Map(false -> Array("snake", "rat"), true -> Array[String]("cool"))),
+              (Array("cat", "crazy"), Map(true          -> Array("cat", "crazy"))),
+              (null, null)
+            ),
+            List(
+              ("words", ArrayType(StringType, true), true),
+              ("expected", MapType(BooleanType, ArrayType(StringType, true)), true)
+            )
+          )
+          .withColumn(
+            "groupBy_begin_with_c",
+            functions
+              .array_groupBy[String]((x: String) => x.startsWith("c"))
+              .apply(col("words"))
+          )
+
+        assertColumnEquality(
+          df,
+          "groupBy_begin_with_c",
+          "expected"
+        )
+
+      }
+
+    }
+
   }
 
 }

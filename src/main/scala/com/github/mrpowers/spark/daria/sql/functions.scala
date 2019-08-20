@@ -538,4 +538,12 @@ object functions {
 
   val regexp_extract_all = udf[Option[Array[String]], String, String](findAllInString)
 
+  def array_groupBy[T: TypeTag](f: (T => Boolean)) = udf[Option[Map[Boolean, Seq[T]]], Seq[T]] { (arr: Seq[T]) =>
+    if (arr == null) {
+      null
+    } else {
+      Some(arr.groupBy(f(_)))
+    }
+  }
+
 }
