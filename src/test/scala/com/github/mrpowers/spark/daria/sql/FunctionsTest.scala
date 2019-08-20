@@ -876,6 +876,35 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
       }
 
+      "works with a regexp" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array("AAAsnake", "BBBrat", "cool"), Map(true -> Array("AAAsnake", "BBBrat"), false -> Array[String]("cool"))),
+              (Array("BBBcat", "AAAcrazy"), Map(true         -> Array("BBBcat", "AAAcrazy"))),
+              (null, null)
+            ),
+            List(
+              ("words", ArrayType(StringType, true), true),
+              ("expected", MapType(BooleanType, ArrayType(StringType, true)), true)
+            )
+          )
+          .withColumn(
+            "groupBy_begin_with_aaa_or_bbb",
+            functions
+              .array_groupBy[String]((x: String) => x.matches("""^AAA\w+|^BBB\w+"""))
+              .apply(col("words"))
+          )
+
+        assertColumnEquality(
+          df,
+          "groupBy_begin_with_aaa_or_bbb",
+          "expected"
+        )
+
+      }
+
     }
 
   }
