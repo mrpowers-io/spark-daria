@@ -907,6 +907,68 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'array_map - {
+
+      "works like the Scala map method on Strings" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array("snake", "rat", "cool"), Array("AAAsnake", "AAArat", "AAAcool")),
+              (Array("cat", "crazy"), Array("AAAcat", "AAAcrazy")),
+              (null, null)
+            ),
+            List(
+              ("words", ArrayType(StringType, true), true),
+              ("expected", ArrayType(StringType, true), true)
+            )
+          )
+          .withColumn(
+            "AAA_prepended",
+            functions
+              .array_map((x: String) => "AAA".concat(x))
+              .apply(col("words"))
+          )
+
+        assertColumnEquality(
+          df,
+          "AAA_prepended",
+          "expected"
+        )
+
+      }
+
+      "works on Integers" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array(1, 2, 3), Array(11, 12, 13)),
+              (Array(4, 5), Array(14, 15)),
+              (null, null)
+            ),
+            List(
+              ("numbers", ArrayType(IntegerType, true), true),
+              ("expected", ArrayType(IntegerType, true), true)
+            )
+          )
+          .withColumn(
+            "numbers_plus_10",
+            functions
+              .array_map[Integer]((x: Integer) => x + 10)
+              .apply(col("numbers"))
+          )
+
+        assertColumnEquality(
+          df,
+          "numbers_plus_10",
+          "expected"
+        )
+
+      }
+
+    }
+
   }
 
 }

@@ -546,4 +546,12 @@ object functions {
     }
   }
 
+  def array_map[T: TypeTag](f: (T => T)) = udf[Option[Seq[T]], Seq[T]] { (arr: Seq[T]) =>
+    if (arr == null) {
+      null
+    } else {
+      Some(arr.map(f(_)))
+    }
+  }
+
 }
