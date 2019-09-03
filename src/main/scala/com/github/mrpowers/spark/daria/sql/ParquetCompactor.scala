@@ -17,6 +17,7 @@ class ParquetCompactor(dirname: String, numOutputFiles: Int) {
         .appName("spark session")
         .getOrCreate()
     }
+
     val df = spark.read.parquet(dirname)
 
     df.withColumn("input_file_name_part", regexp_extract(input_file_name(), """part.+c\d{3}""", 0))
