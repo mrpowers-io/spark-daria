@@ -969,6 +969,35 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'broadcastedArrayContains - {
+
+      "returns true if the number is special" - {
+
+        val specialNumbers = spark.sparkContext.broadcast(Array("123", "456"))
+
+        val df = spark
+          .createDF(
+            List(
+              ("123", true),
+              ("hi", false),
+              (null, null)
+            ),
+            List(
+              ("num", StringType, true),
+              ("expected", BooleanType, true)
+            )
+          )
+          .withColumn(
+            "is_special_number",
+            functions.broadcastArrayContains[String](col("num"), specialNumbers)
+          )
+
+        assertColumnEquality(df, "is_special_number", "expected")
+
+      }
+
+    }
+
   }
 
 }

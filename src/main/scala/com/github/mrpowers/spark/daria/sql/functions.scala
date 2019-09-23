@@ -1,5 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
+import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.functions._
@@ -552,6 +553,12 @@ object functions {
     } else {
       Some(arr.map(f(_)))
     }
+  }
+
+  def broadcastArrayContains[T](col: Column, broadcastedArray: Broadcast[Array[T]]) = {
+    when(col.isNull, null)
+      .when(lit(broadcastedArray.value.mkString(",")).contains(col), lit(true))
+      .otherwise(lit(false))
   }
 
 }
