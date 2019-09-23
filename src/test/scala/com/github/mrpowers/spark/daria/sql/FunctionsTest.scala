@@ -133,37 +133,28 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
       "removes all non-word characters from a string, excluding whitespace" - {
 
-        val sourceDF = spark.createDF(
-          List(
-            ("Bruce &&**||ok"),
-            ("    oba&&&ma"),
-            ("  ni!!ce  h^^air person  "),
-            (null)
-          ),
-          List(("some_string", StringType, true))
-        )
-
-        val actualDF = sourceDF.withColumn(
-          "some_string_remove_non_word_chars",
-          functions.removeNonWordCharacters(col("some_string"))
-        )
-
-        val expectedDF = spark.createDF(
-          List(
-            ("Bruce &&**||ok", "Bruce ok"),
-            ("    oba&&&ma", "    obama"),
-            ("  ni!!ce  h^^air person  ", "  nice  hair person  "),
-            (null, null)
-          ),
-          List(
-            ("some_string", StringType, true),
-            ("some_string_remove_non_word_chars", StringType, true)
+        val df = spark
+          .createDF(
+            List(
+              ("Bruce &&**||ok88", "Bruce ok88"),
+              ("55    oba&&&ma", "55    obama"),
+              ("  ni!!ce  h^^air person  ", "  nice  hair person  "),
+              (null, null)
+            ),
+            List(
+              ("some_string", StringType, true),
+              ("expected", StringType, true)
+            )
           )
-        )
+          .withColumn(
+            "some_string_remove_non_word_chars",
+            functions.removeNonWordCharacters(col("some_string"))
+          )
 
-        assertSmallDataFrameEquality(
-          actualDF,
-          expectedDF
+        assertColumnEquality(
+          df,
+          "some_string_remove_non_word_chars",
+          "expected"
         )
 
       }
