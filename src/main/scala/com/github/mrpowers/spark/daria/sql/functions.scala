@@ -2,7 +2,6 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.Column
-import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
@@ -17,7 +16,6 @@ import scala.reflect.runtime.universe._
  * @groupname Ungrouped Support functions for DataFrames
  */
 object functions {
-  private def withExpr(expr: Expression): Column = new Column(expr)
 
   /**
    * Replaces all whitespace in a string with single spaces
@@ -171,107 +169,6 @@ object functions {
       len
     )
   }
-
-  private def createLambda(f: Column => Column) = {
-    val x        = UnresolvedNamedLambdaVariable(Seq("x"))
-    val function = f(new Column(x)).expr
-    LambdaFunction(
-      function,
-      Seq(x)
-    )
-  }
-
-  private def createLambda(f: (Column, Column) => Column) = {
-    val x = UnresolvedNamedLambdaVariable(Seq("x"))
-    val y = UnresolvedNamedLambdaVariable(Seq("y"))
-    val function = f(
-      new Column(x),
-      new Column(y)
-    ).expr
-    LambdaFunction(
-      function,
-      Seq(
-        x,
-        y
-      )
-    )
-  }
-
-  /**
-   * Returns an array of elements after applying a tranformation to each element
-   * in the input array.
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +---------+
-   * |     nums|
-   * +---------+
-   * |[1, 4, 9]|
-   * |[1, 3, 5]|
-   * +---------+
-   * }}}
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   *   "squared", transform(col("nums"), x => x * 2)
-   * )
-   *
-   * actualDF.show()
-   *
-   * +---------+-----------+
-   * |     nums|    squared|
-   * +---------+-----------+
-   * |[1, 4, 9]|[1, 16, 81]|
-   * |[1, 3, 5]| [1, 9, 25]|
-   * +---------+-----------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  def transform(column: Column, f: Column => Column): Column = new Column(
-    ArrayTransform(
-      column.expr,
-      createLambda(f)
-    )
-  )
-
-  /**
-   * Returns an array of elements after applying a tranformation to each element
-   * in the input array with its index.
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +---------+
-   * |     nums|
-   * +---------+
-   * |[1, 2, 3]|
-   * +---------+
-   * }}}
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   *   "idx_sum", transform(col("nums"), (x, i) => x + i)
-   * )
-   *
-   * actualDF.show()
-   *
-   * +---------+---------+
-   * |     nums|  idx_sum|
-   * +---------+---------+
-   * |[1, 2, 3]|[1, 3, 5]|
-   * +---------+---------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  def transform(column: Column, f: (Column, Column) => Column): Column = new Column(
-    ArrayTransform(
-      column.expr,
-      createLambda(f)
-    )
-  )
 
   /**
    * Like Scala Array exists method, but for ArrayType columns
