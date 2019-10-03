@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '1.8', '11' ]
+        java: [ '1.8' ]
         hadoop: [ 'hadoop-2.7', 'hadoop-3.2' ]
         exclude:
         - java: '11'
