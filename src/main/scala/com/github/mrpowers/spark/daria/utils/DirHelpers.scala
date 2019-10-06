@@ -4,14 +4,15 @@ import org.apache.spark.sql.SparkSession
 
 object DirHelpers {
 
+  lazy val spark: SparkSession = {
+    SparkSession
+      .builder()
+      .master("local")
+      .appName("spark session")
+      .getOrCreate()
+  }
+
   def numBytes(dirname: String): Long = {
-    lazy val spark: SparkSession = {
-      SparkSession
-        .builder()
-        .master("local")
-        .appName("spark session")
-        .getOrCreate()
-    }
     val filePath   = new org.apache.hadoop.fs.Path(dirname)
     val fileSystem = filePath.getFileSystem(spark.sparkContext.hadoopConfiguration)
     fileSystem.getContentSummary(filePath).getLength
@@ -22,7 +23,7 @@ object DirHelpers {
   }
 
   def num1GBPartitions(gigabytes: Long): Int = {
-    math.ceil(gigabytes).toInt
+    if (gigabytes == 0L) 1 else gigabytes.toInt
   }
 
 }
