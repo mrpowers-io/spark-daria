@@ -5,6 +5,11 @@ import org.apache.spark.sql.functions._
 
 object DeltaLogHelpers {
 
+  // get the deltaLogDF with this code
+  // DeltaLog
+  //   .forTable(spark, path)
+  //   .snapshot
+  //   .allFiles
   def num1GbPartitions(deltaLogDF: DataFrame, minNumPartitions: Int = 1): Int = {
 
     val numBytes = deltaLogDF
