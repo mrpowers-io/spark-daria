@@ -17,10 +17,10 @@ Fetch the JAR file from Maven.
 resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 
 // Scala 2.11
-libraryDependencies += "mrpowers" % "spark-daria" % "0.26.1-s_2.11"
+libraryDependencies += "mrpowers" % "spark-daria" % "0.35.0-s_2.11"
 
 // Scala 2.12, Spark 2.4+
-libraryDependencies += "mrpowers" % "spark-daria" % "0.26.1-s_2.12"
+libraryDependencies += "mrpowers" % "spark-daria" % "0.35.0-s_2.12"
 ```
 
 **Option 2: JitPack**
@@ -35,7 +35,7 @@ libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v0.26.0"
 
 Different spark-daria versions are compatible with different Spark versions.  In general, the latest spark-daria versions are always compatible with the latest Spark versions.
 
-|       | 0.26.0             | 0.26.1             | 0.27.0             |
+|       | 0.35.0             | 0.34.0             | 0.33.2             |
 |-------|--------------------|--------------------|--------------------|
 | 2.0.0 | :x:                | :x:                | :x:                |
 | 2.1.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
