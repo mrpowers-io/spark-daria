@@ -960,6 +960,40 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'array_map_ex_null - {
+
+      "works like the Scala map method on Strings" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array("snake", "rat", "cool"), Array("AAAsnake", "AAArat", "AAAcool")),
+              (Array("cat", null, "crazy"), Array("AAAcat", "AAAcrazy")),
+              (Array(null, null), Array[String]()),
+              (null, null)
+            ),
+            List(
+              ("words", ArrayType(StringType, true), true),
+              ("expected", ArrayType(StringType, true), true)
+            )
+          )
+          .withColumn(
+            "AAA_prepended",
+            functions
+              .array_map_ex_null((x: String) => if (x == null) null else "AAA".concat(x))
+              .apply(col("words"))
+          )
+
+        assertColumnEquality(
+          df,
+          "AAA_prepended",
+          "expected"
+        )
+
+      }
+
+    }
+
     'broadcastedArrayContains - {
 
       "returns true if the number is special" - {

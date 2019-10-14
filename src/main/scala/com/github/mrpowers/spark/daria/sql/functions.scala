@@ -555,6 +555,17 @@ object functions {
     }
   }
 
+  def array_map_ex_null[T: TypeTag](f: T => T) = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+    if (arr == null) {
+      null
+    } else {
+      Some(
+        arr.view
+          .map(f(_))
+          .filter(_ != null))
+    }
+  }
+
   def broadcastArrayContains[T](col: Column, broadcastedArray: Broadcast[Array[T]]) = {
     when(col.isNull, null)
       .when(lit(broadcastedArray.value.mkString(",")).contains(col), lit(true))
