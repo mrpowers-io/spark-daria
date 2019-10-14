@@ -140,7 +140,7 @@ object functions {
     val c = Option(colName).getOrElse(return None)
     // initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
     var previousLetter: Char = '\0'
-    Some(c.map { (letter: Char) =>
+    Some(c.map { letter: Char =>
       if (d.contains(previousLetter) || previousLetter.equals('\0')) {
         previousLetter = letter
         letter.toUpper
@@ -354,7 +354,7 @@ object functions {
    *
    * @group collection_funcs
    */
-  def forall[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
+  def forall[T: TypeTag](f: T => Boolean) = udf[Boolean, Seq[T]] { arr: Seq[T] =>
     arr.forall(f(_))
   }
 
@@ -531,7 +531,7 @@ object functions {
   private[sql] def findAllInString(str: String, regexp: String): Option[Array[String]] = {
     val r = regexp.r
     val s = Option(str).getOrElse(return None)
-    if (s.isEmpty()) {
+    if (s.isEmpty) {
       return Some(Array[String]())
     }
     Some(r.findAllIn(s).toArray)
@@ -539,7 +539,7 @@ object functions {
 
   val regexp_extract_all = udf[Option[Array[String]], String, String](findAllInString)
 
-  def array_groupBy[T: TypeTag](f: (T => Boolean)) = udf[Option[Map[Boolean, Seq[T]]], Seq[T]] { (arr: Seq[T]) =>
+  def array_groupBy[T: TypeTag](f: T => Boolean) = udf[Option[Map[Boolean, Seq[T]]], Seq[T]] { arr: Seq[T] =>
     if (arr == null) {
       null
     } else {
@@ -547,7 +547,7 @@ object functions {
     }
   }
 
-  def array_map[T: TypeTag](f: (T => T)) = udf[Option[Seq[T]], Seq[T]] { (arr: Seq[T]) =>
+  def array_map[T: TypeTag](f: T => T) = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
     if (arr == null) {
       null
     } else {

@@ -12,7 +12,7 @@ object StringHelpers {
 
   /**
    * Escapes all the special characters in a string for a SQL regexp expression
-   * Better to simply use triple quotes ;)
+   * Better to simply use triple quotes
    *
    */
   def escapeForSqlRegexp(str: String, charsToEscape: List[String] = sqlCharsToEscape): Option[String] = {
