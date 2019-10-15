@@ -555,6 +555,14 @@ object functions {
     }
   }
 
+  def array_filter_nulls[T: TypeTag]() = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+    if (arr == null) {
+      null
+    } else {
+      Some(arr.filter(_ != null))
+    }
+  }
+
   def array_map_ex_null[T: TypeTag](f: T => T) = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
     if (arr == null) {
       null

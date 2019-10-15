@@ -960,6 +960,38 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'array_filter_nulls - {
+
+      "removes all nulls from arrays" - {
+
+        val df = spark
+          .createDF(
+            List(
+              (Array("snake", null, "cool"), Array("snake", "cool")),
+              (Array("cat", null, null), Array("cat")),
+              (Array(null, null), Array[String]()),
+              (null, null)
+            ),
+            List(
+              ("words", ArrayType(StringType, true), true),
+              ("expected", ArrayType(StringType, true), true)
+            )
+          )
+          .withColumn(
+            "words_filtered",
+            functions.array_filter_nulls[String]().apply(col("words"))
+          )
+
+        assertColumnEquality(
+          df,
+          "words_filtered",
+          "expected"
+        )
+
+      }
+
+    }
+
     'array_map_ex_null - {
 
       "works like the Scala map method on Strings" - {
