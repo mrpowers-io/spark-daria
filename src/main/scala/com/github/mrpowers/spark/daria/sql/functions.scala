@@ -580,4 +580,43 @@ object functions {
       .otherwise(lit(false))
   }
 
+  def regexp_extract_all_by_groups_fun(pattern: String, text: String, captureGroups: Seq[Int]): Array[Array[String]] = {
+    if (pattern == null || text == null) {
+      return null
+    }
+    val matchData = pattern.r
+      .findAllIn(Option[String](text).getOrElse(""))
+      .matchData
+
+    if (matchData.isEmpty) {
+      return Array(Array[String]())
+    }
+
+    matchData
+      .map({ m =>
+        captureGroups.toArray
+          .map({ cg =>
+            m.group(cg)
+          })
+      })
+      .toArray
+  }
+
+  val regexp_extract_all_by_groups = udf(regexp_extract_all_by_groups_fun _)
+
+  def regexp_extract_all_by_group_fun(pattern: String, text: String, captureGroup: Int): Array[String] = {
+    if (pattern == null || text == null) {
+      return null
+    }
+    pattern.r
+      .findAllIn(Option[String](text).getOrElse(""))
+      .matchData
+      .map({ m =>
+        m.group(captureGroup)
+      })
+      .toArray
+  }
+
+  val regexp_extract_all_by_group = udf(regexp_extract_all_by_group_fun _)
+
 }

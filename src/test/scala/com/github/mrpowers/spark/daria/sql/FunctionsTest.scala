@@ -1055,6 +1055,69 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
+    'regexp_extract_all_by_groups - {
+
+      "returns an array of all the matches" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("H34567ok C88dude", Array(Array("34567", "ok"), Array("88", "dude"))),
+              ("B123funny", Array(Array("123", "funny"))),
+              ("no match here", Array(Array())),
+              (null, null)
+            ),
+            List(
+              ("str", StringType, true),
+              ("expected", ArrayType(ArrayType(StringType, true)), true)
+            )
+          )
+          .withColumn(
+            "actual",
+            functions.regexp_extract_all_by_groups(
+              lit("""(\w)(\d+)(\w+)"""),
+              col("str"),
+              lit(Array(2, 3))
+            )
+          )
+
+        assertColumnEquality(df, "actual", "expected")
+
+      }
+
+    }
+
+    'regexp_extract_all_by_group - {
+
+      "returns an array of all the matches for a single group" - {
+
+        val df = spark
+          .createDF(
+            List(
+              ("H34567ok C88dude", Array("34567", "88")),
+              ("B123funny", Array("123")),
+              (null, null)
+            ),
+            List(
+              ("str", StringType, true),
+              ("expected", ArrayType(StringType, true), true)
+            )
+          )
+          .withColumn(
+            "actual",
+            functions.regexp_extract_all_by_group(
+              lit("""(\w)(\d+)(\w+)"""),
+              col("str"),
+              lit(2)
+            )
+          )
+
+        assertColumnEquality(df, "actual", "expected")
+
+      }
+
+    }
+
   }
 
 }
