@@ -131,7 +131,7 @@ The DataFrame helper methods make it easy to convert DataFrame columns into Arra
 ```scala
 import com.github.mrpowers.spark.daria.sql.DataFrameHelpers._
 
-val arr = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
+val arr = columnToArray[Int](sourceDF, "num")
 ```
 
 ### DataFrame validators
