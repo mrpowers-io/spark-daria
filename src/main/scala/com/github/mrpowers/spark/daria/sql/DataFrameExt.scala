@@ -265,13 +265,9 @@ object DataFrameExt {
      *
      */
     def flattenSchema(delimiter: String = ".", prefix: String = null): DataFrame = {
-      df.select(
-        StructTypeHelpers.flattenSchema(
-          df.schema,
-          delimiter,
-          prefix
-        ): _*
-      )
+      val renamedCols: Array[Column] = StructTypeHelpers.flattenSchema(df.schema)
+          .map(name => col(name.toString).as(name.toString.replace(".", delimiter)))
+      df.select(renamedCols: _*)
     }
 
     /**
