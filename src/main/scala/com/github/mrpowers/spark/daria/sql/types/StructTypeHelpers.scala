@@ -9,10 +9,10 @@ import scala.reflect.runtime.universe._
 
 object StructTypeHelpers {
 
-  def flattenSchema(schema: StructType, prefix: String = null): Array[Column] = {
+  def flattenSchema(schema: StructType, prefix: String = ""): Array[Column] = {
     schema.fields.flatMap(structField => {
       val codeColName =
-        if (prefix == null) structField.name
+        if (prefix.isEmpty) structField.name
         else prefix + "." + structField.name
 
       structField.dataType match {
