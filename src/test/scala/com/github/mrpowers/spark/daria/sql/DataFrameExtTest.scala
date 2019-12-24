@@ -645,7 +645,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
         val data = Seq(
           Row(
             Row(
-              "this",
+              Row("this"),
               "is"
             ),
             "something",
@@ -662,8 +662,15 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
                 Seq(
                   StructField(
                     "bar",
-                    StringType,
-                    true
+                    StructType(
+                      Seq(
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    )
                   ),
                   StructField(
                     "baz",
@@ -702,7 +709,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
         val expectedDF = spark.createDF(
           List(("this", "is", "something", "cool", ";)")),
           List(
-            ("foo_bar", StringType, true),
+            ("foo_bar_zoo", StringType, true),
             ("foo_baz", StringType, true),
             ("x", StringType, true),
             ("y", StringType, true),
