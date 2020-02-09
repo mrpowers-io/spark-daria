@@ -49,6 +49,12 @@ Different spark-daria versions are compatible with different Spark versions.  In
 
 Email me if you need a custom spark-daria version and I'll help you out :wink:
 
+## Writing Beautiful Spark Code
+
+Reading [Writing Beautiful Spark Code](https://leanpub.com/beautiful-spark/) is the best way to learn how to build Spark projects and leverage spark-daria.
+
+spark-daria will make you a more productive Spark programmer.  Studying the spark-daria codebase is a great way to learn how you should structure your own Spark projects.
+
 ## PySpark
 
 Use [quinn](https://github.com/MrPowers/quinn) to access all these same functions in PySpark.
