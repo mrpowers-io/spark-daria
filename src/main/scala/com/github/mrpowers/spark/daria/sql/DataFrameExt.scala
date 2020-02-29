@@ -290,7 +290,7 @@ object DataFrameExt {
      */
     def structureSchema(delimiter:String = "_"): DataFrame = {
       def loop(tl: List[(String, List[String])]): List[Column] =
-        tl.groupBy(t => t._2.head).map {
+        tl.groupBy{case (_, columnList) => columnList.head}.map {
           case (structColumn, l) if l.length > 1 => struct(loop(l.map {
             case (column, _ :: tail) => (column, tail)
             case (column, h :: Nil) => (column, List(h))
