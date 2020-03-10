@@ -271,6 +271,54 @@ object DataFrameExt {
     }
 
     /**
+     * This method is opposite of flattenSchema. For example, if you have flat dataframe with snake case columns it will
+     * convert it to dataframe with nested columns.
+     *
+     * From:
+     * root
+     * |-- person_id: long (nullable = true)
+     * |-- person_name: string (nullable = true)
+     * |-- person_surname: string (nullable = true)
+     *
+     * To:
+     * root
+     * |-- person: struct (nullable = false)
+     * |    |-- name: string (nullable = true)
+     * |    |-- surname: string (nullable = true)
+     * |    |-- id: long (nullable = true)
+     *
+     */
+    def structureSchema(delimiter:String = "_"): DataFrame = {
+      def loop(tl: List[(String, List[String])]): List[Column] =
+        tl.groupBy{case (_, columnList) => columnList.head}.map {
+          case (structColumn, l) if l.length > 1 => struct(loop(l.map {
+            case (column, _ :: tail) => (column, tail)
+            case (column, h :: Nil) => (column, List(h))
+          }): _*).alias(structColumn)
+          case (structColumn, l) => l match {
+            case (c, h::Nil)::Nil => col(c).as(h)
+            case _ => struct(loop(l.map{
+              case (column, _ :: tail) => (column, tail)
+              case (column, h :: Nil) => (column, List(h))
+            }):_*).alias(structColumn)
+          }
+        }.toList
+
+      df.select(loop(df.columns.toList.map(c => (c, c.split(delimiter).toList))): _*)
+    }
+
+    /**
+     * Drop nested column by specifying full name (for example foo.bar)
+     *
+     */
+    def dropNestedColumn(fullColumnName:String): DataFrame =  {
+      val delimiter = "_"
+      df.flattenSchema(delimiter)
+        .drop(fullColumnName.replace(".", delimiter))
+        .structureSchema(delimiter)
+    }
+
+    /**
      * Executes a list of transformations in CustomTransform objects
      * Uses function composition
      *

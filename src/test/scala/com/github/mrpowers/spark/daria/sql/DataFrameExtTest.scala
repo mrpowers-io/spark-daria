@@ -961,6 +961,170 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
     }
 
+    'structureSchema - {
+      "structure schema with default delimiter" - {
+        val data = Seq(
+          Row(
+            ";)",
+            Row(
+              "is",
+               Row("this")
+            )
+          )
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField(
+              "z",
+              StringType,
+              true
+            ),
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "baz",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    )
+                  )
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val df = spark
+            .createDataFrame(
+              spark.sparkContext.parallelize(data),
+              StructType(schema)
+            )
+
+        df.printSchema()
+        val delimiter = "_"
+        df.flattenSchema(delimiter).printSchema()
+        val expectedDF = df
+            .flattenSchema(delimiter)
+            .structureSchema(delimiter)
+            .setNullableForAllColumns(true) //for some reason spark changes nullability of struct columns
+        expectedDF.printSchema()
+
+        DariaValidator.validateSchema(
+          expectedDF,
+          schema
+        )
+      }
+    }
+
+    'dropNestedColumn - {
+      "drop nested column" - {
+        val data = Seq(
+          Row(
+            ";)",
+            Row(
+              "is",
+              Row("this")
+            )
+          )
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField(
+              "z",
+              StringType,
+              true
+            ),
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "baz",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    )
+                  )
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val df = spark
+            .createDataFrame(
+              spark.sparkContext.parallelize(data),
+              StructType(schema)
+            )
+
+        df.printSchema()
+
+        val expectedSchema = StructType(
+          Seq(
+            StructField(
+              "z",
+              StringType,
+              true
+            ),
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    )
+                  )
+                )
+              ),
+              true
+            )
+          )
+        )
+
+        val expectedDf = df.dropNestedColumn("foo.baz").setNullableForAllColumns(true)
+        expectedDf.printSchema()
+
+        DariaValidator.validateSchema(
+          expectedDf,
+          expectedSchema
+        )
+
+      }
+    }
     'composeTrans - {
 
       def withCountry()(df: DataFrame): DataFrame = {
