@@ -117,6 +117,15 @@ object transformations {
   }
 
   /**
+   * Strips out invalid characters and replaces spaces with underscores
+   * to make Parquet compatible column names
+   *
+   */
+  def withParquetCompatibleColumnNames()(df: DataFrame): DataFrame = {
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.parquetCompatibleColumnName)(df)
+  }
+
+  /**
    * Changes all the column names in a DataFrame
    *
    */

@@ -70,4 +70,8 @@ object StringHelpers {
       .stripPrefix("_")
   }
 
+  def parquetCompatibleColumnName(str: String): String = {
+    str.replaceAll("[,;{}()\n\t=]", "").replaceAll(" ", "_").toLowerCase()
+  }
+
 }

@@ -29,6 +29,10 @@ object StringHelpersTest extends TestSuite {
       assert(StringHelpers.camelCaseToSnakeCase("thisIsCool") == "this_is_cool")
     }
 
+    'parquetCompatibleColumnName - {
+      assert(StringHelpers.parquetCompatibleColumnName("Column That {Will} Break\t;") == "column_that_will_break")
+    }
+
   }
 
 }

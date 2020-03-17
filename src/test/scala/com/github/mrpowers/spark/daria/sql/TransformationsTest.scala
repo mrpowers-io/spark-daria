@@ -767,9 +767,7 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
     }
 
     'withRowAsStruct - {
-
       "collects an entire row intro a StructType column" - {
-
         val sourceDF = spark
           .createDF(
             List(
@@ -790,9 +788,52 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
         // HACK - don't have a good way to test this yet
         // Need to add assertStructTypeColumnEquality: https://github.com/MrPowers/spark-fast-tests/issues/38
         // Or update assertSmallDataFrameEquality to work with DataFrames that have StructType columns: https://github.com/MrPowers/spark-fast-tests/issues/37
+      }
+    }
 
+    'withParquetCompatibleColumnNames - {
+      "blows up if the column name is invalid for Parquet" - {
+        val df = spark
+          .createDF(
+            List(
+              ("pablo")
+            ),
+            List(
+              ("Column That {Will} Break\t;", StringType, true)
+            )
+          )
+        val path = new java.io.File("./tmp/blowup/example").getCanonicalPath
+        val e = intercept[org.apache.spark.sql.AnalysisException] {
+          df.write.parquet(path)
+        }
       }
 
+      "converts column names to be Parquet compatible" - {
+        val actualDF = spark
+          .createDF(
+            List(
+              ("pablo")
+            ),
+            List(
+              ("Column That {Will} Break\t;", StringType, true)
+            )
+          )
+          .transform(transformations.withParquetCompatibleColumnNames())
+
+        val expectedDF = spark.createDF(
+          List(
+            ("pablo")
+          ),
+          List(
+            ("column_that_will_break", StringType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
     }
 
   }
