@@ -968,7 +968,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             ";)",
             Row(
               "is",
-               Row("this")
+              Row("this")
             )
           )
         )
@@ -1009,18 +1009,18 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
         )
 
         val df = spark
-            .createDataFrame(
-              spark.sparkContext.parallelize(data),
-              StructType(schema)
-            )
+          .createDataFrame(
+            spark.sparkContext.parallelize(data),
+            StructType(schema)
+          )
 
         df.printSchema()
         val delimiter = "_"
         df.flattenSchema(delimiter).printSchema()
         val expectedDF = df
-            .flattenSchema(delimiter)
-            .structureSchema(delimiter)
-            .setNullableForAllColumns(true) //for some reason spark changes nullability of struct columns
+          .flattenSchema(delimiter)
+          .structureSchema(delimiter)
+          .setNullableForAllColumns(true) //for some reason spark changes nullability of struct columns
         expectedDF.printSchema()
 
         DariaValidator.validateSchema(
@@ -1078,10 +1078,10 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
         )
 
         val df = spark
-            .createDataFrame(
-              spark.sparkContext.parallelize(data),
-              StructType(schema)
-            )
+          .createDataFrame(
+            spark.sparkContext.parallelize(data),
+            StructType(schema)
+          )
 
         df.printSchema()
 

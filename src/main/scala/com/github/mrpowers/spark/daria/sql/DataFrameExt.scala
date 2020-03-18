@@ -265,8 +265,9 @@ object DataFrameExt {
      *
      */
     def flattenSchema(delimiter: String = "."): DataFrame = {
-      val renamedCols: Array[Column] = StructTypeHelpers.flattenSchema(df.schema)
-          .map(name => col(name.toString).as(name.toString.replace(".", delimiter)))
+      val renamedCols: Array[Column] = StructTypeHelpers
+        .flattenSchema(df.schema)
+        .map(name => col(name.toString).as(name.toString.replace(".", delimiter)))
       df.select(renamedCols: _*)
     }
 
@@ -288,21 +289,26 @@ object DataFrameExt {
      * |    |-- id: long (nullable = true)
      *
      */
-    def structureSchema(delimiter:String = "_"): DataFrame = {
+    def structureSchema(delimiter: String = "_"): DataFrame = {
       def loop(tl: List[(String, List[String])]): List[Column] =
-        tl.groupBy{case (_, columnList) => columnList.head}.map {
-          case (structColumn, l) if l.length > 1 => struct(loop(l.map {
-            case (column, _ :: tail) => (column, tail)
-            case (column, h :: Nil) => (column, List(h))
-          }): _*).alias(structColumn)
-          case (structColumn, l) => l match {
-            case (c, h::Nil)::Nil => col(c).as(h)
-            case _ => struct(loop(l.map{
-              case (column, _ :: tail) => (column, tail)
-              case (column, h :: Nil) => (column, List(h))
-            }):_*).alias(structColumn)
+        tl.groupBy { case (_, columnList) => columnList.head }
+          .map {
+            case (structColumn, l) if l.length > 1 =>
+              struct(loop(l.map {
+                case (column, _ :: tail) => (column, tail)
+                case (column, h :: Nil)  => (column, List(h))
+              }): _*).alias(structColumn)
+            case (structColumn, l) =>
+              l match {
+                case (c, h :: Nil) :: Nil => col(c).as(h)
+                case _ =>
+                  struct(loop(l.map {
+                    case (column, _ :: tail) => (column, tail)
+                    case (column, h :: Nil)  => (column, List(h))
+                  }): _*).alias(structColumn)
+              }
           }
-        }.toList
+          .toList
 
       df.select(loop(df.columns.toList.map(c => (c, c.split(delimiter).toList))): _*)
     }
@@ -311,7 +317,7 @@ object DataFrameExt {
      * Drop nested column by specifying full name (for example foo.bar)
      *
      */
-    def dropNestedColumn(fullColumnName:String): DataFrame =  {
+    def dropNestedColumn(fullColumnName: String): DataFrame = {
       val delimiter = "_"
       df.flattenSchema(delimiter)
         .drop(fullColumnName.replace(".", delimiter))
