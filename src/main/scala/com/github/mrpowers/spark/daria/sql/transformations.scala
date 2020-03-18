@@ -113,10 +113,18 @@ object transformations {
    * }}}
    */
   def snakifyColumns()(df: DataFrame): DataFrame = {
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.snakify)(df)
+  }
+
+  /**
+   * Changes all the column names in a DataFrame
+   *
+   */
+  def modifyColumnNames(stringFun: String => String)(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
       memoDF.withColumnRenamed(
         colName,
-        com.github.mrpowers.spark.daria.utils.StringHelpers.snakify(colName)
+        stringFun(colName)
       )
     }
   }
@@ -126,32 +134,19 @@ object transformations {
    * Example: SomeColumn -> some_column
    */
   def camelCaseToSnakeCaseColumns()(df: DataFrame): DataFrame =
-    df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(
-        colName,
-        com.github.mrpowers.spark.daria.utils.StringHelpers.camelCaseToSnakeCase(colName)
-      )
-    }
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.camelCaseToSnakeCase)(df)
 
   /**
    * Title Cases all the columns of a DataFrame
    */
   def titleCaseColumns()(df: DataFrame): DataFrame = {
-    df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(
-        colName,
-        colName.toLowerCase().split(' ').map(_.capitalize).mkString(" ")
-      )
-    }
+    def stringFun(str: String): String = str.toLowerCase().split(' ').map(_.capitalize).mkString(" ")
+    modifyColumnNames(stringFun)(df)
   }
 
   def prependToColName(str: String)(df: DataFrame): DataFrame = {
-    df.columns.foldLeft(df) { (memoDF, colName) =>
-      memoDF.withColumnRenamed(
-        colName,
-        str + colName
-      )
-    }
+    def stringFun(s: String): String = str + s
+    modifyColumnNames(stringFun)(df)
   }
 
   /**

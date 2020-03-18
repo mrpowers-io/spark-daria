@@ -48,7 +48,7 @@ object StringHelpers {
    *
    * @return the underscored string
    */
-  def snakify(name: String) =
+  def snakify(name: String): String =
     name
       .replaceAll(
         "([A-Z]+)([A-Z][a-z])",

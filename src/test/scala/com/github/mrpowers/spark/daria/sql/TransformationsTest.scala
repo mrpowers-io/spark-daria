@@ -219,6 +219,39 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
 
     }
 
+    'prependToColName - {
+
+      "Prepends a string to all column names" - {
+
+        val sourceDF =
+          spark.createDF(
+            List(("funny", "joke")),
+            List(
+              ("some col", StringType, true),
+              ("another col", StringType, true)
+            )
+          )
+
+        val actualDF = sourceDF.transform(transformations.prependToColName("hi "))
+
+        val expectedDF =
+          spark.createDF(
+            List(("funny", "joke")),
+            List(
+              ("hi some col", StringType, true),
+              ("hi another col", StringType, true)
+            )
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+
+      }
+
+    }
+
     'multiRegexpReplace - {
 
       "remove characters that match a regular expression in the columns of a DataFrame" - {
