@@ -626,18 +626,16 @@ object ColumnExtTest extends TestSuite with DataFrameComparer with ColumnCompare
         )
 
         val df = spark
-          .createDF(
-            List(
-              ("dog", true),
-              ("shoes", false),
-              ("laces", false),
-              (null, null)
-            ),
-            List(
-              ("stuff", StringType, true),
-              ("expected", BooleanType, true)
-            )
-          )
+          .createDF(List(
+                      ("dog", true),
+                      ("shoes", false),
+                      ("laces", false),
+                      (null, null)
+                    ),
+                    List(
+                      ("stuff", StringType, true),
+                      ("expected", BooleanType, true)
+                    ))
           .withColumn(
             "is_not_footwear_related",
             col("stuff").isNotIn(footwearRelated: _*)
@@ -651,6 +649,12 @@ object ColumnExtTest extends TestSuite with DataFrameComparer with ColumnCompare
 
       }
 
+    }
+
+    'evalString - {
+      "lowercases a string" - {
+        assert(lower(lit("HI THERE")).evalString() == "hi there")
+      }
     }
 
   }

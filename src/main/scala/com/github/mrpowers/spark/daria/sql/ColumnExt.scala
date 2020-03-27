@@ -385,6 +385,10 @@ object ColumnExt {
       not(col.isin(list: _*))
     }
 
+    def evalString(): String = {
+      col.expr.eval().toString
+    }
+
   }
 
 }
