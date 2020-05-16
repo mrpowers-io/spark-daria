@@ -19,6 +19,10 @@ import scala.reflect.runtime.universe._
 object functions {
   private def withExpr(expr: Expression): Column = new Column(expr)
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  // String functions
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
   /**
    * Replaces all whitespace in a string with single spaces
    *  {{{
@@ -197,6 +201,10 @@ object functions {
     )
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  // Collection functions
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
   /**
    * Returns an array of elements after applying a tranformation to each element
    * in the input array.
@@ -373,6 +381,10 @@ object functions {
     )
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  // Misc functions
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
   /**
    * Returns true if multiple columns are equal to a given value
    *
@@ -414,6 +426,10 @@ object functions {
   def multiEquals[T: TypeTag](value: T, cols: Column*) = {
     cols.map(_.===(value)).reduceLeft(_.&&(_))
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  // Datetime functions
+  //////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
    * Returns the number of years from `start` to `end`.
@@ -618,5 +634,34 @@ object functions {
   }
 
   val regexp_extract_all_by_group = udf(regexp_extract_all_by_group_fun _)
+
+  /**
+   *  Convert an Excel epoch to unix timestamp.
+   *
+   * @group datetime_funcs
+   */
+  def excelEpochToUnixTimestamp(col: Column): Column = {
+    val nbOfDaysBetween = 25569        // Number of days between 1900-01-01 and 1970-01-01 (including 19 leap years)
+    val nbOfSecInDay    = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s
+    (col - lit(nbOfDaysBetween)) * nbOfSecInDay
+  }
+
+  /**
+   *  Convert an Excel epoch to timestamp.
+   *
+   * @group datetime_funcs
+   */
+  def excelEpochToTimestamp(col: Column): Column = {
+    from_unixtime(excelEpochToUnixTimestamp(col))
+  }
+
+  /**
+   *  Convert an Excel epoch to date.
+   * 
+   * @group datetime_funcs
+   */
+  def excelEpochToDate(col: Column): Column = {
+    to_date(from_unixtime(excelEpochToUnixTimestamp(col)))
+  }
 
 }
