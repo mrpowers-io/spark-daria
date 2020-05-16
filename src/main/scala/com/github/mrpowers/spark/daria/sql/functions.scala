@@ -637,27 +637,137 @@ object functions {
 
   /**
    *  Convert an Excel epoch to unix timestamp.
+   * Inspired by [Filip Czaja]{http://fczaja.blogspot.com/2011/06/convert-excel-date-into-timestamp.html}
+   * Let's how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToUnixTimestamp` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("num_years", excelEpochToUnixTimestamp(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+--------------------+
+   * |       excel_time|      unix_timestamp|
+   * +-----------------+--------------------+
+   * |43967.24166666666|1.5896080799999995E9|
+   * |33966.78333333378| 7.255684800000383E8|
+   * |43965.58383363244|1.5894648432258427E9|
+   * |33964.58393533934| 7.253784520133189E8|
+   * +-----------------+--------------------+
+   *
+   * }}}
    *
    * @group datetime_funcs
    */
   def excelEpochToUnixTimestamp(col: Column): Column = {
-    val nbOfDaysBetween = 25569        // Number of days between 1900-01-01 and 1970-01-01 (including 19 leap years)
-    val nbOfSecInDay    = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s
+    val nbOfDaysBetween = 25569        // Number of days between 1900-01-01 and 1970-01-01 (under the supposition that there are 19 (not 17) leap years between them, as in Excel)
+    val nbOfSecInDay    = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s (leap seconds are ignored as well)
     (col - lit(nbOfDaysBetween)) * nbOfSecInDay
   }
 
   /**
    *  Convert an Excel epoch to timestamp.
+   * Inspired by [Filip Czaja]{http://fczaja.blogspot.com/2011/06/convert-excel-date-into-timestamp.html}
+   * Let's see how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToTimestamp` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("timestamp", excelEpochToTimestamp(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+-------------------+
+   * |       excel_time|          timestamp|
+   * +-----------------+-------------------+
+   * |43967.24166666666|2020-05-16 05:47:59|
+   * |33966.78333333378|1992-12-28 18:48:00|
+   * |43965.58383363244|2020-05-14 14:00:43|
+   * |33964.58393533934|1992-12-26 14:00:52|
+   * +-----------------+-------------------+
+   *
+   * }}}
    *
    * @group datetime_funcs
    */
   def excelEpochToTimestamp(col: Column): Column = {
-    from_unixtime(excelEpochToUnixTimestamp(col))
+    to_timestamp(from_unixtime(excelEpochToUnixTimestamp(col)))
   }
 
   /**
    *  Convert an Excel epoch to date.
-   * 
+   * Let's see how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToDate` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("timestamp", excelEpochToDate(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+-------------------+
+   * |       excel_time|               date|
+   * +-----------------+-------------------+
+   * |43967.24166666666|2020-05-16 05:47:59|
+   * |33966.78333333378|1992-12-28 18:48:00|
+   * |43965.58383363244|2020-05-14 14:00:43|
+   * |33964.58393533934|1992-12-26 14:00:52|
+   * +-----------------+-------------------+
+   *
+   * }}}
+   *
    * @group datetime_funcs
    */
   def excelEpochToDate(col: Column): Column = {
@@ -665,3 +775,59 @@ object functions {
   }
 
 }
+
+/*
+val testDF = spark.createDF(
+List(
+(43967.241666666664),
+(33966.783333333776),
+(43965.583833632439),
+(33964.583935339336)
+),
+List(
+("excel_time", DoubleType, true)
+)
+)
+
+testDF
++-----------------+
+|       excel_time|
++-----------------+
+|43967.24166666666|
+|33966.78333333378|
+|43965.58383363244|
+|33964.58393533934|
++-----------------+
+
+
++-----------------+--------------------+
+|       excel_time|      unix_timestamp|
++-----------------+--------------------+
+|43967.24166666666|1.5896080799999995E9|
+|33966.78333333378| 7.255684800000383E8|
+|43965.58383363244|1.5894648432258427E9|
+|33964.58393533934| 7.253784520133189E8|
++-----------------+--------------------+
+
++-----------------+-------------------+
+|       excel_time|          timestamp|
++-----------------+-------------------+
+|43967.24166666666|2020-05-16 05:47:59|
+|33966.78333333378|1992-12-28 18:48:00|
+|43965.58383363244|2020-05-14 14:00:43|
+|33964.58393533934|1992-12-26 14:00:52|
++-----------------+-------------------+
+
+
++-----------------+--------------+
+|       excel_time|          date|
++-----------------+--------------+
+|43967.24166666666|    2020-05-16|
+|33966.78333333378|    1992-12-28|
+|43965.58383363244|    2020-05-14|
+|33964.58393533934|    1992-12-26|
++-----------------+--------------+
+
+
+
+ */

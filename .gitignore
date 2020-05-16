@@ -9,6 +9,7 @@ tmp/
 
 *.swp
 
+# vscode
 .bloop/
 .metals
 project/metals.sbt
