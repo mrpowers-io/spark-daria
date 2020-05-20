@@ -708,7 +708,7 @@ object functions {
    * import com.github.mrpowers.spark.daria.sql.functions._
    *
    * val actualDF = testDF
-   *   .withColumn("num_years", excelEpochToUnixTimestamp(col("excel_time")))
+   *   .withColumn("num_years", excelEpochToUnixTimestamp("excel_time"))
    *
    * actualDf.show()
    *
@@ -800,7 +800,7 @@ object functions {
    * import com.github.mrpowers.spark.daria.sql.functions._
    *
    * val actualDF = testDF
-   *   .withColumn("timestamp", excelEpochToTimestamp(col("excel_time")))
+   *   .withColumn("timestamp", excelEpochToTimestamp("excel_time"))
    *
    * actualDf.show()
    *
@@ -890,7 +890,7 @@ object functions {
    * import com.github.mrpowers.spark.daria.sql.functions._
    *
    * val actualDF = testDF
-   *   .withColumn("timestamp", excelEpochToDate(col("excel_time")))
+   *   .withColumn("timestamp", excelEpochToDate("excel_time"))
    *
    * actualDf.show()
    *
