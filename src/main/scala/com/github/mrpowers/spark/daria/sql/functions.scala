@@ -684,6 +684,52 @@ object functions {
   }
 
   /**
+   *  Convert an Excel epoch to unix timestamp.
+   * Inspired by [Filip Czaja]{http://fczaja.blogspot.com/2011/06/convert-excel-date-into-timestamp.html}
+   * Let's see how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToUnixTimestamp` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("num_years", excelEpochToUnixTimestamp(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+--------------------+
+   * |       excel_time|      unix_timestamp|
+   * +-----------------+--------------------+
+   * |43967.24166666666|1.5896080799999995E9|
+   * |33966.78333333378| 7.255684800000383E8|
+   * |43965.58383363244|1.5894648432258427E9|
+   * |33964.58393533934| 7.253784520133189E8|
+   * +-----------------+--------------------+
+   *
+   * }}}
+   *
+   * @group datetime_funcs
+   */
+  def excelEpochToUnixTimestamp(colName: String): Column = {
+    excelEpochToUnixTimestamp(col(colName))
+  }
+
+  /**
    *  Convert an Excel epoch to timestamp.
    * Inspired by [Filip Czaja]{http://fczaja.blogspot.com/2011/06/convert-excel-date-into-timestamp.html}
    * Let's see how it works:
@@ -730,6 +776,52 @@ object functions {
   }
 
   /**
+   *  Convert an Excel epoch to timestamp.
+   * Inspired by [Filip Czaja]{http://fczaja.blogspot.com/2011/06/convert-excel-date-into-timestamp.html}
+   * Let's see how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToTimestamp` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("timestamp", excelEpochToTimestamp(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+-------------------+
+   * |       excel_time|          timestamp|
+   * +-----------------+-------------------+
+   * |43967.24166666666|2020-05-16 05:47:59|
+   * |33966.78333333378|1992-12-28 18:48:00|
+   * |43965.58383363244|2020-05-14 14:00:43|
+   * |33964.58393533934|1992-12-26 14:00:52|
+   * +-----------------+-------------------+
+   *
+   * }}}
+   *
+   * @group datetime_funcs
+   */
+  def excelEpochToTimestamp(colName: String): Column = {
+    excelEpochToTimestamp(col(colName))
+  }
+
+  /**
    *  Convert an Excel epoch to date.
    * Let's see how it works:
    * Suppose we have the following `testDF`
@@ -772,6 +864,51 @@ object functions {
    */
   def excelEpochToDate(col: Column): Column = {
     to_date(from_unixtime(excelEpochToUnixTimestamp(col)))
+  }
+
+  /**
+   *  Convert an Excel epoch to date.
+   * Let's see how it works:
+   * Suppose we have the following `testDF`
+   *
+   * {{{
+   *
+   * +-----------------+
+   * |       excel_time|
+   * +-----------------+
+   * |43967.24166666666|
+   * |33966.78333333378|
+   * |43965.58383363244|
+   * |33964.58393533934|
+   * +-----------------+
+   *
+   * }}}
+   *
+   * We can run the `excelEpochToDate` function as follows:
+   *
+   * {{{
+   * import com.github.mrpowers.spark.daria.sql.functions._
+   *
+   * val actualDF = testDF
+   *   .withColumn("timestamp", excelEpochToDate(col("excel_time")))
+   *
+   * actualDf.show()
+   *
+   * +-----------------+----------+
+   * |       excel_time|      date|
+   * +-----------------+----------+
+   * |43967.24166666666|2020-05-16|
+   * |33966.78333333378|1992-12-28|
+   * |43965.58383363244|2020-05-14|
+   * |33964.58393533934|1992-12-26|
+   * +-----------------+----------+
+   *
+   * }}}
+   *
+   * @group datetime_funcs
+   */
+  def excelEpochToDate(colName: String): Column = {
+    excelEpochToDate(col(colName))
   }
 
 }
