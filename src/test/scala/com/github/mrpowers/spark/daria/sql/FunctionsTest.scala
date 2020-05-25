@@ -1,9 +1,8 @@
 package com.github.mrpowers.spark.daria.sql
 
-import java.sql.Timestamp
+import java.sql.{Date, Timestamp}
 
 import utest._
-
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
@@ -1118,6 +1117,257 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
-  }
+    'excelEpochToUnixTimestamp - {
 
+      "convert an Excel epoch time to unix timestamp" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "unix_timestamp",
+            functions.excelEpochToUnixTimestamp(col("excel_time"))
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, 1.5896080799999995E9),
+            (33966.783333333776, 7.255684800000383E8),
+            (43965.583833632439, 1.5894648432258427E9),
+            (33964.583935339336, 7.253784520133189E8)
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("unix_timestamp", DoubleType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+    'excelEpochToUnixTimestamp - {
+
+      "convert an Excel epoch time to unix timestamp" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "unix_timestamp",
+            functions.excelEpochToUnixTimestamp("excel_time")
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, 1.5896080799999995E9),
+            (33966.783333333776, 7.255684800000383E8),
+            (43965.583833632439, 1.5894648432258427E9),
+            (33964.583935339336, 7.253784520133189E8)
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("unix_timestamp", DoubleType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+    'excelEpochToTimestamp - {
+
+      "convert an Excel epoch time to timestamp" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "timestamp",
+            functions.excelEpochToTimestamp(col("excel_time"))
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, Timestamp.valueOf("2020-05-16 05:47:59")),
+            (33966.783333333776, Timestamp.valueOf("1992-12-28 18:48:00")),
+            (43965.583833632439, Timestamp.valueOf("2020-05-14 14:00:43")),
+            (33964.583935339336, Timestamp.valueOf("1992-12-26 14:00:52"))
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("timestamp", TimestampType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+    'excelEpochToTimestamp - {
+
+      "convert an Excel epoch time to timestamp" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "timestamp",
+            functions.excelEpochToTimestamp("excel_time")
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, Timestamp.valueOf("2020-05-16 05:47:59")),
+            (33966.783333333776, Timestamp.valueOf("1992-12-28 18:48:00")),
+            (43965.583833632439, Timestamp.valueOf("2020-05-14 14:00:43")),
+            (33964.583935339336, Timestamp.valueOf("1992-12-26 14:00:52"))
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("timestamp", TimestampType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+    'excelEpochToDate - {
+
+      "convert an Excel epoch time to date" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "date",
+            functions.excelEpochToDate(col("excel_time"))
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, Date.valueOf("2020-05-16")),
+            (33966.783333333776, Date.valueOf("1992-12-28")),
+            (43965.583833632439, Date.valueOf("2020-05-14")),
+            (33964.583935339336, Date.valueOf("1992-12-26"))
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("date", DateType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+    'excelEpochToDate - {
+
+      "convert an Excel epoch time to date" - {
+
+        val sourceDF = spark.createDF(
+          List(
+            (43967.241666666664),
+            (33966.783333333776),
+            (43965.583833632439),
+            (33964.583935339336)
+          ),
+          List(
+            ("excel_time", DoubleType, true)
+          )
+        )
+
+        val actualDF =
+          sourceDF.withColumn(
+            "date",
+            functions.excelEpochToDate("excel_time")
+          )
+
+        val expectedDF = spark.createDF(
+          List(
+            (43967.241666666664, Date.valueOf("2020-05-16")),
+            (33966.783333333776, Date.valueOf("1992-12-28")),
+            (43965.583833632439, Date.valueOf("2020-05-14")),
+            (33964.583935339336, Date.valueOf("1992-12-26"))
+          ),
+          List(
+            ("excel_time", DoubleType, true),
+            ("date", DateType, true)
+          )
+        )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF
+        )
+      }
+    }
+
+  }
 }

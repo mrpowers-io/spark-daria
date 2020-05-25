@@ -8,3 +8,8 @@ tmp/
 *.iml
 
 *.swp
+
+# vscode
+.bloop/
+.metals
+project/metals.sbt
