@@ -6,7 +6,7 @@ organization := "com.github.mrpowers"
 name := "spark-daria"
 
 version := "0.37.1"
-crossScalaVersions := Seq("2.11.12", "2.12.7")
+crossScalaVersions := Seq("2.11.12", "2.12.10")
 scalaVersion := "2.11.12"
 sparkVersion := "2.4.4"
 
