@@ -56,26 +56,22 @@ object DariaWritersTest extends TestSuite with SparkSessionTestWrapper {
 
     'writeThenMerge - {
       //val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
-
       val sourceDataPath = new java.io.File("./src/test/resources/some_data.csv").getCanonicalPath
       val df = spark.read
         .option("header", "true")
         .option("charset", "UTF8")
         .csv(sourceDataPath)
-
       val multiPartitionDF = df.repartition(5) // this would get written out as 5 files by default
       val tmpFolder        = new java.io.File("./tmp/daria-writer-merge").getCanonicalPath
       val filename         = new java.io.File("./tmp/my-merged-file.csv").getCanonicalPath
-
       DariaWriters.writeThenMerge(
         df = multiPartitionDF,
         format = "csv",
         sc = spark.sparkContext,
         tmpFolder = tmpFolder,
         filename = filename,
-        saveMode = "overwrite"
+        saveModeForTmpFolder = "overwrite"
       )
-
     }
 
   }
