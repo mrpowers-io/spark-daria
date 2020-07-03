@@ -1,0 +1,4 @@
+{"zip":10506,"city":"Bedford","state":"NY","ts":"111"}
+{"zip":95053,"city":"Santa Clara","state":"CA","ts":"222"}
+{"zip":86001,"city":"Flagstaff","state":"AZ","ts":"333"}
+{"something":"garbage data row","ts":"666"}
