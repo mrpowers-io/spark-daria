@@ -14,11 +14,11 @@ object DariaWriters {
   // tmpFolder should look like s3a://bucket/data/src
   // filename should look like s3a://bucket/data/dest/my_cool_file.csv
   def writeSingleFile(
-      df: DataFrame, // must be small
-      format: String = "csv", // csv, parquet
-      sc: SparkContext, // pass in spark.sparkContext
-      tmpFolder: String, // will be deleted, so make sure it doesn't already exist
-      filename: String, // the full filename you want outputted
+      df: DataFrame,             // must be small
+      format: String = "csv",    // csv, parquet
+      sc: SparkContext,          // pass in spark.sparkContext
+      tmpFolder: String,         // will be deleted, so make sure it doesn't already exist
+      filename: String,          // the full filename you want outputted
       saveMode: String = "error" // Spark default is error, overwrite and append are also common
   ): Unit = {
     df.repartition(1)
@@ -37,10 +37,10 @@ object DariaWriters {
 
   def writeThenMerge(
       df: DataFrame,
-      format: String = "csv", // csv, parquet
-      sc: SparkContext, // pass in spark.sparkContext
-      tmpFolder: String, // will be deleted, so make sure it doesn't already exist
-      filename: String, // the full filename you want outputted
+      format: String = "csv",                // csv, parquet
+      sc: SparkContext,                      // pass in spark.sparkContext
+      tmpFolder: String,                     // will be deleted, so make sure it doesn't already exist
+      filename: String,                      // the full filename you want outputted
       saveModeForTmpFolder: String = "error" // Spark default is error, overwrite and append are also common
   ): Unit = {
     df.write

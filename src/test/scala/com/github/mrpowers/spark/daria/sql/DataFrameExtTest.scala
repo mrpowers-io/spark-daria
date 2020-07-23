@@ -1134,13 +1134,12 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             col("city") === "Calgary",
             "Canada"
           ).when(
-              col("city") === "Buenos Aires",
-              "Argentina"
-            )
-            .when(
-              col("city") === "Cape Town",
-              "South Africa"
-            )
+            col("city") === "Buenos Aires",
+            "Argentina"
+          ).when(
+            col("city") === "Cape Town",
+            "South Africa"
+          )
         )
       }
 
@@ -1151,13 +1150,12 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             col("country") === "Canada",
             "Northern Hemisphere"
           ).when(
-              col("country") === "Argentina",
-              "Southern Hemisphere"
-            )
-            .when(
-              col("country") === "South Africa",
-              "Southern Hemisphere"
-            )
+            col("country") === "Argentina",
+            "Southern Hemisphere"
+          ).when(
+            col("country") === "South Africa",
+            "Southern Hemisphere"
+          )
         )
       }
 

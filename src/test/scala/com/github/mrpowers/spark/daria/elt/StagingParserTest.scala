@@ -25,7 +25,8 @@ object StagingParserTest extends TestSuite with DataFrameComparer with ColumnCom
             StructField("city", StringType, true),
             StructField("state", StringType, true),
             StructField("ts", StringType, true)
-          ))
+          )
+        )
         val sp       = new StagingParser(schema)
         val actualDF = sp.parse(sourceDF).drop("origin")
         val expectedDF = spark.createDF(
@@ -61,7 +62,8 @@ object StagingParserTest extends TestSuite with DataFrameComparer with ColumnCom
             StructField("city", StringType, true),
             StructField("state", StringType, true),
             StructField("ts", StringType, true)
-          ))
+          )
+        )
         val sp       = new StagingParser(schema)
         val parsedDF = sp.parse(sourceDF)
         val actualDF = sp
@@ -97,7 +99,8 @@ object StagingParserTest extends TestSuite with DataFrameComparer with ColumnCom
             StructField("city", StringType, true),
             StructField("state", StringType, true),
             StructField("ts", StringType, true)
-          ))
+          )
+        )
         val sp       = new StagingParser(schema)
         val actualDF = sp.apply(sourceDF).flattenSchema("-").select("ts", "parse_details-status")
         val expectedDF = spark.createDF(

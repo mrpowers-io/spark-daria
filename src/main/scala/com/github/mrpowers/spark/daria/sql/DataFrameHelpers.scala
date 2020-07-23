@@ -53,10 +53,9 @@ object DataFrameHelpers extends DataFrameValidator {
       )
     )
     df.select(
-        keyColName,
-        valueColName
-      )
-      .collect()
+      keyColName,
+      valueColName
+    ).collect()
       .map(r => (r(0).asInstanceOf[keyType], r(1).asInstanceOf[valueType]))
       .toMap
   }

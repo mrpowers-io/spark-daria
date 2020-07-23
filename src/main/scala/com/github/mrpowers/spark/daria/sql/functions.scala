@@ -237,12 +237,13 @@ object functions {
    *
    * @group collection_funcs
    */
-  def transform(column: Column, f: Column => Column): Column = new Column(
-    ArrayTransform(
-      column.expr,
-      createLambda(f)
+  def transform(column: Column, f: Column => Column): Column =
+    new Column(
+      ArrayTransform(
+        column.expr,
+        createLambda(f)
+      )
     )
-  )
 
   /**
    * Returns an array of elements after applying a tranformation to each element
@@ -274,12 +275,13 @@ object functions {
    *
    * @group collection_funcs
    */
-  def transform(column: Column, f: (Column, Column) => Column): Column = new Column(
-    ArrayTransform(
-      column.expr,
-      createLambda(f)
+  def transform(column: Column, f: (Column, Column) => Column): Column =
+    new Column(
+      ArrayTransform(
+        column.expr,
+        createLambda(f)
+      )
     )
-  )
 
   /**
    * Like Scala Array exists method, but for ArrayType columns
@@ -320,9 +322,10 @@ object functions {
    *
    * @group collection_funcs
    */
-  def exists[T: TypeTag](f: (T => Boolean)) = udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
-    arr.exists(f(_))
-  }
+  def exists[T: TypeTag](f: (T => Boolean)) =
+    udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
+      arr.exists(f(_))
+    }
 
   /**
    * Like Scala Array forall method, but for ArrayType columns
@@ -362,9 +365,10 @@ object functions {
    *
    * @group collection_funcs
    */
-  def forall[T: TypeTag](f: T => Boolean) = udf[Boolean, Seq[T]] { arr: Seq[T] =>
-    arr.forall(f(_))
-  }
+  def forall[T: TypeTag](f: T => Boolean) =
+    udf[Boolean, Seq[T]] { arr: Seq[T] =>
+      arr.forall(f(_))
+    }
 
   /**
    * Like array() function but doesn't include null elements
@@ -479,11 +483,13 @@ object functions {
     ) / 365
   }
 
-  def bucketFinder(col: Column,
-                   buckets: Array[(Any, Any)],
-                   inclusiveBoundries: Boolean = false,
-                   lowestBoundLte: Boolean = false,
-                   highestBoundGte: Boolean = false): Column = {
+  def bucketFinder(
+      col: Column,
+      buckets: Array[(Any, Any)],
+      inclusiveBoundries: Boolean = false,
+      lowestBoundLte: Boolean = false,
+      highestBoundGte: Boolean = false
+  ): Column = {
 
     val inclusiveBoundriesCol = lit(inclusiveBoundries)
     val lowerBoundLteCol      = lit(lowestBoundLte)
@@ -494,32 +500,27 @@ object functions {
         col.isNull,
         lit(null)
       ).when(
-          lowerBoundLteCol === false && lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
-          lit(s"<${res._2}")
-        )
-        .when(
-          lowerBoundLteCol === true && lit(res._1).isNull && lit(res._2).isNotNull && col <= lit(res._2),
-          lit(s"<=${res._2}")
-        )
-        .when(
-          upperBoundGteCol === false && lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
-          lit(s">${res._1}")
-        )
-        .when(
-          upperBoundGteCol === true && lit(res._1).isNotNull && lit(res._2).isNull && col >= lit(res._1),
-          lit(s">=${res._1}")
-        )
-        .when(
-          inclusiveBoundriesCol === true && col.between(
-            res._1,
-            res._2
-          ),
-          lit(s"${res._1}-${res._2}")
-        )
-        .when(
-          inclusiveBoundriesCol === false && col.gt(res._1) && col.lt(res._2),
-          lit(s"${res._1}-${res._2}")
-        )
+        lowerBoundLteCol === false && lit(res._1).isNull && lit(res._2).isNotNull && col < lit(res._2),
+        lit(s"<${res._2}")
+      ).when(
+        lowerBoundLteCol === true && lit(res._1).isNull && lit(res._2).isNotNull && col <= lit(res._2),
+        lit(s"<=${res._2}")
+      ).when(
+        upperBoundGteCol === false && lit(res._1).isNotNull && lit(res._2).isNull && col > lit(res._1),
+        lit(s">${res._1}")
+      ).when(
+        upperBoundGteCol === true && lit(res._1).isNotNull && lit(res._2).isNull && col >= lit(res._1),
+        lit(s">=${res._1}")
+      ).when(
+        inclusiveBoundriesCol === true && col.between(
+          res._1,
+          res._2
+        ),
+        lit(s"${res._1}-${res._2}")
+      ).when(
+        inclusiveBoundriesCol === false && col.gt(res._1) && col.lt(res._2),
+        lit(s"${res._1}-${res._2}")
+      )
     }
 
     coalesce(b: _*)
@@ -555,40 +556,45 @@ object functions {
 
   val regexp_extract_all = udf[Option[Array[String]], String, String](findAllInString)
 
-  def array_groupBy[T: TypeTag](f: T => Boolean) = udf[Option[Map[Boolean, Seq[T]]], Seq[T]] { arr: Seq[T] =>
-    if (arr == null) {
-      null
-    } else {
-      Some(arr.groupBy(f(_)))
+  def array_groupBy[T: TypeTag](f: T => Boolean) =
+    udf[Option[Map[Boolean, Seq[T]]], Seq[T]] { arr: Seq[T] =>
+      if (arr == null) {
+        null
+      } else {
+        Some(arr.groupBy(f(_)))
+      }
     }
-  }
 
-  def array_map[T: TypeTag](f: T => T) = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
-    if (arr == null) {
-      null
-    } else {
-      Some(arr.map(f(_)))
+  def array_map[T: TypeTag](f: T => T) =
+    udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+      if (arr == null) {
+        null
+      } else {
+        Some(arr.map(f(_)))
+      }
     }
-  }
 
-  def array_filter_nulls[T: TypeTag]() = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
-    if (arr == null) {
-      null
-    } else {
-      Some(arr.filter(_ != null))
+  def array_filter_nulls[T: TypeTag]() =
+    udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+      if (arr == null) {
+        null
+      } else {
+        Some(arr.filter(_ != null))
+      }
     }
-  }
 
-  def array_map_ex_null[T: TypeTag](f: T => T) = udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
-    if (arr == null) {
-      null
-    } else {
-      Some(
-        arr.view
-          .map(f(_))
-          .filter(_ != null))
+  def array_map_ex_null[T: TypeTag](f: T => T) =
+    udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+      if (arr == null) {
+        null
+      } else {
+        Some(
+          arr.view
+            .map(f(_))
+            .filter(_ != null)
+        )
+      }
     }
-  }
 
   def broadcastArrayContains[T](col: Column, broadcastedArray: Broadcast[Array[T]]) = {
     when(col.isNull, null)
@@ -678,8 +684,9 @@ object functions {
    * @group datetime_funcs
    */
   def excelEpochToUnixTimestamp(col: Column): Column = {
-    val nbOfDaysBetween = 25569        // Number of days between 1900-01-01 and 1970-01-01 (under the supposition that there are 19 (not 17) leap years between them, as in Excel)
-    val nbOfSecInDay    = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s (leap seconds are ignored as well)
+    val nbOfDaysBetween =
+      25569 // Number of days between 1900-01-01 and 1970-01-01 (under the supposition that there are 19 (not 17) leap years between them, as in Excel)
+    val nbOfSecInDay = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s (leap seconds are ignored as well)
     (col - lit(nbOfDaysBetween)) * nbOfSecInDay
   }
 

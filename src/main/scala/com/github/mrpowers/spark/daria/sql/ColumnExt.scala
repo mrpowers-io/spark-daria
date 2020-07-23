@@ -202,7 +202,6 @@ object ColumnExt {
      * +------+------------+
      * }}}
      *
-     *
      * @group expr_ops
      */
     def isFalsy: Column = {
