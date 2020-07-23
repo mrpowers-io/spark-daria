@@ -843,7 +843,7 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           .createDF(
             List(
               (Array("snake", "rat", "cool"), Map(false -> Array("snake", "rat"), true -> Array[String]("cool"))),
-              (Array("cat", "crazy"), Map(true          -> Array("cat", "crazy"))),
+              (Array("cat", "crazy"), Map(true -> Array("cat", "crazy"))),
               (null, null)
             ),
             List(
@@ -872,7 +872,7 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           .createDF(
             List(
               (Array("AAAsnake", "BBBrat", "cool"), Map(true -> Array("AAAsnake", "BBBrat"), false -> Array[String]("cool"))),
-              (Array("BBBcat", "AAAcrazy"), Map(true         -> Array("BBBcat", "AAAcrazy"))),
+              (Array("BBBcat", "AAAcrazy"), Map(true -> Array("BBBcat", "AAAcrazy"))),
               (null, null)
             ),
             List(
@@ -1141,10 +1141,10 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
         val expectedDF = spark.createDF(
           List(
-            (43967.241666666664, 1.5896080799999995E9),
-            (33966.783333333776, 7.255684800000383E8),
-            (43965.583833632439, 1.5894648432258427E9),
-            (33964.583935339336, 7.253784520133189E8)
+            (43967.241666666664, 1.5896080799999995e9),
+            (33966.783333333776, 7.255684800000383e8),
+            (43965.583833632439, 1.5894648432258427e9),
+            (33964.583935339336, 7.253784520133189e8)
           ),
           List(
             ("excel_time", DoubleType, true),
@@ -1183,10 +1183,10 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
         val expectedDF = spark.createDF(
           List(
-            (43967.241666666664, 1.5896080799999995E9),
-            (33966.783333333776, 7.255684800000383E8),
-            (43965.583833632439, 1.5894648432258427E9),
-            (33964.583935339336, 7.253784520133189E8)
+            (43967.241666666664, 1.5896080799999995e9),
+            (33966.783333333776, 7.255684800000383e8),
+            (43965.583833632439, 1.5894648432258427e9),
+            (33964.583935339336, 7.253784520133189e8)
           ),
           List(
             ("excel_time", DoubleType, true),

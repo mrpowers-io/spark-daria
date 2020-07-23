@@ -13,10 +13,12 @@ import org.apache.spark.sql.DataFrame
  *
  * The `EtlDefinition` class is generic and can be molded to suit all ETL situations.  For example, it can read a CSV file from S3, run transformations, and write out Parquet files on your local filesystem.
  */
-case class EtlDefinition(sourceDF: DataFrame,
-                         transform: (DataFrame => DataFrame),
-                         write: (DataFrame => Unit),
-                         metadata: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()) {
+case class EtlDefinition(
+    sourceDF: DataFrame,
+    transform: (DataFrame => DataFrame),
+    write: (DataFrame => Unit),
+    metadata: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
+) {
 
   /**
    * Runs an ETL process

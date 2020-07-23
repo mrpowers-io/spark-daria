@@ -119,7 +119,6 @@ object transformations {
   /**
    * Strips out invalid characters and replaces spaces with underscores
    * to make Parquet compatible column names
-   *
    */
   def withParquetCompatibleColumnNames()(df: DataFrame): DataFrame = {
     modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.parquetCompatibleColumnName)(df)
@@ -127,7 +126,6 @@ object transformations {
 
   /**
    * Changes all the column names in a DataFrame
-   *
    */
   def modifyColumnNames(stringFun: String => String)(df: DataFrame): DataFrame = {
     df.columns.foldLeft(df) { (memoDF, colName) =>
@@ -251,12 +249,14 @@ object transformations {
   /**
    * Categorizes a numeric column in various user specified "buckets"
    */
-  def withColBucket(colName: String,
-                    outputColName: String,
-                    buckets: Array[(Any, Any)],
-                    inclusiveBoundries: Boolean = false,
-                    lowestBoundLte: Boolean = false,
-                    highestBoundGte: Boolean = false)(df: DataFrame) = {
+  def withColBucket(
+      colName: String,
+      outputColName: String,
+      buckets: Array[(Any, Any)],
+      inclusiveBoundries: Boolean = false,
+      lowestBoundLte: Boolean = false,
+      highestBoundGte: Boolean = false
+  )(df: DataFrame) = {
     df.withColumn(
       outputColName,
       functions.bucketFinder(

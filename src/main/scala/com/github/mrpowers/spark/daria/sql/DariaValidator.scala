@@ -22,7 +22,6 @@ object DariaValidator {
    * This is the error message
    *
    * > com.github.mrpowers.spark.daria.sql.MissingDataFrameColumnsException: The [country, city] columns are not included in the DataFrame with the following columns [team, sport]
-   *
    */
   def validatePresenceOfColumns(df: DataFrame, requiredColNames: Seq[String]): Unit = {
     val c = new DataFrameColumnsChecker(

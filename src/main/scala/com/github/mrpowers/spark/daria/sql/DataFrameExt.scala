@@ -219,9 +219,11 @@ object DataFrameExt {
       }
 
       // make sure df isn't missing the columns that will be dropped
-      if (!customTransform.removedColumns.isEmpty && df.columns.toSeq
-            .intersect(customTransform.removedColumns)
-            .isEmpty) {
+      if (
+        !customTransform.removedColumns.isEmpty && df.columns.toSeq
+          .intersect(customTransform.removedColumns)
+          .isEmpty
+      ) {
         throw new DataFrameColumnsException(
           s"The DataFrame does not contain the columns your transformation will drop. The DataFrame has these columns: [${df.columns
             .mkString(", ")}]. You've asserted that your transformation will drop these columns: [${customTransform.removedColumns
@@ -262,7 +264,6 @@ object DataFrameExt {
     /**
      * Converts all the StructType columns to regular columns
      * This StackOverflow answer provides a detailed description how to use flattenSchema: https://stackoverflow.com/a/50402697/1125159
-     *
      */
     def flattenSchema(delimiter: String = "."): DataFrame = {
       val renamedCols: Array[Column] = StructTypeHelpers
@@ -287,7 +288,6 @@ object DataFrameExt {
      * |    |-- name: string (nullable = true)
      * |    |-- surname: string (nullable = true)
      * |    |-- id: long (nullable = true)
-     *
      */
     def structureSchema(delimiter: String = "_"): DataFrame = {
       def loop(tl: List[(String, List[String])]): List[Column] =
@@ -315,7 +315,6 @@ object DataFrameExt {
 
     /**
      * Drop nested column by specifying full name (for example foo.bar)
-     *
      */
     def dropNestedColumn(fullColumnName: String): DataFrame = {
       val delimiter = "_"
@@ -327,7 +326,6 @@ object DataFrameExt {
     /**
      * Executes a list of transformations in CustomTransform objects
      * Uses function composition
-     *
      */
     def composeTrans(customTransforms: List[CustomTransform]): DataFrame = {
       customTransforms.foldLeft(df) { (memoDF, ct) =>
@@ -341,20 +339,17 @@ object DataFrameExt {
 
     /**
      * Completely removes all duplicates from a DataFrame
-     *
      */
     def killDuplicates(cols: Column*): DataFrame = {
       df.withColumn(
-          "my_super_secret_count",
-          count("*").over(Window.partitionBy(cols: _*))
-        )
-        .where(col("my_super_secret_count") === 1)
+        "my_super_secret_count",
+        count("*").over(Window.partitionBy(cols: _*))
+      ).where(col("my_super_secret_count") === 1)
         .drop(col("my_super_secret_count"))
     }
 
     /**
      * Completely removes all duplicates from a DataFrame
-     *
      */
     def killDuplicates(col1: String, cols: String*): DataFrame = {
       df.killDuplicates((col1 +: cols).map(col): _*)
@@ -362,7 +357,6 @@ object DataFrameExt {
 
     /**
      * Completely removes all duplicates from a DataFrame
-     *
      */
     def killDuplicates(): DataFrame = {
       df.killDuplicates(df.columns.map(col): _*)
@@ -374,11 +368,10 @@ object DataFrameExt {
      * Here is how to trim all the columns df.renameColumns(_.trim)
      */
     def renameColumns(f: String => String): DataFrame =
-      df.columns.foldLeft(df)(
-        (tempDf, c) =>
-          tempDf.withColumnRenamed(
-            c,
-            f(c)
+      df.columns.foldLeft(df)((tempDf, c) =>
+        tempDf.withColumnRenamed(
+          c,
+          f(c)
         )
       )
 
@@ -396,23 +389,24 @@ object DataFrameExt {
      * @return
      */
     def setNullableForAllColumns(nullable: Boolean): DataFrame = {
-      def loop(s: StructType): Seq[StructField] = s.map {
-        case StructField(name, dataType: StructType, _, metadata) =>
-          StructField(
-            name,
-            StructType(loop(dataType)),
-            nullable,
-            metadata
-          )
-        case StructField(name, dataType: ArrayType, _, metadata) if dataType.elementType.isInstanceOf[StructType] =>
-          StructField(
-            name,
-            ArrayType(StructType(loop(dataType.elementType.asInstanceOf[StructType]))),
-            nullable,
-            metadata
-          )
-        case t @ StructField(_, _, _, _) => t.copy(nullable = nullable)
-      }
+      def loop(s: StructType): Seq[StructField] =
+        s.map {
+          case StructField(name, dataType: StructType, _, metadata) =>
+            StructField(
+              name,
+              StructType(loop(dataType)),
+              nullable,
+              metadata
+            )
+          case StructField(name, dataType: ArrayType, _, metadata) if dataType.elementType.isInstanceOf[StructType] =>
+            StructField(
+              name,
+              ArrayType(StructType(loop(dataType.elementType.asInstanceOf[StructType]))),
+              nullable,
+              metadata
+            )
+          case t @ StructField(_, _, _, _) => t.copy(nullable = nullable)
+        }
       df.sqlContext.createDataFrame(
         df.rdd,
         StructType(loop(df.schema))

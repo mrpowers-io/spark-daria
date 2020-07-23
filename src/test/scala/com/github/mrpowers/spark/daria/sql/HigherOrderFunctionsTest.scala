@@ -102,12 +102,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
             7
           ),
           Seq(
-            5,
-            null,
-            8,
-            9,
-            7,
-            2
+            5, null, 8, 9, 7, 2
           ),
           Seq.empty,
           null
@@ -131,12 +126,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
             ),
             Row(
               Seq(
-                6,
-                null,
-                9,
-                10,
-                8,
-                3
+                6, null, 9, 10, 8, 3
               )
             ),
             Row(Seq.empty),
@@ -162,12 +152,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
             ),
             Row(
               Seq(
-                5,
-                null,
-                10,
-                12,
-                11,
-                7
+                5, null, 10, 12, 11, 7
               )
             ),
             Row(Seq.empty),
@@ -199,7 +184,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
                 concat(
                   x,
                   x
-              )
+                )
             )
           ),
           Seq(
@@ -230,7 +215,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
                 concat(
                   x,
                   i
-              )
+                )
             )
           ),
           Seq(
@@ -364,7 +349,7 @@ object HigherOrderFunctionsTest extends TestSuite with SparkSessionTestWrapper {
                 concat(
                   col("arg"),
                   array(x)
-              )
+                )
             )
           ),
           Seq(
