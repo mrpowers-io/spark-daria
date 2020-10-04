@@ -12,52 +12,25 @@ Chat: [![Gitter](https://badges.gitter.im/spark-daria/community.svg)](https://gi
 
 ## Setup
 
-**Option 1: Maven**
-
 Fetch the JAR file from Maven.
 
 ```scala
-resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
-
-// Scala 2.11
-libraryDependencies += "mrpowers" % "spark-daria" % "0.35.0-s_2.11"
-
-// Scala 2.12, Spark 2.4+
-libraryDependencies += "mrpowers" % "spark-daria" % "0.35.0-s_2.12"
+libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "0.38.2"
 ```
 
-**Option 2: JitPack**
+You can find the spark-daria [Scala 2.11 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.11/) and the [Scala 2.12 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.12/).  The [legacy versions are here](https://mvnrepository.com/artifact/mrpowers/spark-daria?repo=spark-packages).
 
-Update your `build.sbt` file as follows.
-
-```scala
-resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.mrpowers" % "spark-daria" % "v0.35.0"
-```
-**Accessing spark-daria versions for different Spark versions**
-
-Different spark-daria versions are compatible with different Spark versions.  In general, the latest spark-daria versions are always compatible with the latest Spark versions.
-
-|       | 0.35.0             | 0.34.0             | 0.33.2             |
-|-------|--------------------|--------------------|--------------------|
-| 2.0.0 | :x:                | :x:                | :x:                |
-| 2.1.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2.2.2 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2.3.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2.3.1 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 2.4.0 | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-Email me if you need a custom spark-daria version and I'll help you out :wink:
+You should generally use Scala 2.11 with Spark 2 and Scala 2.12 with Spark 3.
 
 ## Writing Beautiful Spark Code
 
-Reading [Writing Beautiful Spark Code](https://leanpub.com/beautiful-spark/) is the best way to learn how to build Spark projects and leverage spark-daria.
+Reading [Beautiful Spark Code](https://leanpub.com/beautiful-spark/) is the best way to learn how to build Spark projects and leverage spark-daria.
 
-spark-daria will make you a more productive Spark programmer.  Studying the spark-daria codebase is a great way to learn how you should structure your own Spark projects.
+spark-daria will make you a more productive Spark programmer.  Studying the spark-daria codebase will help you understand how to organize Spark codebases.
 
 ## PySpark
 
-Use [quinn](https://github.com/MrPowers/quinn) to access all these same functions in PySpark.
+Use [quinn](https://github.com/MrPowers/quinn) to access similar functions in PySpark.
 
 ## Usage
 
@@ -180,8 +153,17 @@ Continued excellence will be rewarded with push access to the master branch.
 
 ## Publishing
 
-Build the JAR / POM files with `sbt +spDist` as described in [this GitHub issue](https://github.com/databricks/sbt-spark-package/issues/18#issuecomment-184107369).
+Run `sbt` to open the SBT console.
 
-Manually upload the zip files to [Spark Packages](https://spark-packages.org/).
+Run `> ; + publishSigned; sonatypeBundleRelease` to create the JAR files and release them to Maven.
 
-Make a GitHub release so the code is available via JitPack.
+When the release command is run, you'll be prompted to enter your GPG passphrase.
+
+The Sonatype credentials should be stored in the `~/.sbt/sonatype_credentials` file in this format:
+
+```
+realm=Sonatype Nexus Repository Manager
+host=oss.sonatype.org
+user=$USERNAME
+password=$PASSWORD
+```
