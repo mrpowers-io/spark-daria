@@ -30,7 +30,7 @@ artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   Artifact.artifactName(sv, module, artifact).replaceAll(s"-${module.revision}", s"-${sparkVersion}${module.revision}")
 }
 
-credentials += Credentials(Path.userHome / ".ivy2" / ".sbtcredentials")
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 fork in Test := true
 
