@@ -8,10 +8,10 @@ crossScalaVersions := Seq("2.11.12", "2.12.10")
 scalaVersion := "2.11.12"
 val sparkVersion = "2.4.4"
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
-libraryDependencies += "org.apache.spark" %% "spark-mllib" % sparkVersion % "provided"
-libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "0.21.3" % "test"
-libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
+libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
+libraryDependencies += "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided"
+libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "0.21.3"     % "test"
+libraryDependencies += "com.lihaoyi"         %% "utest"            % "0.6.3"      % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
@@ -38,4 +38,4 @@ publishMavenStyle := true
 
 publishTo := sonatypePublishToBundle.value
 
-Global/useGpgPinentry := true
+Global / useGpgPinentry := true
