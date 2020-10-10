@@ -137,7 +137,7 @@ validatePresenceOfColumns(sourceDF, requiredColNames)
 
 ## Documentation
 
-[Here is the latest spark-daria documentation](https://mrpowers.github.io/docs/spark_daria/latest/index.html).
+[Here is the latest spark-daria documentation](https://mrpowers.github.io/spark-daria/latest/api/).
 
 Studying these docs will make you a better Spark developer!
 
