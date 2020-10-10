@@ -1,0 +1,954 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>DataFrameMethods - com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods</title>
+          <meta name="description" content="DataFrameMethods - com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods" />
+          <meta name="keywords" content="DataFrameMethods com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Class" src="../../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.github">github</a>.<a href="../../../package.html" class="extype" name="com.github.mrpowers">mrpowers</a>.<a href="../../package.html" class="extype" name="com.github.mrpowers.spark">spark</a>.<a href="../package.html" class="extype" name="com.github.mrpowers.spark.daria">daria</a>.<a href="package.html" class="extype" name="com.github.mrpowers.spark.daria.sql">sql</a>.<a href="DataFrameExt$.html" class="extype" name="com.github.mrpowers.spark.daria.sql.DataFrameExt">DataFrameExt</a></p>
+        <h1>DataFrameMethods</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="DataFrameExt$.html" class="extype" name="com.github.mrpowers.spark.daria.sql.DataFrameExt">package DataFrameExt</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DataFrameMethods</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods"><span>DataFrameMethods</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(df:org.apache.spark.sql.DataFrame):com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods"></a>
+      <a id="&lt;init&gt;:DataFrameMethods"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DataFrameMethods</span><span class="params">(<span name="df">df: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@&lt;init&gt;(df:org.apache.spark.sql.DataFrame):com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#columnDiff" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="columnDiff(otherDF:org.apache.spark.sql.DataFrame):Seq[String]"></a>
+      <a id="columnDiff(DataFrame):Seq[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">columnDiff</span><span class="params">(<span name="otherDF">otherDF: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@columnDiff(otherDF:org.apache.spark.sql.DataFrame):Seq[String]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the columns in otherDF that aren't in self</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#composeTrans" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="composeTrans(customTransforms:List[com.github.mrpowers.spark.daria.sql.CustomTransform]):org.apache.spark.sql.DataFrame"></a>
+      <a id="composeTrans(List[CustomTransform]):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">composeTrans</span><span class="params">(<span name="customTransforms">customTransforms: <span class="extype" name="scala.List">List</span>[<a href="CustomTransform.html" class="extype" name="com.github.mrpowers.spark.daria.sql.CustomTransform">CustomTransform</a>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@composeTrans(customTransforms:List[com.github.mrpowers.spark.daria.sql.CustomTransform]):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Executes a list of transformations in CustomTransform objects
+Uses function composition
+</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#composeTransforms" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="composeTransforms(transforms:org.apache.spark.sql.DataFrame=&gt;org.apache.spark.sql.DataFrame*):org.apache.spark.sql.DataFrame"></a>
+      <a id="composeTransforms((DataFrame)⇒DataFrame*):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">composeTransforms</span><span class="params">(<span name="transforms">transforms: (<span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>) ⇒ <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>*</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@composeTransforms(transforms:org.apache.spark.sql.DataFrame=&gt;org.apache.spark.sql.DataFrame*):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Executes a list of custom DataFrame transformations
+Uses function composition to run a list of DataFrame transformations.</p><div class="fullcomment"><div class="comment cmt"><p>Executes a list of custom DataFrame transformations
+Uses function composition to run a list of DataFrame transformations.</p><p>def withGreeting()(df: DataFrame): DataFrame = {
+  df.withColumn(&quot;greeting&quot;, lit(&quot;hello world&quot;))
+}</p><p>def withCat(name: String)(df: DataFrame): DataFrame = {
+  df.withColumn(&quot;cats&quot;, lit(name + &quot; meow&quot;))
+}</p><p>sourceDF.composeTransforms(withGreeting(), withCat(&quot;sandy&quot;))
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#composeTransforms" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="composeTransforms(transforms:List[org.apache.spark.sql.DataFrame=&gt;org.apache.spark.sql.DataFrame]):org.apache.spark.sql.DataFrame"></a>
+      <a id="composeTransforms(List[(DataFrame)⇒DataFrame]):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">composeTransforms</span><span class="params">(<span name="transforms">transforms: <span class="extype" name="scala.List">List</span>[(<span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>) ⇒ <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@composeTransforms(transforms:List[org.apache.spark.sql.DataFrame=&gt;org.apache.spark.sql.DataFrame]):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Executes a list of custom DataFrame transformations
+Uses function composition to run a list of DataFrame transformations.</p><div class="fullcomment"><div class="comment cmt"><p>Executes a list of custom DataFrame transformations
+Uses function composition to run a list of DataFrame transformations.</p><p>def withGreeting()(df: DataFrame): DataFrame = {
+  df.withColumn(&quot;greeting&quot;, lit(&quot;hello world&quot;))
+}</p><p>def withCat(name: String)(df: DataFrame): DataFrame = {
+  df.withColumn(&quot;cats&quot;, lit(name + &quot; meow&quot;))
+}</p><p>val transforms = List(
+  withGreeting()(_),
+  withCat(&quot;sandy&quot;)(_)
+)</p><p>sourceDF.composeTransforms(transforms)
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#containsColumn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="containsColumn(structField:org.apache.spark.sql.types.StructField):Boolean"></a>
+      <a id="containsColumn(StructField):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">containsColumn</span><span class="params">(<span name="structField">structField: <span class="extype" name="org.apache.spark.sql.types.StructField">StructField</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@containsColumn(structField:org.apache.spark.sql.types.StructField):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns true if the DataFrame contains the StructField</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if the DataFrame contains the StructField</p><pre>sourceDF.containsColumn(StructField(<span class="lit">"team"</span>, StringType, <span class="kw">true</span>))</pre><p>Returns <code>true</code> if <code>sourceDF</code> contains the StructField and false otherwise.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#containsColumn" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="containsColumn(colName:String):Boolean"></a>
+      <a id="containsColumn(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">containsColumn</span><span class="params">(<span name="colName">colName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@containsColumn(colName:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns true if the DataFrame contains the column</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if the DataFrame contains the column</p><pre>sourceDF.containsColumn(<span class="lit">"team"</span>)</pre><p>Returns <code>true</code> if <code>sourceDF</code> contains a column named <code>&quot;team&quot;</code> and false otherwise.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#containsColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="containsColumns(colNames:String*):Boolean"></a>
+      <a id="containsColumns(String*):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">containsColumns</span><span class="params">(<span name="colNames">colNames: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@containsColumns(colNames:String*):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns true if the DataFrame contains all the columns</p><div class="fullcomment"><div class="comment cmt"><p>Returns true if the DataFrame contains all the columns</p><pre>sourceDF.containsColumns(<span class="lit">"team"</span>, <span class="lit">"city"</span>)</pre><p>Returns <code>true</code> if <code>sourceDF</code> contains the <code>&quot;team&quot;</code> and <code>&quot;city&quot;</code> columns and false otherwise.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#dropColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dropColumns(f:String=&gt;Boolean):org.apache.spark.sql.DataFrame"></a>
+      <a id="dropColumns((String)⇒Boolean):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropColumns</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@dropColumns(f:String=&gt;Boolean):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drops multiple columns that satisfy the conditions of a function
+Here is how to drop all columns that start with an underscore
+df.dropColumns(_.startsWith(&quot;_&quot;))
+</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#dropNestedColumn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dropNestedColumn(fullColumnName:String):org.apache.spark.sql.DataFrame"></a>
+      <a id="dropNestedColumn(String):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dropNestedColumn</span><span class="params">(<span name="fullColumnName">fullColumnName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@dropNestedColumn(fullColumnName:String):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Drop nested column by specifying full name (for example foo.bar)
+</p>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#flattenSchema" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flattenSchema(delimiter:String):org.apache.spark.sql.DataFrame"></a>
+      <a id="flattenSchema(String):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flattenSchema</span><span class="params">(<span name="delimiter">delimiter: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.&quot;</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@flattenSchema(delimiter:String):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Converts all the StructType columns to regular columns
+This StackOverflow answer provides a detailed description how to use flattenSchema: https://stackoverflow.com/a/50402697/1125159
+</p>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#killDuplicates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="killDuplicates():org.apache.spark.sql.DataFrame"></a>
+      <a id="killDuplicates():DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">killDuplicates</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@killDuplicates():org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Completely removes all duplicates from a DataFrame
+</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#killDuplicates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="killDuplicates(col1:String,cols:String*):org.apache.spark.sql.DataFrame"></a>
+      <a id="killDuplicates(String,String*):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">killDuplicates</span><span class="params">(<span name="col1">col1: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="cols">cols: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@killDuplicates(col1:String,cols:String*):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Completely removes all duplicates from a DataFrame
+</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#killDuplicates" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="killDuplicates(cols:org.apache.spark.sql.Column*):org.apache.spark.sql.DataFrame"></a>
+      <a id="killDuplicates(Column*):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">killDuplicates</span><span class="params">(<span name="cols">cols: <span class="extype" name="org.apache.spark.sql.Column">Column</span>*</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@killDuplicates(cols:org.apache.spark.sql.Column*):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Completely removes all duplicates from a DataFrame
+</p>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#printSchemaInCodeFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printSchemaInCodeFormat():Unit"></a>
+      <a id="printSchemaInCodeFormat():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSchemaInCodeFormat</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@printSchemaInCodeFormat():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Prints the schema with StructType and StructFields so it's easy to copy into code
+Spark has a <code>printSchema</code> method to print the schema of a DataFrame and a <code>schema</code> method that returns a <code>StructType</code> object.</p><div class="fullcomment"><div class="comment cmt"><p>Prints the schema with StructType and StructFields so it's easy to copy into code
+Spark has a <code>printSchema</code> method to print the schema of a DataFrame and a <code>schema</code> method that returns a <code>StructType</code> object.</p><p>The <code>Dataset#schema</code> method can be easily converted into working code for small DataFrames, but it can be a lot of manual work for DataFrames with a lot of columns.</p><p>The <code>printSchemaInCodeFormat</code> DataFrame extension prints the DataFrame schema as a valid <code>StructType</code> object.</p><p>Suppose you have the following <code>sourceDF</code>:</p><pre>+--------+--------+---------+
+|    team|   sport|goals_for|
++--------+--------+---------+
+|    jets|football|       <span class="num">45</span>|
+|nacional|  soccer|       <span class="num">10</span>|
++--------+--------+---------+
+
+`sourceDF.printSchemaInCodeFormat()` will output the following rows in the console:
+
+StructType(
+  <span class="std">List</span>(
+    StructField(<span class="lit">"team"</span>, StringType, <span class="kw">true</span>),
+    StructField(<span class="lit">"sport"</span>, StringType, <span class="kw">true</span>),
+    StructField(<span class="lit">"goals_for"</span>, IntegerType, <span class="kw">true</span>)
+  )
+)</pre></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#renameColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="renameColumns(f:String=&gt;String):org.apache.spark.sql.DataFrame"></a>
+      <a id="renameColumns((String)⇒String):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">renameColumns</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@renameColumns(f:String=&gt;String):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Rename columns
+Here is how to lowercase all the columns df.renameColumns(_.toLowerCase)
+Here is how to trim all the columns df.renameColumns(_.trim)
+</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#reorderColumns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reorderColumns(colNames:Seq[String]):org.apache.spark.sql.DataFrame"></a>
+      <a id="reorderColumns(Seq[String]):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reorderColumns</span><span class="params">(<span name="colNames">colNames: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@reorderColumns(colNames:Seq[String]):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reorders columns as specified
+Reorders the columns in a DataFrame.</p><div class="fullcomment"><div class="comment cmt"><p>Reorders columns as specified
+Reorders the columns in a DataFrame.</p><pre><span class="kw">val</span> actualDF = sourceDF.reorderColumns(
+  <span class="std">Seq</span>(<span class="lit">"greeting"</span>, <span class="lit">"team"</span>, <span class="lit">"cats"</span>)
+)</pre><p>The <code>actualDF</code> will have the <code>greeting</code> column first, then the <code>team</code> column then the <code>cats</code> column.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#setNullableForAllColumns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setNullableForAllColumns(nullable:Boolean):org.apache.spark.sql.DataFrame"></a>
+      <a id="setNullableForAllColumns(Boolean):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNullableForAllColumns</span><span class="params">(<span name="nullable">nullable: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@setNullableForAllColumns(nullable:Boolean):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Makes all columns nullable or vice versa</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#structureSchema" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="structureSchema(delimiter:String):org.apache.spark.sql.DataFrame"></a>
+      <a id="structureSchema(String):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">structureSchema</span><span class="params">(<span name="delimiter">delimiter: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;_&quot;</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@structureSchema(delimiter:String):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This method is opposite of flattenSchema.</p><div class="fullcomment"><div class="comment cmt"><p>This method is opposite of flattenSchema. For example, if you have flat dataframe with snake case columns it will
+convert it to dataframe with nested columns.</p><p>From:
+root
+|-- person_id: long (nullable = true)
+|-- person_name: string (nullable = true)
+|-- person_surname: string (nullable = true)</p><p>To:
+root
+|-- person: struct (nullable = false)
+|    |-- name: string (nullable = true)
+|    |-- surname: string (nullable = true)
+|    |-- id: long (nullable = true)
+</p></div></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#trans" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trans(customTransform:com.github.mrpowers.spark.daria.sql.CustomTransform):org.apache.spark.sql.DataFrame"></a>
+      <a id="trans(CustomTransform):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trans</span><span class="params">(<span name="customTransform">customTransform: <a href="CustomTransform.html" class="extype" name="com.github.mrpowers.spark.daria.sql.CustomTransform">CustomTransform</a></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@trans(customTransform:com.github.mrpowers.spark.daria.sql.CustomTransform):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like transform(), but for CustomTransform objects
+Enables you to specify the columns that should be added / removed by a custom transformations and errors out if the columns the columns that are actually added / removed are different.</p><div class="fullcomment"><div class="comment cmt"><p>Like transform(), but for CustomTransform objects
+Enables you to specify the columns that should be added / removed by a custom transformations and errors out if the columns the columns that are actually added / removed are different.</p><p>val actualDF = sourceDF
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.withGreeting(),
+      addedColumns = Seq(&quot;greeting&quot;),
+      requiredColumns = Seq(&quot;something&quot;)
+    )
+  )
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.withCat(&quot;spanky&quot;),
+      addedColumns = Seq(&quot;cats&quot;)
+    )
+  )
+  .trans(
+    CustomTransform(
+      transform = ExampleTransforms.dropWordCol(),
+      removedColumns = Seq(&quot;word&quot;)
+    )
+  )
+</p></div></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#withColumnCast" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withColumnCast(columnName:String,newType:org.apache.spark.sql.types.DataType):org.apache.spark.sql.DataFrame"></a>
+      <a id="withColumnCast(String,DataType):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withColumnCast</span><span class="params">(<span name="columnName">columnName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newType">newType: <span class="extype" name="org.apache.spark.sql.types.DataType">DataType</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@withColumnCast(columnName:String,newType:org.apache.spark.sql.types.DataType):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a new <code>DataFrame</code> with the column <code>columnName</code> cast
+as <code>newType</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <code>DataFrame</code> with the column <code>columnName</code> cast
+as <code>newType</code>.
+</p></div><dl class="paramcmts block"><dt class="param">columnName</dt><dd class="cmt"><p>the column to cast</p></dd><dt class="param">newType</dt><dd class="cmt"><p>the new type for columnName</p></dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt.DataFrameMethods#withColumnCast" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withColumnCast(columnName:String,newType:String):org.apache.spark.sql.DataFrame"></a>
+      <a id="withColumnCast(String,String):DataFrame"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withColumnCast</span><span class="params">(<span name="columnName">columnName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newType">newType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.DataFrameExt$$DataFrameMethods@withColumnCast(columnName:String,newType:String):org.apache.spark.sql.DataFrame" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns a new <code>DataFrame</code> with the column <code>columnName</code> cast
+as <code>newType</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a new <code>DataFrame</code> with the column <code>columnName</code> cast
+as <code>newType</code>.
+</p></div><dl class="paramcmts block"><dt class="param">columnName</dt><dd class="cmt"><p>the column to cast</p></dd><dt class="param">newType</dt><dd class="cmt"><p>the new type for columnName</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

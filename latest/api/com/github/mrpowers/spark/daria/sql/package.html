@@ -1,0 +1,448 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>sql - com.github.mrpowers.spark.daria.sql</title>
+          <meta name="description" content="sql - com.github.mrpowers.spark.daria.sql" />
+          <meta name="keywords" content="sql com.github.mrpowers.spark.daria.sql" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.github.mrpowers.spark.daria.sql.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.github">github</a>.<a href="../../../package.html" class="extype" name="com.github.mrpowers">mrpowers</a>.<a href="../../package.html" class="extype" name="com.github.mrpowers.spark">spark</a>.<a href="../package.html" class="extype" name="com.github.mrpowers.spark.daria">daria</a></p>
+        <h1>sql</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sql</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.github.mrpowers.spark.daria.sql.CustomTransform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CustomTransformextendsProductwithSerializable"></a>
+      <a id="CustomTransform:CustomTransform"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CustomTransform.html"><span class="name">CustomTransform</span></a><span class="params">(<span name="transform">transform: (<span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>) ⇒ <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="requiredColumns">requiredColumns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq.empty[String]</span></span>, <span name="addedColumns">addedColumns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq.empty[String]</span></span>, <span name="removedColumns">removedColumns: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq.empty[String]</span></span>, <span name="skipWhenPossible">skipWhenPossible: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@CustomTransformextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameColumnsException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DataFrameColumnsExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="DataFrameColumnsException:DataFrameColumnsException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DataFrameColumnsException.html"><span class="name">DataFrameColumnsException</span></a><span class="params">(<span name="smth">smth: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DataFrameColumnsExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameValidator" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DataFrameValidatorextendsAnyRef"></a>
+      <a id="DataFrameValidator:DataFrameValidator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DataFrameValidator.html"><span class="name">DataFrameValidator</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DataFrameValidatorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.EtlDefinition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EtlDefinitionextendsProductwithSerializable"></a>
+      <a id="EtlDefinition:EtlDefinition"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EtlDefinition.html"><span class="name">EtlDefinition</span></a><span class="params">(<span name="sourceDF">sourceDF: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="transform">transform: (<span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>) ⇒ <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="write">write: (<span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>, <span name="metadata">metadata: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Any">Any</span>] = <span class="defval" name="scala.collection.mutable.Map[String, Any]()">...</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@EtlDefinitionextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">spark-daria can be used as a lightweight framework for running ETL analyses in Spark.</p><div class="fullcomment"><div class="comment cmt"><p>spark-daria can be used as a lightweight framework for running ETL analyses in Spark.</p><p>You can define <code>EtlDefinitions</code>, group them in a collection, and run the etls via jobs.</p><p><b>Components of an ETL</b></p><p>An ETL starts with a DataFrame, runs a series of transformations (filter, custom transformations, repartition), and writes out data.</p><p>The <code>EtlDefinition</code> class is generic and can be molded to suit all ETL situations.  For example, it can read a CSV file from S3, run transformations, and write out Parquet files on your local filesystem.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.InvalidColumnSortOrderException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvalidColumnSortOrderExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="InvalidColumnSortOrderException:InvalidColumnSortOrderException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InvalidColumnSortOrderException.html"><span class="name">InvalidColumnSortOrderException</span></a><span class="params">(<span name="smth">smth: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@InvalidColumnSortOrderExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.InvalidDataFrameSchemaException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InvalidDataFrameSchemaExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="InvalidDataFrameSchemaException:InvalidDataFrameSchemaException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InvalidDataFrameSchemaException.html"><span class="name">InvalidDataFrameSchemaException</span></a><span class="params">(<span name="smth">smth: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@InvalidDataFrameSchemaExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.MissingDataFrameColumnsException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MissingDataFrameColumnsExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="MissingDataFrameColumnsException:MissingDataFrameColumnsException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MissingDataFrameColumnsException.html"><span class="name">MissingDataFrameColumnsException</span></a><span class="params">(<span name="smth">smth: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@MissingDataFrameColumnsExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.ParquetCompactor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParquetCompactorextendsAnyRef"></a>
+      <a id="ParquetCompactor:ParquetCompactor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ParquetCompactor.html"><span class="name">ParquetCompactor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@ParquetCompactorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.ProhibitedDataFrameColumnsException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProhibitedDataFrameColumnsExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="ProhibitedDataFrameColumnsException:ProhibitedDataFrameColumnsException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ProhibitedDataFrameColumnsException.html"><span class="name">ProhibitedDataFrameColumnsException</span></a><span class="params">(<span name="smth">smth: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@ProhibitedDataFrameColumnsExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.github.mrpowers.spark.daria.sql.ColumnExt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ColumnExt"></a>
+      <a id="ColumnExt:ColumnExt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ColumnExt$.html"><span class="name">ColumnExt</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@ColumnExt" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Additional methods for the Spark Column class
+</p><div class="fullcomment"><div class="comment cmt"><p>Additional methods for the Spark Column class
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>0.0.1</p></dd></dl></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.DariaValidator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DariaValidator"></a>
+      <a id="DariaValidator:DariaValidator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DariaValidator$.html"><span class="name">DariaValidator</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DariaValidator" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.DariaWriters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DariaWriters"></a>
+      <a id="DariaWriters:DariaWriters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DariaWriters$.html"><span class="name">DariaWriters</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DariaWriters" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameExt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DataFrameExt"></a>
+      <a id="DataFrameExt:DataFrameExt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DataFrameExt$.html"><span class="name">DataFrameExt</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DataFrameExt" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.DataFrameHelpers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DataFrameHelpers"></a>
+      <a id="DataFrameHelpers:DataFrameHelpers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DataFrameHelpers$.html"><span class="name">DataFrameHelpers</span></a><span class="result"> extends <a href="DataFrameValidator.html" class="extype" name="com.github.mrpowers.spark.daria.sql.DataFrameValidator">DataFrameValidator</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@DataFrameHelpers" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.FunctionsAsColumnExt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FunctionsAsColumnExt"></a>
+      <a id="FunctionsAsColumnExt:FunctionsAsColumnExt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FunctionsAsColumnExt$.html"><span class="name">FunctionsAsColumnExt</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@FunctionsAsColumnExt" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.SparkSessionExt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SparkSessionExt"></a>
+      <a id="SparkSessionExt:SparkSessionExt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SparkSessionExt$.html"><span class="name">SparkSessionExt</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@SparkSessionExt" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.functions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="functions"></a>
+      <a id="functions:functions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="functions$.html"><span class="name">functions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@functions" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Spark [has a ton of SQL functions](https://spark.apache.org/docs/2.1.0/api/java/org/apache/spark/sql/functions.html) and spark-daria is meant to fill in any gaps.</p>
+    </li><li name="com.github.mrpowers.spark.daria.sql.transformations" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="transformations"></a>
+      <a id="transformations:transformations"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="transformations$.html"><span class="name">transformations</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@transformations" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Functions available for DataFrame operations.</p><div class="fullcomment"><div class="comment cmt"><p>Functions available for DataFrame operations.</p><p>SQL transformations take a DataFrame as an argument and return a DataFrame.  They are suitable arguments for the <code>Dataset#transform</code> method.</p><p>It's convenient to work with DataFrames that have snake_case column names.  Column names with spaces make it harder to write SQL queries.
+</p></div></div>
+    </li><li name="com.github.mrpowers.spark.daria.sql.types" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="types"></a>
+      <a id="types:types"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="types/package.html"><span class="name">types</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@types" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.github.mrpowers.spark.daria.sql.udafs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="udafs"></a>
+      <a id="udafs:udafs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="udafs/package.html"><span class="name">udafs</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.github.mrpowers.spark.daria.sql.package@udafs" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
