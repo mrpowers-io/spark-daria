@@ -153,6 +153,12 @@ Continued excellence will be rewarded with push access to the master branch.
 
 ## Publishing
 
+1. Version bump commit and create GitHub tag
+
+2. Publish documentation with `sbt ghpagesPushSite`
+
+3. Publish JAR
+
 Run `sbt` to open the SBT console.
 
 Run `> ; + publishSigned; sonatypeBundleRelease` to create the JAR files and release them to Maven.  These commands are made available by the [sbt-sonatype](https://github.com/xerial/sbt-sonatype) plugin.
