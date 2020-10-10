@@ -155,7 +155,7 @@ Continued excellence will be rewarded with push access to the master branch.
 
 Run `sbt` to open the SBT console.
 
-Run `> ; + publishSigned; sonatypeBundleRelease` to create the JAR files and release them to Maven.
+Run `> ; + publishSigned; sonatypeBundleRelease` to create the JAR files and release them to Maven.  These commands are made available by the [sbt-sonatype](https://github.com/xerial/sbt-sonatype) plugin.
 
 When the release command is run, you'll be prompted to enter your GPG passphrase.
 
