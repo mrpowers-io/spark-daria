@@ -2,12 +2,24 @@ package com.github.mrpowers.spark.daria.sql.types
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.ScalaReflection
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.{DataType, StructField, StructType}
 import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
 
 object StructTypeHelpers {
+
+  def build[U <: Product](fields: U*) = {
+    fields.map {
+      case x: StructField => x.asInstanceOf[StructField]
+      case (name: String, dataType: DataType, nullable: Boolean) =>
+        StructField(
+          name,
+          dataType,
+          nullable
+        )
+    }
+  }
 
   def flattenSchema(schema: StructType, prefix: String = ""): Array[Column] = {
     schema.fields.flatMap(structField => {
