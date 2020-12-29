@@ -86,6 +86,13 @@ import com.github.mrpowers.spark.daria.sql.functions._
 removeAllWhitespace(col("first_name"))
 ```
 
+#### Datetime functions
+
+* `beginningOfWeek`
+* `endOfWeek`
+* `beginningOfMonth`
+* `endOfMonth`
+
 ### Custom transformations
 
 Custom transformations have the following method signature so they can be passed as arguments to the Spark `DataFrame#transform()` method.

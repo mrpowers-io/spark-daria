@@ -483,6 +483,54 @@ object functions {
     ) / 365
   }
 
+  // Spark uses 1 for Sunday, 2 for Monday, ... 7 for Saturday
+  // this function converts Spark's numerical representation to the string representation
+  // sometimes they use the string representation as well
+  def dayOfWeekStr(col: Column): Column = {
+    when(col.isNull, null)
+      .when(col === lit(1), lit("Sun"))
+      .when(col === lit(2), lit("Mon"))
+      .when(col === lit(3), lit("Tue"))
+      .when(col === lit(4), lit("Wed"))
+      .when(col === lit(5), lit("Thu"))
+      .when(col === lit(6), lit("Fri"))
+      .when(col === lit(7), lit("Sat"))
+  }
+
+  def beginningOfWeek(col: Column, lastDayOfWeek: String = "Sat"): Column = {
+    // in Spark, the default week starts with Sunday
+    // Sunday is 1, Monday is 2, ..., Saturday is 7
+    // implementation is pretty silly
+    // cannot use the date_sub function regularly because the second argument can't be a column, not till Spark 3 at least
+    // Spark date functions require a lot of hacking
+    val endOfWeek = functions.endOfWeek(col, lastDayOfWeek)
+    date_sub(endOfWeek, 6)
+  }
+
+  def endOfWeek(col: Column, lastDayOfWeek: String = "Sat"): Column = {
+    // dayOfWeek Case insensitive, and accepts: "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+    // Saturday is the default week end day
+    val res = next_day(col, lastDayOfWeek)
+    when(dayOfWeekStr(dayofweek(col)) === lit(lastDayOfWeek), col).otherwise(res)
+  }
+
+  def beginningOfMonth(col: Column): Column = {
+    // @todo add a better solution
+    //  the more correct solution is f.date_sub(f.col('date'), f.dayofmonth(f.col('date')) - 1 )
+    // this solution doesn't work until Spark 3
+    // pre-Spark 3, the data_sub function only worked with the second argument as an integer
+    // refactor this solution once this library no longer supports Spark 2
+    trunc(col, "month")
+  }
+
+  def endOfMonth(col: Column): Column = {
+    // the last_day function is already built in to the Spark standard lib
+    // this function is added because the function has a terrible name
+    // last_day makes for unreadable code
+    // ... the last day of what? ... the week, the year?
+    last_day(col)
+  }
+
   def bucketFinder(
       col: Column,
       buckets: Array[(Any, Any)],

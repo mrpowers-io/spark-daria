@@ -161,9 +161,7 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
     }
 
     'yeardiff - {
-
       "calculates the years between two dates" - {
-
         val testDF = spark.createDF(
           List(
             (Timestamp.valueOf("2016-09-10 00:00:00"), Timestamp.valueOf("2001-08-10 00:00:00")),
@@ -176,7 +174,6 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
             ("second_datetime", TimestampType, true)
           )
         )
-
         val actualDF = testDF
           .withColumn(
             "num_years",
@@ -185,7 +182,6 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               col("second_datetime")
             )
           )
-
         val expectedDF = spark.createDF(
           List(
             (15.095890410958905),
@@ -195,20 +191,151 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           ),
           List(("num_years", DoubleType, true))
         )
-
         assertSmallDataFrameEquality(
           actualDF.select("num_years"),
           expectedDF
         )
+      }
+    }
 
+    "dayOfWeekStr" - {
+      "converts a dayofweek output to the day of week string representation" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2020-12-28"), "Mon"),
+              (Date.valueOf("2021-01-03"), "Sun"),
+              (Date.valueOf("2020-12-12"), "Sat"),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", StringType, true)
+            )
+          )
+          .withColumn("dayofweek", dayofweek(col("some_date")))
+          .withColumn("day_of_week_str", functions.dayOfWeekStr(col("dayofweek")))
+        assertColumnEquality(df, "day_of_week_str", "expected")
+      }
+    }
+
+    "beginningOfWeek" - {
+      "returns the date at the start of the week using the default week start" - {
+        val df = spark
+          .createDF(
+            List(
+              // Remember the default week start is Sunday
+              // When Monday, then the Sunday prior
+              (Date.valueOf("2020-12-28"), Date.valueOf("2020-12-27")),
+              // When Sunday, then the same day
+              (Date.valueOf("2021-01-03"), Date.valueOf("2021-01-03")),
+              // When Saturday, then the Sunday prior
+              (Date.valueOf("2020-12-12"), Date.valueOf("2020-12-06")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.beginningOfWeek(col("some_date")))
+        assertColumnEquality(df, "res", "expected")
       }
 
+      "returns the date at the start of the week using a custom week start" - {
+        val df = spark
+          .createDF(
+            List(
+              // This example considers Tuesday to be the last day of the week
+              // So Wednesday is the first day of the week
+              // for a Monday, the week start is the Wednesday prior
+              (Date.valueOf("2020-12-28"), Date.valueOf("2020-12-23")),
+              // for a Sunday, the week start is the Wednesday prior
+              (Date.valueOf("2021-01-03"), Date.valueOf("2020-12-30")),
+              // for a Saturday, the week start is the Wednesday prior
+              (Date.valueOf("2020-12-12"), Date.valueOf("2020-12-09")),
+              // for a Wednesday, the week start the same day
+              (Date.valueOf("2020-12-23"), Date.valueOf("2020-12-23")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.beginningOfWeek(col("some_date"), "Tue"))
+        assertColumnEquality(df, "res", "expected")
+      }
+    }
+
+    "endOfWeek" - {
+      "returns the date at the end of the week using the default week start" - {
+        val df = spark
+          .createDF(
+            List(
+              // Remember, Saturday is last day of week by default
+              // if Sunday, then next Saturday
+              (Date.valueOf("2020-12-27"), Date.valueOf("2021-01-02")),
+              // if Monday, then next Saturday
+              (Date.valueOf("2020-12-28"), Date.valueOf("2021-01-02")),
+              // if Sunday, then next Saturday
+              (Date.valueOf("2021-01-03"), Date.valueOf("2021-01-09")),
+              // if Saturday, then current day
+              (Date.valueOf("2020-12-12"), Date.valueOf("2020-12-12")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.endOfWeek(col("some_date")))
+        assertColumnEquality(df, "res", "expected")
+      }
+    }
+
+    "beginningOfMonth" - {
+      "returns the date at the start of the month" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2016-09-10"), Date.valueOf("2016-09-01")),
+              (Date.valueOf("2020-01-01"), Date.valueOf("2020-01-01")),
+              (Date.valueOf("2016-01-10"), Date.valueOf("2016-01-01")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.beginningOfMonth(col("some_date")))
+        assertColumnEquality(df, "res", "expected")
+      }
+    }
+
+    "endOfMonth" - {
+      "returns the date at the end of the month" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2016-09-10"), Date.valueOf("2016-09-30")),
+              (Date.valueOf("2020-01-01"), Date.valueOf("2020-01-31")),
+              (Date.valueOf("2016-01-10"), Date.valueOf("2016-01-31")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.endOfMonth(col("some_date")))
+        assertColumnEquality(df, "res", "expected")
+      }
     }
 
     'capitalizeFully - {
-
       "uses the supplied delimeter to identify word breaks with org.apache.commons WordUtils.capitalizeFully" - {
-
         val df = spark
           .createDF(
             List(
@@ -231,17 +358,14 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               lit(",")
             )
           )
-
         assertColumnEquality(
           df,
           "expected",
           "some_string_udf"
         )
-
       }
 
       "can be called with multiple delimiters" - {
-
         val df = spark
           .createDF(
             List(
@@ -265,15 +389,12 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               lit("/, ")
             )
           )
-
         assertColumnEquality(
           df,
           "expected",
           "some_string_udf"
         )
-
       }
-
     }
 
     'exists - {
