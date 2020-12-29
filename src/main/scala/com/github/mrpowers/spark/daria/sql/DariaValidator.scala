@@ -2,6 +2,8 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
+case class DariaValidationError(smth: String) extends Exception(smth)
+
 object DariaValidator {
 
   /**
@@ -102,6 +104,13 @@ object DariaValidator {
       prohibitedColNames
     )
     c.validateAbsenceOfColumns()
+  }
+
+  def validateIsIn[A](item: A, items: List[A]): Unit = {
+    if (!items.contains(item)) {
+      val message = s"'$item' in not included in '$items'"
+      throw new DariaValidationError(message)
+    }
   }
 
 }

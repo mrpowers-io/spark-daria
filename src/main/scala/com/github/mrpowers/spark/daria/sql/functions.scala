@@ -503,6 +503,7 @@ object functions {
     // implementation is pretty silly
     // cannot use the date_sub function regularly because the second argument can't be a column, not till Spark 3 at least
     // Spark date functions require a lot of hacking
+    DariaValidator.validateIsIn[String](lastDayOfWeek, List("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
     val endOfWeek = functions.endOfWeek(col, lastDayOfWeek)
     date_sub(endOfWeek, 6)
   }

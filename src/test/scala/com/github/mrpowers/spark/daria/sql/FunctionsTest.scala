@@ -263,8 +263,25 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               ("expected", DateType, true)
             )
           )
-          .withColumn("res", functions.beginningOfWeek(col("some_date"), "Tue"))
+          .withColumn("res", functions.beginningOfWeek(col("some_date"), lastDayOfWeek = "Tue"))
         assertColumnEquality(df, "res", "expected")
+      }
+
+      "errors out if the lastDayOfWeek is invalid" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2020-12-28"), Date.valueOf("2020-12-23")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+        val e = intercept[DariaValidationError] {
+          df.withColumn("res", functions.beginningOfWeek(col("some_date"), lastDayOfWeek = "Cat"))
+        }
       }
     }
 
