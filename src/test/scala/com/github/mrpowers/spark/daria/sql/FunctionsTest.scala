@@ -295,7 +295,7 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
     }
 
     "beginningOfMonth" - {
-      "returns the date at the start of the month" - {
+      "returns the date at the start of the month for column argument" - {
         val df = spark
           .createDF(
             List(
@@ -310,6 +310,24 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
             )
           )
           .withColumn("res", functions.beginningOfMonth(col("some_date")))
+        assertColumnEquality(df, "res", "expected")
+      }
+
+      "returns the date at the start of the month for column name" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2016-09-10"), Date.valueOf("2016-09-01")),
+              (Date.valueOf("2020-01-01"), Date.valueOf("2020-01-01")),
+              (Date.valueOf("2016-01-10"), Date.valueOf("2016-01-01")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("res", functions.beginningOfMonth("some_date"))
         assertColumnEquality(df, "res", "expected")
       }
     }

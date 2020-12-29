@@ -515,17 +515,20 @@ object functions {
   }
 
   def beginningOfMonth(col: Column): Column = {
-    // @todo add a better solution
-    //  the more correct solution is f.date_sub(f.col('date'), f.dayofmonth(f.col('date')) - 1 )
-    // this solution doesn't work until Spark 3
-    // pre-Spark 3, the data_sub function only worked with the second argument as an integer
+    // @todo Spark 3 will allow for a better solution
+    // this toString hack is required because the second argument to date_sub needs to be an integer
     // refactor this solution once this library no longer supports Spark 2
-    trunc(col, "month")
+    beginningOfMonth(col.toString())
+  }
+
+  def beginningOfMonth(colName: String): Column = {
+    // need to use the expr hack to get around the date_sub requirement of having a second argument that's an integer
+    expr(s"date_sub($colName, dayofmonth($colName) - 1 )")
   }
 
   def endOfMonth(col: Column): Column = {
     // the last_day function is already built in to the Spark standard lib
-    // this function is added because the function has a terrible name
+    // this wrapper function is necessary because last_day is a horrible function name
     // last_day makes for unreadable code
     // ... the last day of what? ... the week, the year?
     last_day(col)
