@@ -217,6 +217,32 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           .withColumn("day_of_week_str", functions.dayOfWeekStr(col("dayofweek")))
         assertColumnEquality(df, "day_of_week_str", "expected")
       }
+
+      "displays a bunch of different options for a Stackoverflow answer" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2021-01-09")),
+              (Date.valueOf("2021-01-10")),
+              (Date.valueOf("2021-01-11")),
+              (Date.valueOf("2021-01-12")),
+              (Date.valueOf("2021-01-13")),
+              (Date.valueOf("2021-01-14")),
+              (Date.valueOf("2021-01-15")),
+              (Date.valueOf("2021-01-16")),
+              (Date.valueOf("2021-01-17")),
+              (Date.valueOf("2021-01-18")),
+              (null)
+            ),
+            List(
+              ("some_date", DateType, true)
+            )
+          )
+          .withColumn("beginning_of_week", functions.beginningOfWeek(col("some_date")))
+          .withColumn("end_of_week", functions.endOfWeek(col("some_date")))
+          .show()
+
+      }
     }
 
     "beginningOfWeek" - {
@@ -326,7 +352,7 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               ("expected", DateType, true)
             )
           )
-          .withColumn("res", functions.beginningOfMonth(col("some_date")))
+          .withColumn("res", functions.beginningOfMonthDate(col("some_date")))
         assertColumnEquality(df, "res", "expected")
       }
 
@@ -347,6 +373,24 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           .withColumn("res", functions.beginningOfMonth("some_date"))
         assertColumnEquality(df, "res", "expected")
       }
+
+      "works for timestamp type columns" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2017-11-25"), Timestamp.valueOf("2017-11-01 00:00:00")),
+              (Date.valueOf("2017-12-21"), Timestamp.valueOf("2017-12-01 00:00:00")),
+              (Date.valueOf("2017-09-12"), Timestamp.valueOf("2017-09-01 00:00:00")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", TimestampType, true)
+            )
+          )
+          .withColumn("beginning_of_month_time", functions.beginningOfMonthTime(col("some_date")))
+        assertColumnEquality(df, "beginning_of_month_time", "expected")
+      }
     }
 
     "endOfMonth" - {
@@ -364,8 +408,32 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
               ("expected", DateType, true)
             )
           )
-          .withColumn("res", functions.endOfMonth(col("some_date")))
+          .withColumn("res", functions.endOfMonthDate(col("some_date")))
         assertColumnEquality(df, "res", "expected")
+      }
+    }
+
+    "nextWeekDay" - {
+      "calculates the next week day" - {
+        val df = spark
+          .createDF(
+            List(
+              (Date.valueOf("2021-01-10"), Date.valueOf("2021-01-11")),
+              (Date.valueOf("2021-01-11"), Date.valueOf("2021-01-12")),
+              (Date.valueOf("2021-01-12"), Date.valueOf("2021-01-13")),
+              (Date.valueOf("2021-01-13"), Date.valueOf("2021-01-14")),
+              (Date.valueOf("2021-01-14"), Date.valueOf("2021-01-15")),
+              (Date.valueOf("2021-01-15"), Date.valueOf("2021-01-18")),
+              (Date.valueOf("2021-01-16"), Date.valueOf("2021-01-18")),
+              (null, null)
+            ),
+            List(
+              ("some_date", DateType, true),
+              ("expected", DateType, true)
+            )
+          )
+          .withColumn("next_weekday", functions.nextWeekday(col("some_date")))
+        assertColumnEquality(df, "next_weekday", "expected")
       }
     }
 

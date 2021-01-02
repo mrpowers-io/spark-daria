@@ -511,15 +511,16 @@ object functions {
   def endOfWeek(col: Column, lastDayOfWeek: String = "Sat"): Column = {
     // dayOfWeek Case insensitive, and accepts: "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
     // Saturday is the default week end day
-    val res = next_day(col, lastDayOfWeek)
-    when(dayOfWeekStr(dayofweek(col)) === lit(lastDayOfWeek), col).otherwise(res)
+    when(dayOfWeekStr(dayofweek(col)) === lit(lastDayOfWeek), col)
+      .otherwise(next_day(col, lastDayOfWeek))
   }
 
-  def beginningOfMonth(col: Column): Column = {
-    // @todo Spark 3 will allow for a better solution
-    // this toString hack is required because the second argument to date_sub needs to be an integer
-    // refactor this solution once this library no longer supports Spark 2
-    beginningOfMonth(col.toString())
+  def beginningOfMonthDate(col: Column): Column = {
+    trunc(col, "month")
+  }
+
+  def beginningOfMonthTime(col: Column): Column = {
+    date_trunc("month", col)
   }
 
   def beginningOfMonth(colName: String): Column = {
@@ -527,12 +528,21 @@ object functions {
     expr(s"date_sub($colName, dayofmonth($colName) - 1 )")
   }
 
-  def endOfMonth(col: Column): Column = {
+  def endOfMonthDate(col: Column): Column = {
     // the last_day function is already built in to the Spark standard lib
     // this wrapper function is necessary because last_day is a horrible function name
     // last_day makes for unreadable code
     // ... the last day of what? ... the week, the year?
     last_day(col)
+  }
+
+  def nextWeekday(col: Column): Column = {
+    val d        = dayofweek(col)
+    val friday   = lit(6)
+    val saturday = lit(7)
+    when(col.isNull, null)
+      .when(d === friday || d === saturday, next_day(col, "Mon"))
+      .otherwise(date_add(col, 1))
   }
 
   def bucketFinder(
