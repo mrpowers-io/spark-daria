@@ -47,15 +47,10 @@ object DataFrameHelpers extends DataFrameValidator {
   def twoColumnsToMap[keyType: TypeTag, valueType: TypeTag](df: DataFrame, keyColName: String, valueColName: String): Map[keyType, valueType] = {
     validatePresenceOfColumns(
       df,
-      Seq(
-        keyColName,
-        valueColName
-      )
+      Seq(keyColName, valueColName)
     )
-    df.select(
-      keyColName,
-      valueColName
-    ).collect()
+    df.select(keyColName, valueColName)
+      .collect()
       .map(r => (r(0).asInstanceOf[keyType], r(1).asInstanceOf[valueType]))
       .toMap
   }
@@ -121,10 +116,7 @@ object DataFrameHelpers extends DataFrameValidator {
    * }}}
    */
   def columnToList[T: ClassTag](df: DataFrame, colName: String): List[T] = {
-    columnToArray[T](
-      df,
-      colName
-    ).toList
+    columnToArray[T](df, colName).toList
   }
 
   /**
@@ -235,17 +227,11 @@ object DataFrameHelpers extends DataFrameValidator {
 
     if (overwriteLatest) {
       val latestData = Seq(
-        Row(
-          outputPath
-        )
+        Row(outputPath)
       )
 
       val latestSchema = List(
-        StructField(
-          "latest_path",
-          StringType,
-          false
-        )
+        StructField("latest_path", StringType, false)
       )
 
       val latestDF = spark.createDataFrame(
@@ -254,14 +240,8 @@ object DataFrameHelpers extends DataFrameValidator {
       )
 
       latestDF.write
-        .option(
-          "header",
-          "false"
-        )
-        .option(
-          "delimiter",
-          ","
-        )
+        .option("header", "false")
+        .option("delimiter", ",")
         .mode(SaveMode.Overwrite)
         .csv(outputDirname + "/latest")
     }
@@ -269,14 +249,8 @@ object DataFrameHelpers extends DataFrameValidator {
 
   def readTimestamped(dirname: String): DataFrame = {
     val latestDF = spark.read
-      .option(
-        "header",
-        "false"
-      )
-      .option(
-        "delimiter",
-        ","
-      )
+      .option("header", "false")
+      .option("delimiter", ",")
       .csv(dirname + "/latest")
 
     val latestPath = latestDF.head().getString(0)

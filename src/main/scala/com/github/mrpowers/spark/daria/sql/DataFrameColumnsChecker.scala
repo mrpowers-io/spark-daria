@@ -16,7 +16,7 @@ private[sql] class DataFrameColumnsChecker(df: DataFrame, requiredColNames: Seq[
 
   def validatePresenceOfColumns(): Unit = {
     if (missingColumns.nonEmpty) {
-      throw new MissingDataFrameColumnsException(missingColumnsMessage())
+      throw MissingDataFrameColumnsException(missingColumnsMessage())
     }
   }
 

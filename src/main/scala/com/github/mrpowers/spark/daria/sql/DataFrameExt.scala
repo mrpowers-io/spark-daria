@@ -135,7 +135,7 @@ object DataFrameExt {
      * The `actualDF` will have the `greeting` column first, then the `team` column then the `cats` column.
      */
     def reorderColumns(colNames: Seq[String]): DataFrame = {
-      val cols = colNames.map(col(_))
+      val cols = colNames.map(col)
       df.select(cols: _*)
     }
 
@@ -211,7 +211,7 @@ object DataFrameExt {
     def trans(customTransform: CustomTransform): DataFrame = {
       // make sure df doesn't already have the columns that will be added
       if (df.columns.toSeq.exists((c: String) => customTransform.addedColumns.contains(c))) {
-        throw new DataFrameColumnsException(
+        throw DataFrameColumnsException(
           s"The DataFrame already contains the columns your transformation will add. The DataFrame has these columns: [${df.columns
             .mkString(", ")}]. You've asserted that your transformation will add these columns: [${customTransform.addedColumns
             .mkString(", ")}]"
@@ -243,7 +243,7 @@ object DataFrameExt {
       // make sure the columns have been added
       val actualColumnsAdded = transformedDF.columnDiff(df)
       if (!actualColumnsAdded.equals(customTransform.addedColumns)) {
-        throw new DataFrameColumnsException(
+        throw DataFrameColumnsException(
           s"The [${actualColumnsAdded.mkString(", ")}] columns were actually added, but you specified that these columns should have been added [${customTransform.addedColumns
             .mkString(", ")}]"
         )
@@ -252,7 +252,7 @@ object DataFrameExt {
       // make sure the columns have been removed
       val actualColumnsRemoved = df.columnDiff(transformedDF)
       if (!actualColumnsRemoved.equals(customTransform.removedColumns)) {
-        throw new DataFrameColumnsException(
+        throw DataFrameColumnsException(
           s"The [${actualColumnsRemoved.mkString(", ")}] columns were actually removed, but you specified that these columns should have been removed [${customTransform.removedColumns
             .mkString(", ")}]"
         )
@@ -368,12 +368,7 @@ object DataFrameExt {
      * Here is how to trim all the columns df.renameColumns(_.trim)
      */
     def renameColumns(f: String => String): DataFrame =
-      df.columns.foldLeft(df)((tempDf, c) =>
-        tempDf.withColumnRenamed(
-          c,
-          f(c)
-        )
-      )
+      df.columns.foldLeft(df)((tempDf, c) => tempDf.withColumnRenamed(c, f(c)))
 
     /**
      * Drops multiple columns that satisfy the conditions of a function

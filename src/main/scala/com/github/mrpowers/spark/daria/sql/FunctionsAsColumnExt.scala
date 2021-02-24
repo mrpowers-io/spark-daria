@@ -15,11 +15,7 @@ object FunctionsAsColumnExt {
     def lower(): Column = t(F.lower)
 
     def regexp_replace(pattern: String, replacement: String): Column =
-      F.regexp_replace(
-        col,
-        pattern,
-        replacement
-      )
+      F.regexp_replace(col, pattern, replacement)
 
   }
 

@@ -19,19 +19,13 @@ object StringHelpers {
 
     Some(charsToEscape.foldLeft(str) {
       case (res, pattern) =>
-        res.replaceAll(
-          pattern,
-          "\\" + pattern
-        )
+        res.replaceAll(pattern, "\\" + pattern)
     })
   }
 
   def toSnakeCase(str: String): String = {
     str
-      .replaceAll(
-        "\\s+",
-        "_"
-      )
+      .replaceAll("\\s+", "_")
       .toLowerCase
   }
 
@@ -48,22 +42,13 @@ object StringHelpers {
    */
   def snakify(name: String): String =
     name
-      .replaceAll(
-        "([A-Z]+)([A-Z][a-z])",
-        "$1_$2"
-      )
-      .replaceAll(
-        "([a-z\\d])([A-Z])",
-        "$1_$2"
-      )
+      .replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2")
+      .replaceAll("([a-z\\d])([A-Z])", "$1_$2")
       .toLowerCase
 
   def camelCaseToSnakeCase(str: String): String = {
     str
-      .replaceAll(
-        "([A-Z]+)",
-        "_$1"
-      )
+      .replaceAll("([A-Z]+)", "_$1")
       .toLowerCase
       .stripPrefix("_")
   }

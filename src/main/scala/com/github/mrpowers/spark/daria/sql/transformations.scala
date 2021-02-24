@@ -54,7 +54,7 @@ object transformations {
     } else {
       val message =
         s"The sort order must be 'asc' or 'desc'.  Your sort order was '$order'."
-      throw new InvalidColumnSortOrderException(message)
+      throw InvalidColumnSortOrderException(message)
     }
     val cols = colNames.map(col(_))
     df.select(cols: _*)
@@ -175,11 +175,7 @@ object transformations {
       memoDF
         .withColumn(
           col.toString(),
-          regexp_replace(
-            col,
-            pattern,
-            replacement
-          )
+          regexp_replace(col, pattern, replacement)
         )
     }
   }
@@ -207,11 +203,7 @@ object transformations {
       }
       .toList
 
-    multiRegexpReplace(
-      cols,
-      pattern,
-      replacement
-    )(df)
+    multiRegexpReplace(cols, pattern, replacement)(df)
   }
 
   /**
@@ -235,10 +227,7 @@ object transformations {
         if (memoDF.schema.fieldNames.contains(colName)) {
           memoDF.withColumn(
             colName,
-            truncate(
-              col(colName),
-              length
-            )
+            truncate(col(colName), length)
           )
         } else {
           memoDF
@@ -304,10 +293,7 @@ object transformations {
   def extractFromJson(colName: String, outputColName: String, jsonSchema: StructType)(df: DataFrame): DataFrame = {
     df.withColumn(
       outputColName,
-      from_json(
-        col(colName),
-        jsonSchema
-      )
+      from_json(col(colName), jsonSchema)
     )
   }
 
@@ -341,10 +327,7 @@ object transformations {
   def extractFromJson(colName: String, outputColName: String, path: String)(df: DataFrame): DataFrame = {
     df.withColumn(
       outputColName,
-      get_json_object(
-        col(colName),
-        path
-      )
+      get_json_object(col(colName), path)
     )
   }
 

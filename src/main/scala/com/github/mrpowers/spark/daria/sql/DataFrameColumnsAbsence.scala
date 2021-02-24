@@ -16,7 +16,7 @@ private[sql] class DataFrameColumnsAbsence(df: DataFrame, prohibitedColNames: Se
 
   def validateAbsenceOfColumns(): Unit = {
     if (extraColNames.nonEmpty) {
-      throw new ProhibitedDataFrameColumnsException(extraColumnsMessage())
+      throw ProhibitedDataFrameColumnsException(extraColumnsMessage())
     }
   }
 

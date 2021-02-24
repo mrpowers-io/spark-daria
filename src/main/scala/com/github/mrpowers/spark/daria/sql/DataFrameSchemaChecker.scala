@@ -15,7 +15,7 @@ private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructT
 
   def validateSchema(): Unit = {
     if (missingStructFields.nonEmpty) {
-      throw new InvalidDataFrameSchemaException(missingStructFieldsMessage())
+      throw InvalidDataFrameSchemaException(missingStructFieldsMessage())
     }
   }
 

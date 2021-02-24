@@ -8,10 +8,7 @@ object ArrayHelpers {
   def regexpString(strs: Array[String], charsToEscape: List[String] = StringHelpers.sqlCharsToEscape): String = {
     val t = strs.filter(_ != null).map { str: String =>
       StringHelpers
-        .escapeForSqlRegexp(
-          str,
-          charsToEscape
-        )
+        .escapeForSqlRegexp(str, charsToEscape)
         .getOrElse(None)
     }
     t.mkString("|")
