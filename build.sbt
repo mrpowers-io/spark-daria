@@ -14,10 +14,6 @@ libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "0.21.3" % 
 libraryDependencies += "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 
-artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-  Artifact.artifactName(sv, module, artifact).replaceAll(s"-${module.revision}", s"-${sparkVersion}${module.revision}")
-}
-
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 fork in Test := true
