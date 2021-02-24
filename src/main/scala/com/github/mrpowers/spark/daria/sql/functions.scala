@@ -17,8 +17,6 @@ import scala.reflect.runtime.universe._
  * @groupname Ungrouped Support functions for DataFrames
  */
 object functions {
-  @deprecated("Removing for Spark 3", "0.38.2")
-  private def withExpr(expr: Expression): Column = new Column(expr)
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   // String functions
@@ -153,205 +151,9 @@ object functions {
     substring(col, 0, len)
   }
 
-  @deprecated("Removing for Spark 3", "0.38.2")
-  private def createLambda(f: Column => Column) = {
-    val x        = UnresolvedNamedLambdaVariable(Seq("x"))
-    val function = f(new Column(x)).expr
-    LambdaFunction(
-      function,
-      Seq(x)
-    )
-  }
-
-  @deprecated("Removing for Spark 3", "0.38.2")
-  private def createLambda(f: (Column, Column) => Column) = {
-    val x = UnresolvedNamedLambdaVariable(Seq("x"))
-    val y = UnresolvedNamedLambdaVariable(Seq("y"))
-    val function = f(
-      new Column(x),
-      new Column(y)
-    ).expr
-    LambdaFunction(
-      function,
-      Seq(
-        x,
-        y
-      )
-    )
-  }
-
   //////////////////////////////////////////////////////////////////////////////////////////////
   // Collection functions
   //////////////////////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * Returns an array of elements after applying a tranformation to each element
-   * in the input array.
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +---------+
-   * |     nums|
-   * +---------+
-   * |[1, 4, 9]|
-   * |[1, 3, 5]|
-   * +---------+
-   * }}}
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   *   "squared", transform(col("nums"), x => x * 2)
-   * )
-   *
-   * actualDF.show()
-   *
-   * +---------+-----------+
-   * |     nums|    squared|
-   * +---------+-----------+
-   * |[1, 4, 9]|[1, 16, 81]|
-   * |[1, 3, 5]| [1, 9, 25]|
-   * +---------+-----------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  @deprecated("Removing for Spark 3", "0.38.2")
-  def transform(column: Column, f: Column => Column): Column =
-    new Column(
-      ArrayTransform(
-        column.expr,
-        createLambda(f)
-      )
-    )
-
-  /**
-   * Returns an array of elements after applying a tranformation to each element
-   * in the input array with its index.
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +---------+
-   * |     nums|
-   * +---------+
-   * |[1, 2, 3]|
-   * +---------+
-   * }}}
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   *   "idx_sum", transform(col("nums"), (x, i) => x + i)
-   * )
-   *
-   * actualDF.show()
-   *
-   * +---------+---------+
-   * |     nums|  idx_sum|
-   * +---------+---------+
-   * |[1, 2, 3]|[1, 3, 5]|
-   * +---------+---------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  @deprecated("Removing for Spark 3", "0.38.2")
-  def transform(column: Column, f: (Column, Column) => Column): Column =
-    new Column(
-      ArrayTransform(
-        column.expr,
-        createLambda(f)
-      )
-    )
-
-  /**
-   * Like Scala Array exists method, but for ArrayType columns
-   * Scala has an Array#exists function that works like this:
-   *
-   * {{{
-   * Array(1, 2, 5).exists(_ % 2 == 0) // true
-   * }}}
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +---------+
-   * |     nums|
-   * +---------+
-   * |[1, 4, 9]|
-   * |[1, 3, 5]|
-   * +---------+
-   * }}}
-   *
-   * We can use the spark-daria `exists` function to see if there are even numbers in the arrays in the `nums` column.
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   * "nums_has_even",
-   * exists[Int]((x: Int) => x % 2 == 0).apply(col("nums"))
-   * )
-   *
-   * actualDF.show()
-   *
-   * +---------+-------------+
-   * |     nums|nums_has_even|
-   * +---------+-------------+
-   * |[1, 4, 9]|         true|
-   * |[1, 3, 5]|        false|
-   * +---------+-------------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  @deprecated("Removing for Spark 3", "0.38.2")
-  def exists[T: TypeTag](f: (T => Boolean)) =
-    udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
-      arr.exists(f(_))
-    }
-
-  /**
-   * Like Scala Array forall method, but for ArrayType columns
-   *
-   * Scala has an Array#forall function that works like this:
-   *
-   * Array("catdog", "crazy cat").forall(_.contains("cat")) // true
-   *
-   * Suppose we have the following sourceDF:
-   *
-   * {{{
-   * +------------+
-   * |       words|
-   * +------------+
-   * |[snake, rat]|
-   * |[cat, crazy]|
-   * +------------+
-   * }}}
-   *
-   * We can use the spark-daria `forall` function to see if all the strings in an array contain the string `"cat"`.
-   *
-   * {{{
-   * val actualDF = sourceDF.withColumn(
-   * "all_words_begin_with_c",
-   * forall[String]((x: String) => x.startsWith("c")).apply(col("words"))
-   * )
-   *
-   * actualDF.show()
-   *
-   * +------------+----------------------+
-   * |       words|all_words_begin_with_c|
-   * +------------+----------------------+
-   * |[snake, rat]|                 false|
-   * |[cat, crazy]|                  true|
-   * +------------+----------------------+
-   * }}}
-   *
-   * @group collection_funcs
-   */
-  @deprecated("Removing for Spark 3", "0.38.2")
-  def forall[T: TypeTag](f: T => Boolean) =
-    udf[Boolean, Seq[T]] { arr: Seq[T] =>
-      arr.forall(f(_))
-    }
 
   /**
    * Like array() function but doesn't include null elements
@@ -601,16 +403,6 @@ object functions {
         null
       } else {
         Some(arr.groupBy(f(_)))
-      }
-    }
-
-  @deprecated("Removing for Spark 3", "0.38.2")
-  def array_map[T: TypeTag](f: T => T) =
-    udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
-      if (arr == null) {
-        null
-      } else {
-        Some(arr.map(f(_)))
       }
     }
 
