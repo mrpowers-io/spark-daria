@@ -17,6 +17,7 @@ import scala.reflect.runtime.universe._
  * @groupname Ungrouped Support functions for DataFrames
  */
 object functions {
+  @deprecated("Removing for Spark 3", "0.38.2")
   private def withExpr(expr: Expression): Column = new Column(expr)
 
   //////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,11 +39,7 @@ object functions {
    */
   def singleSpace(col: Column): Column = {
     trim(
-      regexp_replace(
-        col,
-        " +",
-        " "
-      )
+      regexp_replace(col, " +", " ")
     )
   }
 
@@ -61,11 +58,7 @@ object functions {
    * @since 0.16.0
    */
   def removeAllWhitespace(col: Column): Column = {
-    regexp_replace(
-      col,
-      "\\s+",
-      ""
-    )
+    regexp_replace(col, "\\s+", "")
   }
 
   /**
@@ -81,11 +74,7 @@ object functions {
    * @since 0.16.0
    */
   def removeAllWhitespace(colName: String): Column = {
-    regexp_replace(
-      col(colName),
-      "\\s+",
-      ""
-    )
+    regexp_replace(col(colName), "\\s+", "")
   }
 
   /**
@@ -103,11 +92,7 @@ object functions {
    * @group string_funcs
    */
   def antiTrim(col: Column): Column = {
-    regexp_replace(
-      col,
-      "\\b\\s+\\b",
-      ""
-    )
+    regexp_replace(col, "\\b\\s+\\b", "")
   }
 
   /**
@@ -125,11 +110,7 @@ object functions {
    * @group string_funcs
    */
   def removeNonWordCharacters(col: Column): Column = {
-    regexp_replace(
-      col,
-      "[^\\w\\s]+",
-      ""
-    )
+    regexp_replace(col, "[^\\w\\s]+", "")
   }
 
   /**
@@ -169,13 +150,10 @@ object functions {
    * @group string_funcs
    */
   def truncate(col: Column, len: Int): Column = {
-    substring(
-      col,
-      0,
-      len
-    )
+    substring(col, 0, len)
   }
 
+  @deprecated("Removing for Spark 3", "0.38.2")
   private def createLambda(f: Column => Column) = {
     val x        = UnresolvedNamedLambdaVariable(Seq("x"))
     val function = f(new Column(x)).expr
@@ -185,6 +163,7 @@ object functions {
     )
   }
 
+  @deprecated("Removing for Spark 3", "0.38.2")
   private def createLambda(f: (Column, Column) => Column) = {
     val x = UnresolvedNamedLambdaVariable(Seq("x"))
     val y = UnresolvedNamedLambdaVariable(Seq("y"))
@@ -237,6 +216,7 @@ object functions {
    *
    * @group collection_funcs
    */
+  @deprecated("Removing for Spark 3", "0.38.2")
   def transform(column: Column, f: Column => Column): Column =
     new Column(
       ArrayTransform(
@@ -275,6 +255,7 @@ object functions {
    *
    * @group collection_funcs
    */
+  @deprecated("Removing for Spark 3", "0.38.2")
   def transform(column: Column, f: (Column, Column) => Column): Column =
     new Column(
       ArrayTransform(
@@ -322,6 +303,7 @@ object functions {
    *
    * @group collection_funcs
    */
+  @deprecated("Removing for Spark 3", "0.38.2")
   def exists[T: TypeTag](f: (T => Boolean)) =
     udf[Boolean, Seq[T]] { (arr: Seq[T]) =>
       arr.exists(f(_))
@@ -365,6 +347,7 @@ object functions {
    *
    * @group collection_funcs
    */
+  @deprecated("Removing for Spark 3", "0.38.2")
   def forall[T: TypeTag](f: T => Boolean) =
     udf[Boolean, Seq[T]] { arr: Seq[T] =>
       arr.forall(f(_))
@@ -377,10 +360,7 @@ object functions {
    */
   def arrayExNull(cols: Column*): Column = {
     split(
-      concat_ws(
-        ",,,",
-        cols: _*
-      ),
+      concat_ws(",,,", cols: _*),
       ",,,"
     )
   }
@@ -477,10 +457,7 @@ object functions {
    * @group datetime_funcs
    */
   def yeardiff(end: Column, start: Column): Column = {
-    datediff(
-      end,
-      start
-    ) / 365
+    datediff(end, start) / 365
   }
 
   // Spark uses 1 for Sunday, 2 for Monday, ... 7 for Saturday
@@ -627,6 +604,7 @@ object functions {
       }
     }
 
+  @deprecated("Removing for Spark 3", "0.38.2")
   def array_map[T: TypeTag](f: T => T) =
     udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
       if (arr == null) {
@@ -746,9 +724,10 @@ object functions {
    * @group datetime_funcs
    */
   def excelEpochToUnixTimestamp(col: Column): Column = {
-    val nbOfDaysBetween =
-      25569 // Number of days between 1900-01-01 and 1970-01-01 (under the supposition that there are 19 (not 17) leap years between them, as in Excel)
-    val nbOfSecInDay = 24 * 60 * 60 // Number of seconds in a day: 24h * 60min * 60s = 86400s (leap seconds are ignored as well)
+    // Number of days between 1900-01-01 and 1970-01-01 (under the supposition that there are 19 (not 17) leap years between them, as in Excel)
+    val nbOfDaysBetween = 25569
+    // Number of seconds in a day: 24h * 60min * 60s = 86400s (leap seconds are ignored as well)
+    val nbOfSecInDay = 24 * 60 * 60
     (col - lit(nbOfDaysBetween)) * nbOfSecInDay
   }
 
