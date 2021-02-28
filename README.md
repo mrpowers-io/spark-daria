@@ -13,12 +13,14 @@ Code quality: [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c06
 Fetch the JAR file from Maven.
 
 ```scala
-libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "0.38.2"
+// Spark 3
+libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "1.0.0"
+
+// Spark 2
+libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "0.39.0"
 ```
 
 You can find the spark-daria [Scala 2.11 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.11/) and the [Scala 2.12 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.12/).  The [legacy versions are here](https://mvnrepository.com/artifact/mrpowers/spark-daria?repo=spark-packages).
-
-You should generally use Scala 2.11 with Spark 2 and Scala 2.12 with Spark 3.
 
 ## Writing Beautiful Spark Code
 
