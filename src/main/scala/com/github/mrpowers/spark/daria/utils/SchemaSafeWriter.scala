@@ -9,11 +9,19 @@ object SchemaSafeWriter {
   // writes to a Parquet data lake if the schema matches the existing schema
   // throws an error if the schemas don't match
   def parquetAppend(path: String, df: DataFrame): Unit = {
+    append(path, df, "parquet")
+  }
+
+  def deltaAppend(path: String, df: DataFrame): Unit = {
+    append(path, df, "delta")
+  }
+
+  def append(path: String, df: DataFrame, fileFormat: String): Unit = {
     val spark          = SparkSession.getActiveSession.get
     val existingDF     = spark.read.parquet(path)
     val existingSchema = existingDF.schema
     if (existingSchema.equals(df.schema)) {
-      df.write.mode("append").parquet(path)
+      df.write.format(fileFormat).mode("append").save(path)
     } else {
       println("Existing schema:")
       existingDF.printSchema()
