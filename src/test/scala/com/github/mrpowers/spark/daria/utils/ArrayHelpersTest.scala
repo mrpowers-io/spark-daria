@@ -7,7 +7,6 @@ object ArrayHelpersTest extends TestSuite {
   val tests = Tests {
 
     'regexpString - {
-
       "converts an array of strings to an escaped regexp string" - {
         val origArray = Array(
           "D/E",
@@ -22,7 +21,6 @@ object ArrayHelpersTest extends TestSuite {
         val expectedStr = """D\/E|\(E\/F\)||E\|G|E;;G|^AB\-C"""
         assert(actualStr == expectedStr)
       }
-
     }
 
   }

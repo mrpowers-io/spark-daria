@@ -1,5 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
+import com.github.mrpowers.spark.daria.sql.types.StructFieldHelpers
+import com.github.mrpowers.spark.daria.utils.RowHelpers
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 import org.apache.spark.sql.types._
@@ -256,6 +258,21 @@ object DataFrameHelpers extends DataFrameValidator {
     val latestPath = latestDF.head().getString(0)
 
     spark.read.parquet(latestPath)
+  }
+
+  def printCreateDataFrame(df: DataFrame): Unit = {
+    val dataRows   = df.collect().map(r => s"  Row(${RowHelpers.prettyPrintRow(r).mkString(", ")})").mkString(",\n")
+    val schemaRows = df.schema.map(sf => s"  ${StructFieldHelpers.prettyFormat(sf)}").mkString(",\n")
+    println("val data = Seq(")
+    println(dataRows)
+    println(")")
+    println("val schema = StructType(Seq(")
+    println(schemaRows)
+    println("))")
+    println("val df = spark.createDataFrame(")
+    println("  spark.sparkContext.parallelize(data),")
+    println("  schema")
+    println(")")
   }
 
 }

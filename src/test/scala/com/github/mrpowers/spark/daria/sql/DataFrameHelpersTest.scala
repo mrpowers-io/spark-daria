@@ -1,7 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
 import utest._
-import org.apache.spark.sql.types.{IntegerType, LongType, StringType}
+import org.apache.spark.sql.types._
 import SparkSessionExt._
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 
@@ -10,9 +10,7 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
   val tests = Tests {
 
     'twoColumnsToMap - {
-
       "converts two columns of a DataFrame to a map" - {
-
         val sourceDF = spark.createDF(
           List(
             ("boracay", 7),
@@ -23,29 +21,22 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
             ("fun_level", IntegerType, true)
           )
         )
-
         val actual =
           DataFrameHelpers.twoColumnsToMap[String, Int](
             sourceDF,
             "island",
             "fun_level"
           )
-
         val expected = Map(
           "boracay"     -> 7,
           "long island" -> 9
         )
-
         actual ==> expected
-
       }
-
     }
 
     'columnToArray - {
-
       "converts a column to an array" - {
-
         val sourceDF =
           spark.createDF(
             List(
@@ -57,26 +48,13 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
               ("num", IntegerType, true)
             )
           )
-
-        val actual = DataFrameHelpers.columnToArray[Int](
-          sourceDF,
-          "num"
-        )
-
-        actual ==> Array(
-          1,
-          2,
-          3
-        )
-
+        val actual = DataFrameHelpers.columnToArray[Int](sourceDF, "num")
+        actual ==> Array(1, 2, 3)
       }
-
     }
 
     'columnToList - {
-
       "converts a column to a list" - {
-
         val sourceDF =
           spark.createDF(
             List(
@@ -88,26 +66,13 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
               ("num", IntegerType, true)
             )
           )
-
-        val actual = DataFrameHelpers.columnToList[Int](
-          sourceDF,
-          "num"
-        )
-
-        actual ==> List(
-          1,
-          2,
-          3
-        )
-
+        val actual = DataFrameHelpers.columnToList[Int](sourceDF, "num")
+        actual ==> List(1, 2, 3)
       }
-
     }
 
     'toArrayOfMaps - {
-
       "converts a DataFrame into an array of maps" - {
-
         val sourceDF =
           spark.createDF(
             List(
@@ -120,9 +85,7 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
               ("pay_grade", StringType, true)
             )
           )
-
         val actual = DataFrameHelpers.toArrayOfMaps(sourceDF)
-
         val expected = Array(
           Map(
             "profession"  -> "doctor",
@@ -135,17 +98,12 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
             "pay_grade"   -> "high"
           )
         )
-
         actual ==> expected
-
       }
-
     }
 
     'printAthenaCreateTable - {
-
       "prints the CREATE TABLE Athena code" - {
-
         val df = spark.createDF(
           List(
             ("jets", "football", 45),
@@ -157,16 +115,13 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
             ("goals_for", IntegerType, true)
           )
         )
-
         //      uncomment the next line if you want to check out the console output
 //        DataFrameHelpers.printAthenaCreateTable(
 //          df,
 //          "my_cool_athena_table",
 //          "s3://my-bucket/extracts/people"
 //        )
-
       }
-
     }
 
 //    'writeTimestamped - {
@@ -204,6 +159,22 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
 //      df.show()
 //
 //    }
+
+    "printCreateDataFrame" - {
+      val df = spark.createDF(
+        List(
+          ("boracay", 7, 3.4, 4L),
+          ("long island", 9, null, 5L)
+        ),
+        List(
+          ("island", StringType, true),
+          ("fun_level", IntegerType, true),
+          ("some_double", DoubleType, true),
+          ("some_long", LongType, true)
+        )
+      )
+      DataFrameHelpers.printCreateDataFrame(df)
+    }
 
   }
 

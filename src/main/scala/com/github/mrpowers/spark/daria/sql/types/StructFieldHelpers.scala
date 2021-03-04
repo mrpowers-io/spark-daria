@@ -15,4 +15,8 @@ object StructFieldHelpers {
     }
   }
 
+  def prettyFormat(sf: StructField): String = {
+    s"""StructField("${sf.name}", ${sf.dataType}, ${sf.nullable})"""
+  }
+
 }

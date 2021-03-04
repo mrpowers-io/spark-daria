@@ -2,7 +2,6 @@ package com.github.mrpowers.spark.daria.sql
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.Column
-import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
