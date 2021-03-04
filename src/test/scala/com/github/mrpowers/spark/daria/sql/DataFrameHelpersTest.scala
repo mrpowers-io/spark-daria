@@ -160,8 +160,8 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
 //
 //    }
 
-    "printCreateDataFrame" - {
-      val df = spark.createDF(
+    "toCreateDataFrameCode" - {
+      val df1 = spark.createDF(
         List(
           ("boracay", 7, 3.4, 4L),
           ("long island", 9, null, 5L)
@@ -173,7 +173,22 @@ object DataFrameHelpersTest extends TestSuite with SparkSessionTestWrapper with 
           ("some_long", LongType, true)
         )
       )
-      DataFrameHelpers.printCreateDataFrame(df)
+      val res = DataFrameHelpers.toCreateDataFrameCode(df1)
+      val expected =
+        """val data = Seq(
+          |  Row("boracay", 7, 3.4, 4L),
+          |  Row("long island", 9, null, 5L))
+          |val schema = StructType(Seq(
+          |  StructField("island", StringType, true),
+          |  StructField("fun_level", IntegerType, true),
+          |  StructField("some_double", DoubleType, true),
+          |  StructField("some_long", LongType, true)))
+          |val df = spark.createDataFrame(
+          |  spark.sparkContext.parallelize(data),
+          |  schema
+          |)
+          |""".stripMargin
+      assert(res == expected)
     }
 
   }

@@ -260,19 +260,22 @@ object DataFrameHelpers extends DataFrameValidator {
     spark.read.parquet(latestPath)
   }
 
-  def printCreateDataFrame(df: DataFrame): Unit = {
-    val dataRows   = df.collect().map(r => s"  Row(${RowHelpers.prettyPrintRow(r).mkString(", ")})").mkString(",\n")
-    val schemaRows = df.schema.map(sf => s"  ${StructFieldHelpers.prettyFormat(sf)}").mkString(",\n")
-    println("val data = Seq(")
-    println(dataRows)
-    println(")")
-    println("val schema = StructType(Seq(")
-    println(schemaRows)
-    println("))")
-    println("val df = spark.createDataFrame(")
-    println("  spark.sparkContext.parallelize(data),")
-    println("  schema")
-    println(")")
+  def toCreateDataFrameCode(df: DataFrame): String = {
+    val l          = System.lineSeparator()
+    val dataRows   = df.collect().map(r => s"  Row(${RowHelpers.prettyPrintRow(r).mkString(", ")})").mkString(s",$l")
+    val schemaRows = df.schema.map(sf => s"  ${StructFieldHelpers.prettyFormat(sf)}").mkString(s",$l")
+    val builder    = StringBuilder.newBuilder
+    builder.append(s"val data = Seq($l")
+    builder.append(dataRows)
+    builder.append(s")$l")
+    builder.append(s"val schema = StructType(Seq($l")
+    builder.append(schemaRows)
+    builder.append(s"))$l")
+    builder.append(s"val df = spark.createDataFrame($l")
+    builder.append(s"  spark.sparkContext.parallelize(data),$l")
+    builder.append(s"  schema$l")
+    builder.append(s")$l")
+    builder.toString()
   }
 
 }
