@@ -2,11 +2,11 @@
 
 Spark helper methods to maximize developer productivity.
 
-CI: ![GitHub Build Status](https://github.com/mrpowers/spark-daria/workflows/master/badge.svg)
+CI: ![GitHub Build Status](https://github.com/mrpowers/spark-daria/workflows/ci/badge.svg)
 
 Code quality: [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c0624682b4487a3b3e5c8330f1fbe)](https://www.codacy.com/app/MrPowers/spark-daria?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrPowers/spark-daria&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/513fcd36d6be35191737/maintainability)](https://codeclimate.com/github/MrPowers/spark-daria/maintainability)
 
-![typical daria](https://github.com/MrPowers/spark-daria/blob/master/daria.png)
+![typical daria](https://github.com/MrPowers/spark-daria/blob/main/daria.png)
 
 ## Setup
 
@@ -155,8 +155,6 @@ We are actively looking for contributors to add functionality that fills in the 
 To get started, fork the project and submit a pull request.  Please write tests!
 
 After submitting a couple of good pull requests, you'll be added as a contributor to the project.
-
-Continued excellence will be rewarded with push access to the master branch.
 
 ## Publishing
 
