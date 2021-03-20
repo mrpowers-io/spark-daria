@@ -151,6 +151,18 @@ object transformations {
     modifyColumnNames(stringFun)(df)
   }
 
+  def toSnakeCaseColumns()(df: DataFrame): DataFrame = {
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.snakeCaseCatchAll)(df)
+  }
+
+  def camelCaseColumns()(df: DataFrame): DataFrame = {
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.snakeCaseToCamelCase)(df)
+  }
+
+  def upperCaseColumns()(df: DataFrame): DataFrame = {
+    modifyColumnNames(com.github.mrpowers.spark.daria.utils.StringHelpers.upperCaseCatchAll)(df)
+  }
+
   def prependToColName(str: String)(df: DataFrame): DataFrame = {
     def stringFun(s: String): String = str + s
     modifyColumnNames(stringFun)(df)

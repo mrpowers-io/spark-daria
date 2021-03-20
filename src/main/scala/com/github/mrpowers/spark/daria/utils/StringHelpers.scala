@@ -57,4 +57,20 @@ object StringHelpers {
     str.replaceAll("[,;{}()\n\t=]", "").replaceAll(" ", "_").toLowerCase()
   }
 
+  def titleCase(str: String): String = {
+    str.toLowerCase().split(' ').map(_.capitalize).mkString(" ")
+  }
+
+  def snakeCaseCatchAll(str: String): String = toSnakeCase(snakify(str))
+
+  def snakeCaseToCamelCase(str: String): String = {
+    val words = snakeCaseCatchAll(str)
+      .split('_')
+      .map(_.capitalize)
+
+    (words.head.toLowerCase() ++ words.tail).mkString("")
+  }
+
+  def upperCaseCatchAll(str: String): String = snakeCaseCatchAll(str).toUpperCase
+
 }
