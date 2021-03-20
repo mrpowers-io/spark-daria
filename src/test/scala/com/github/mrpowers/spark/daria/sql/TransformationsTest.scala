@@ -219,6 +219,243 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
 
     }
 
+    "snakifyColumns catch-all scenarios" - {
+
+      val sourceDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("A b C", StringType, true),
+          ("de F", StringType, true),
+          ("cr   ay", StringType, true),
+          ("ThIs", StringType, true),
+          ("BiH", StringType, true),
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true),
+          ("col_four", StringType, true),
+          ("colfive", StringType, true),
+          ("col_sevenAh", StringType, true),
+          ("HOWABOUTTHIS", StringType, true),
+          ("thisOne", StringType, true),
+          ("oracle_casing", StringType, true)
+        )
+      )
+
+      val actualDf = sourceDF.transform(transformations.toSnakeCaseColumns())
+
+      val expectedDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true),
+          ("th_is", StringType, true),
+          ("bi_h", StringType, true),
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true),
+          ("col_four", StringType, true),
+          ("colfive", StringType, true),
+          ("col_seven_ah", StringType, true),
+          ("howaboutthis", StringType, true),
+          ("this_one", StringType, true),
+          ("oracle_casing", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(
+        actualDf,
+        expectedDF
+      )
+
+    }
+
+    "camelCase catch-all scenarios" - {
+
+      val sourceDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("A b C", StringType, true),
+          ("de F", StringType, true),
+          ("cr   ay", StringType, true),
+          ("ThIs", StringType, true),
+          ("BiH", StringType, true),
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true),
+          ("col_four", StringType, true),
+          ("colfive", StringType, true),
+          ("col_sevenAh", StringType, true),
+          ("HOWABOUTTHIS", StringType, true),
+          ("thisOne", StringType, true),
+          ("oracle_casing", StringType, true)
+        )
+      )
+
+      val actualDf = sourceDF.transform(transformations.camelCaseColumns())
+
+      val expectedDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("aBC", StringType, true),
+          ("deF", StringType, true),
+          ("crAy", StringType, true),
+          ("thIs", StringType, true),
+          ("biH", StringType, true),
+          ("aBC", StringType, true),
+          ("deF", StringType, true),
+          ("crAy", StringType, true),
+          ("colFour", StringType, true),
+          ("colfive", StringType, true),
+          ("colSevenAh", StringType, true),
+          ("howaboutthis", StringType, true),
+          ("thisOne", StringType, true),
+          ("oracleCasing", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(
+        actualDf,
+        expectedDF
+      )
+
+    }
+
+    "upperCase catch-all scenarios" - {
+
+      val sourceDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("A b C", StringType, true),
+          ("de F", StringType, true),
+          ("cr   ay", StringType, true),
+          ("ThIs", StringType, true),
+          ("BiH", StringType, true),
+          ("a_b_c", StringType, true),
+          ("de_f", StringType, true),
+          ("cr_ay", StringType, true),
+          ("col_four", StringType, true),
+          ("colfive", StringType, true),
+          ("col_sevenAh", StringType, true),
+          ("HOWABOUTTHIS", StringType, true),
+          ("thisOne", StringType, true),
+          ("oracle_casing", StringType, true)
+        )
+      )
+
+      val actualDf = sourceDF.transform(transformations.upperCaseColumns())
+
+      val expectedDF = spark.createDF(
+        List(("mixed case with spaces",
+          "mixed case with spaces",
+          "multi-spaces",
+          "word with a capitalized letter",
+          "BiH",
+          "a_b_c",
+          "de_f",
+          "cr_ay",
+          "col_four",
+          "colfive",
+          "col_sevenAh",
+          "HOWABOUTTHIS",
+          "thisOne",
+          "ORACLE_CASING"
+        )),
+        List(
+          ("A_B_C", StringType, true),
+          ("DE_F", StringType, true),
+          ("CR_AY", StringType, true),
+          ("TH_IS", StringType, true),
+          ("BI_H", StringType, true),
+          ("A_B_C", StringType, true),
+          ("DE_F", StringType, true),
+          ("CR_AY", StringType, true),
+          ("COL_FOUR", StringType, true),
+          ("COLFIVE", StringType, true),
+          ("COL_SEVEN_AH", StringType, true),
+          ("HOWABOUTTHIS", StringType, true),
+          ("THIS_ONE", StringType, true),
+          ("ORACLE_CASING", StringType, true)
+        )
+      )
+
+      assertSmallDataFrameEquality(
+        actualDf,
+        expectedDF
+      )
+
+    }
+
     'prependToColName - {
 
       "Prepends a string to all column names" - {
