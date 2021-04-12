@@ -222,21 +222,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
     "snakifyColumns catch-all scenarios" - {
 
       val sourceDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("A b C", StringType, true),
           ("de F", StringType, true),
@@ -258,21 +261,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
       val actualDf = sourceDF.transform(transformations.toSnakeCaseColumns())
 
       val expectedDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("a_b_c", StringType, true),
           ("de_f", StringType, true),
@@ -301,21 +307,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
     "camelCase catch-all scenarios" - {
 
       val sourceDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("A b C", StringType, true),
           ("de F", StringType, true),
@@ -337,21 +346,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
       val actualDf = sourceDF.transform(transformations.camelCaseColumns())
 
       val expectedDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("aBC", StringType, true),
           ("deF", StringType, true),
@@ -380,21 +392,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
     "upperCase catch-all scenarios" - {
 
       val sourceDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("A b C", StringType, true),
           ("de F", StringType, true),
@@ -416,21 +431,24 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
       val actualDf = sourceDF.transform(transformations.upperCaseColumns())
 
       val expectedDF = spark.createDF(
-        List(("mixed case with spaces",
-          "mixed case with spaces",
-          "multi-spaces",
-          "word with a capitalized letter",
-          "BiH",
-          "a_b_c",
-          "de_f",
-          "cr_ay",
-          "col_four",
-          "colfive",
-          "col_sevenAh",
-          "HOWABOUTTHIS",
-          "thisOne",
-          "ORACLE_CASING"
-        )),
+        List(
+          (
+            "mixed case with spaces",
+            "mixed case with spaces",
+            "multi-spaces",
+            "word with a capitalized letter",
+            "BiH",
+            "a_b_c",
+            "de_f",
+            "cr_ay",
+            "col_four",
+            "colfive",
+            "col_sevenAh",
+            "HOWABOUTTHIS",
+            "thisOne",
+            "ORACLE_CASING"
+          )
+        ),
         List(
           ("A_B_C", StringType, true),
           ("DE_F", StringType, true),

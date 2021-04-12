@@ -17,4 +17,4 @@ jobs:
       - uses: actions/checkout@v1
       - uses: olafurpg/setup-scala@v10
       - name: Test
-        run: sbt -Dspark.testVersion=${{ matrix.spark  }} ++${{ matrix.scala }} test
+        run: sbt -Dspark.testVersion=${{ matrix.spark }} ++${{ matrix.scala }} test scalafmtCheckAll
