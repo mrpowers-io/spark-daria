@@ -121,9 +121,9 @@ object functions {
     val d = Option(delimiters).getOrElse(return None)
     val c = Option(colName).getOrElse(return None)
     // initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
-    var previousLetter: Char = '\0'
+    var previousLetter: Char = '\u0000'
     Some(c.map { letter: Char =>
-      if (d.contains(previousLetter) || previousLetter.equals('\0')) {
+      if (d.contains(previousLetter) || previousLetter.equals('\u0000')) {
         previousLetter = letter
         letter.toUpper
       } else {
