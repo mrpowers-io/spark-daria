@@ -170,6 +170,128 @@ object DariaValidatorTest extends TestSuite with SparkSessionTestWrapper {
 
       }
 
+      "matches schema when fields are out of order" - {
+        val zoo = StructField(
+          "zoo",
+          StringType,
+          true
+        )
+        val zaa = StructField(
+          "zaa",
+          StringType,
+          true
+        )
+        val bar = StructField(
+          "bar",
+          StructType(
+            Seq(
+              zaa,
+              zoo
+            )
+          )
+        )
+        val baz = StructField(
+          "baz",
+          StringType,
+          true
+        )
+        val foo = StructField(
+          "foo",
+          StructType(
+            Seq(
+              baz,
+              bar
+            )
+          ),
+          true
+        )
+        val z = StructField(
+          "z",
+          StringType,
+          true
+        )
+
+        def validateSchemaEquality(s1: StructType, s2: StructType) = {
+          val df = spark
+            .createDataFrame(
+              spark.sparkContext.parallelize(Seq[Row]()),
+              s1
+            )
+
+          df.printSchema()
+          spark
+            .createDataFrame(
+              spark.sparkContext.parallelize(Seq[Row]()),
+              s2
+            )
+            .printSchema()
+
+          DariaValidator.validateSchema(
+            df,
+            s2
+          )
+        }
+
+        // Shallow equality
+        validateSchemaEquality(
+          StructType(
+            Seq(z, foo)
+          ),
+          StructType(
+            Seq(foo, z)
+          )
+        )
+
+        // Second level equality
+        val foo2 = StructField(
+          "foo",
+          StructType(
+            Seq(
+              bar,
+              baz
+            )
+          ),
+          true
+        )
+        validateSchemaEquality(
+          StructType(
+            Seq(z, foo)
+          ),
+          StructType(
+            Seq(z, foo2)
+          )
+        )
+
+        // Third level equality - just to make sure
+        val bar2 = StructField(
+          "bar",
+          StructType(
+            Seq(
+              zoo,
+              zaa
+            )
+          )
+        )
+        val foo3 = StructField(
+          "foo",
+          StructType(
+            Seq(
+              baz,
+              bar2
+            )
+          ),
+          true
+        )
+        validateSchemaEquality(
+          StructType(
+            Seq(z, foo)
+          ),
+          StructType(
+            Seq(z, foo3)
+          )
+        )
+      }
+
     }
 
     'validateAbsenceOfColumns - {
