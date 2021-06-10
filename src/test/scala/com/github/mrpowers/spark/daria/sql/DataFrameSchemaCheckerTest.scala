@@ -363,6 +363,40 @@ object DataFrameSchemaCheckerTest extends TestSuite with SparkSessionTestWrapper
 
       }
 
+      "validates non-null column against a null schema" - {
+        val sourceSchema = List(
+          StructField(
+            "num",
+            IntegerType,
+            false
+          )
+        )
+
+        val sourceDF =
+          spark.createDataFrame(
+            spark.sparkContext.parallelize(Seq[Row]()),
+            StructType(sourceSchema)
+          )
+
+        val requiredSchema =
+          StructType(
+            List(
+              StructField(
+                "num",
+                IntegerType,
+                true
+              )
+            )
+          )
+
+        val c = new DataFrameSchemaChecker(
+          sourceDF,
+          requiredSchema
+        )
+
+        c.validateSchema()
+      }
+
     }
 
   }

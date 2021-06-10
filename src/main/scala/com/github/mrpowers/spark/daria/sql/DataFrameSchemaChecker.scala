@@ -18,9 +18,8 @@ private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructT
       case Success(namedField) =>
         val basicMatch =
           namedField.name == reqField.name &&
-            namedField.nullable == reqField.nullable &&
+            (!namedField.nullable || reqField.nullable) &&
             namedField.metadata == reqField.metadata
-
         val contentMatch = reqField.dataType match {
           case reqSchema: StructType =>
             namedField.dataType match {
@@ -28,7 +27,8 @@ private[sql] class DataFrameSchemaChecker(df: DataFrame, requiredSchema: StructT
                 diff(reqSchema, fieldSchema).isEmpty
               case _ => false
             }
-          case _ => reqField == namedField
+          case namedField.dataType => true
+          case _                   => false
         }
 
         basicMatch && contentMatch
