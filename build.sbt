@@ -4,8 +4,8 @@ organization := "com.github.mrpowers"
 name := "spark-daria"
 
 version := "1.0.0"
-crossScalaVersions := Seq("2.12.12")
-scalaVersion := "2.12.12"
+crossScalaVersions := Seq("2.12.15")
+scalaVersion := "2.12.15"
 val sparkVersion = "3.0.1"
 
 libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
