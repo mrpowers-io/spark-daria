@@ -437,68 +437,68 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
       }
     }
 
-    'capitalizeFully - {
-      "uses the supplied delimeter to identify word breaks with org.apache.commons WordUtils.capitalizeFully" - {
-        val df = spark
-          .createDF(
-            List(
-              ("Bruce,willis", "Bruce,Willis"),
-              ("Trump,donald", "Trump,Donald"),
-              ("clinton,Hillary", "Clinton,Hillary"),
-              ("Brack obama", "Brack obama"),
-              ("george w. bush", "George w. bush"),
-              (null, null)
-            ),
-            List(
-              ("some_string", StringType, true),
-              ("expected", StringType, true)
-            )
-          )
-          .withColumn(
-            "some_string_udf",
-            functions.capitalizeFully(
-              col("some_string"),
-              lit(",")
-            )
-          )
-        assertColumnEquality(
-          df,
-          "expected",
-          "some_string_udf"
-        )
-      }
+    //'capitalizeFully - {
+    //"uses the supplied delimeter to identify word breaks with org.apache.commons WordUtils.capitalizeFully" - {
+    //val df = spark
+    //.createDF(
+    //List(
+    //("Bruce,willis", "Bruce,Willis"),
+    //("Trump,donald", "Trump,Donald"),
+    //("clinton,Hillary", "Clinton,Hillary"),
+    //("Brack obama", "Brack obama"),
+    //("george w. bush", "George w. bush"),
+    //(null, null)
+    //),
+    //List(
+    //("some_string", StringType, true),
+    //("expected", StringType, true)
+    //)
+    //)
+    //.withColumn(
+    //"some_string_udf",
+    //functions.capitalizeFully(
+    //col("some_string"),
+    //lit(",")
+    //)
+    //)
+    //assertColumnEquality(
+    //df,
+    //"expected",
+    //"some_string_udf"
+    //)
+    //}
 
-      "can be called with multiple delimiters" - {
-        val df = spark
-          .createDF(
-            List(
-              ("Bruce,willis", "Bruce,Willis"),
-              ("Trump,donald", "Trump,Donald"),
-              ("clinton,Hillary", "Clinton,Hillary"),
-              ("Brack/obama", "Brack/Obama"),
-              ("george w. bush", "George W. Bush"),
-              ("RALPHY", "Ralphy"),
-              (null, null)
-            ),
-            List(
-              ("some_string", StringType, true),
-              ("expected", StringType, true)
-            )
-          )
-          .withColumn(
-            "some_string_udf",
-            functions.capitalizeFully(
-              col("some_string"),
-              lit("/, ")
-            )
-          )
-        assertColumnEquality(
-          df,
-          "expected",
-          "some_string_udf"
-        )
-      }
-    }
+    //"can be called with multiple delimiters" - {
+    //val df = spark
+    //.createDF(
+    //List(
+    //("Bruce,willis", "Bruce,Willis"),
+    //("Trump,donald", "Trump,Donald"),
+    //("clinton,Hillary", "Clinton,Hillary"),
+    //("Brack/obama", "Brack/Obama"),
+    //("george w. bush", "George W. Bush"),
+    //("RALPHY", "Ralphy"),
+    //(null, null)
+    //),
+    //List(
+    //("some_string", StringType, true),
+    //("expected", StringType, true)
+    //)
+    //)
+    //.withColumn(
+    //"some_string_udf",
+    //functions.capitalizeFully(
+    //col("some_string"),
+    //lit("/, ")
+    //)
+    //)
+    //assertColumnEquality(
+    //df,
+    //"expected",
+    //"some_string_udf"
+    //)
+    //}
+    //}
 
     'multiEquals - {
 
@@ -1051,39 +1051,39 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
 
     }
 
-    'array_map_ex_null - {
+    //'array_map_ex_null - {
 
-      "works like the Scala map method on Strings" - {
+    //"works like the Scala map method on Strings" - {
 
-        val df = spark
-          .createDF(
-            List(
-              (Array("snake", "rat", "cool"), Array("AAAsnake", "AAArat", "AAAcool")),
-              (Array("cat", null, "crazy"), Array("AAAcat", "AAAcrazy")),
-              (Array(null, null), Array[String]()),
-              (null, null)
-            ),
-            List(
-              ("words", ArrayType(StringType, true), true),
-              ("expected", ArrayType(StringType, true), true)
-            )
-          )
-          .withColumn(
-            "AAA_prepended",
-            functions
-              .array_map_ex_null((x: String) => if (x == null) null else "AAA".concat(x))
-              .apply(col("words"))
-          )
+    //val df = spark
+    //.createDF(
+    //List(
+    //(Array("snake", "rat", "cool"), Array("AAAsnake", "AAArat", "AAAcool")),
+    //(Array("cat", null, "crazy"), Array("AAAcat", "AAAcrazy")),
+    //(Array(null, null), Array[String]()),
+    //(null, null)
+    //),
+    //List(
+    //("words", ArrayType(StringType, true), true),
+    //("expected", ArrayType(StringType, true), true)
+    //)
+    //)
+    //.withColumn(
+    //"AAA_prepended",
+    //functions
+    //.array_map_ex_null((x: String) => if (x == null) null else "AAA".concat(x))
+    //.apply(col("words"))
+    //)
 
-        assertColumnEquality(
-          df,
-          "AAA_prepended",
-          "expected"
-        )
+    //assertColumnEquality(
+    //df,
+    //"AAA_prepended",
+    //"expected"
+    //)
 
-      }
+    //}
 
-    }
+    //}
 
     'broadcastedArrayContains - {
 

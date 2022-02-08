@@ -151,82 +151,82 @@ object DataFrameSchemaCheckerTest extends TestSuite with SparkSessionTestWrapper
 
     }
 
-    'missingColumnsMessage - {
+    //'missingColumnsMessage - {
 
-      "provides a descriptive message of the StructFields that are missing" - {
+    //"provides a descriptive message of the StructFields that are missing" - {
 
-        val sourceData =
-          List(
-            Row(
-              1,
-              1
-            ),
-            Row(
-              -8,
-              8
-            ),
-            Row(
-              -5,
-              5
-            ),
-            Row(
-              null,
-              null
-            )
-          )
+    //val sourceData =
+    //List(
+    //Row(
+    //1,
+    //1
+    //),
+    //Row(
+    //-8,
+    //8
+    //),
+    //Row(
+    //-5,
+    //5
+    //),
+    //Row(
+    //null,
+    //null
+    //)
+    //)
 
-        val sourceSchema = List(
-          StructField(
-            "num1",
-            IntegerType,
-            true
-          ),
-          StructField(
-            "num2",
-            IntegerType,
-            true
-          )
-        )
+    //val sourceSchema = List(
+    //StructField(
+    //"num1",
+    //IntegerType,
+    //true
+    //),
+    //StructField(
+    //"num2",
+    //IntegerType,
+    //true
+    //)
+    //)
 
-        val sourceDF =
-          spark.createDataFrame(
-            spark.sparkContext.parallelize(sourceData),
-            StructType(sourceSchema)
-          )
+    //val sourceDF =
+    //spark.createDataFrame(
+    //spark.sparkContext.parallelize(sourceData),
+    //StructType(sourceSchema)
+    //)
 
-        val requiredSchema = StructType(
-          List(
-            StructField(
-              "num1",
-              IntegerType,
-              true
-            ),
-            StructField(
-              "num2",
-              IntegerType,
-              true
-            ),
-            StructField(
-              "name",
-              StringType,
-              true
-            )
-          )
-        )
+    //val requiredSchema = StructType(
+    //List(
+    //StructField(
+    //"num1",
+    //IntegerType,
+    //true
+    //),
+    //StructField(
+    //"num2",
+    //IntegerType,
+    //true
+    //),
+    //StructField(
+    //"name",
+    //StringType,
+    //true
+    //)
+    //)
+    //)
 
-        val c = new DataFrameSchemaChecker(
-          sourceDF,
-          requiredSchema
-        )
+    //val c = new DataFrameSchemaChecker(
+    //sourceDF,
+    //requiredSchema
+    //)
 
-        val expected =
-          "The [StructField(name,StringType,true)] StructFields are not included in the DataFrame with the following StructFields [StructType(StructField(num1,IntegerType,true), StructField(num2,IntegerType,true))]"
+    //val expected =
+    //"The [StructField(name,StringType,true)] StructFields are not included in the DataFrame with the following StructFields [StructType(StructField(num1,IntegerType,true), StructField(num2,IntegerType,true))]"
 
-        assert(c.missingStructFieldsMessage() == expected)
+    //assert(c.missingStructFieldsMessage() == expected)
 
-      }
+    //}
 
-    }
+    //}
 
     'validateSchema - {
 

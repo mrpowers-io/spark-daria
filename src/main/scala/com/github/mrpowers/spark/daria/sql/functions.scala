@@ -110,28 +110,29 @@ object functions {
     regexp_replace(col, "[^\\w\\s]+", "")
   }
 
+  // TODO ADD this back in!!!
   /**
    * Like initcap, but factors in additional delimiters
    *
    * @group string_funcs
    */
-  val capitalizeFully = udf[Option[String], String, String](capitalizeFullyFun)
+  //val capitalizeFully = udf[Option[String], String, String](capitalizeFullyFun)
 
-  def capitalizeFullyFun(colName: String, delimiters: String): Option[String] = {
-    val d = Option(delimiters).getOrElse(return None)
-    val c = Option(colName).getOrElse(return None)
-    // initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
-    var previousLetter: Char = '\0'
-    Some(c.map { letter: Char =>
-      if (d.contains(previousLetter) || previousLetter.equals('\0')) {
-        previousLetter = letter
-        letter.toUpper
-      } else {
-        previousLetter = letter
-        letter.toLower
-      }
-    })
-  }
+  //def capitalizeFullyFun(colName: String, delimiters: String): Option[String] = {
+  //val d = Option(delimiters).getOrElse(return None)
+  //val c = Option(colName).getOrElse(return None)
+  //// initialize the previousLetter to be the null character - the closest representation of the empty character: https://stackoverflow.com/questions/8306060/how-do-i-represent-an-empty-char-in-scala
+  //var previousLetter: Char = '\0'
+  //Some(c.map { letter: Char =>
+  //if (d.contains(previousLetter) || previousLetter.equals('\0')) {
+  //previousLetter = letter
+  //letter.toUpper
+  //} else {
+  //previousLetter = letter
+  //letter.toLower
+  //}
+  //})
+  //}
 
   /**
    * Truncates the length of StringType columns
@@ -414,18 +415,18 @@ object functions {
       }
     }
 
-  def array_map_ex_null[T: TypeTag](f: T => T) =
-    udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
-      if (arr == null) {
-        null
-      } else {
-        Some(
-          arr.view
-            .map(f(_))
-            .filter(_ != null)
-        )
-      }
-    }
+  //def array_map_ex_null[T: TypeTag](f: T => T) =
+  //udf[Option[Seq[T]], Seq[T]] { arr: Seq[T] =>
+  //if (arr == null) {
+  //null
+  //} else {
+  //Some(
+  //arr.view
+  //.map(f(_))
+  //.filter(_ != null)
+  //)
+  //}
+  //}
 
   def broadcastArrayContains[T](col: Column, broadcastedArray: Broadcast[Array[T]]) = {
     when(col.isNull, null)
