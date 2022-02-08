@@ -3,8 +3,8 @@ scalafmtOnCompile in Compile := true
 organization := "com.github.mrpowers"
 name := "spark-daria"
 
-version := "1.1.0"
-crossScalaVersions := Seq("2.12.15", "2.13.8")
+version := "1.1.1"
+crossScalaVersions := Seq("2.12.15")
 scalaVersion := "2.12.15"
 //scalaVersion := "2.13.8"
 val sparkVersion = "3.2.1"
