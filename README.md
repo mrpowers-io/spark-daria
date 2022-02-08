@@ -158,6 +158,12 @@ After submitting a couple of good pull requests, you'll be added as a contributo
 
 ## Publishing
 
+Sonatype passwords can go stale and need to be reset periodically.  Go to the Sonatype website and log in to make sure your password is working to avoid errors that are difficult to understand and debug.
+
+You need GPG installed on your machine as well.  You can install it with `brew install gnupg`.
+
+You need to get GPG keys properly setup on every machine.  You can follow [these instructions](https://github.com/sbt/sbt-ci-release#gpg) to get your GPG key setup on each machine.
+
 1. Version bump commit and create GitHub tag
 
 2. Publish documentation with `sbt ghpagesPushSite`
@@ -178,3 +184,5 @@ host=oss.sonatype.org
 user=$USERNAME
 password=$PASSWORD
 ```
+
+New Sonatype accounts need a different host, as [described here](https://github.com/xerial/sbt-sonatype/issues/224#issuecomment-812601799).  My Sonatype account was created before February 2021, so this does not apply to me.
