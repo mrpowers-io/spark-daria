@@ -4,7 +4,7 @@ Spark helper methods to maximize developer productivity.
 
 CI: [![GitHub Build Status](https://github.com/MrPowers/spark-daria/actions/workflows/ci.yml/badge.svg)](https://github.com/MrPowers/spark-daria/actions/workflows/ci.yml)
 
-Code quality: [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf2c0624682b4487a3b3e5c8330f1fbe)](https://www.codacy.com/app/MrPowers/spark-daria?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrPowers/spark-daria&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/513fcd36d6be35191737/maintainability)](https://codeclimate.com/github/MrPowers/spark-daria/maintainability)
+Code quality: [![Maintainability](https://api.codeclimate.com/v1/badges/513fcd36d6be35191737/maintainability)](https://codeclimate.com/github/MrPowers/spark-daria/maintainability)
 
 ![typical daria](https://github.com/MrPowers/spark-daria/blob/main/daria.png)
 
@@ -14,13 +14,18 @@ Fetch the JAR file from Maven.
 
 ```scala
 // Spark 3
-libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "1.0.0"
+libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "1.2.3"
 
 // Spark 2
 libraryDependencies += "com.github.mrpowers" %% "spark-daria" % "0.39.0"
 ```
 
-You can find the spark-daria [Scala 2.11 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.11/) and the [Scala 2.12 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.12/).  The [legacy versions are here](https://mvnrepository.com/artifact/mrpowers/spark-daria?repo=spark-packages).
+You can find the spark-daria releases for different Scala versions:
+
+* [Scala 2.11 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.11/)
+* [Scala 2.12 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.12/)
+* [Scala 2.13 versions here](https://repo1.maven.org/maven2/com/github/mrpowers/spark-daria_2.13/)
+* [legacy versions are here](https://mvnrepository.com/artifact/mrpowers/spark-daria?repo=spark-packages).
 
 ## Writing Beautiful Spark Code
 
@@ -171,6 +176,8 @@ You need to get GPG keys properly setup on every machine.  You can follow [these
 3. Publish JAR
 
 Run `sbt` to open the SBT console.
+
+*IMPORTANT* Run `sbt clean` before running the publish commands!  Otherwise you may run into [this error](https://github.com/xerial/sbt-sonatype/issues/282).
 
 Run `> ; + publishSigned; sonatypeBundleRelease` to create the JAR files and release them to Maven.  These commands are made available by the [sbt-sonatype](https://github.com/xerial/sbt-sonatype) plugin.
 

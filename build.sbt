@@ -3,8 +3,8 @@ scalafmtOnCompile in Compile := true
 organization := "com.github.mrpowers"
 name := "spark-daria"
 
-version := "1.1.1"
-crossScalaVersions := Seq("2.12.15")
+version := "1.2.3"
+crossScalaVersions := Seq("2.12.15", "2.13.8")
 scalaVersion := "2.12.15"
 //scalaVersion := "2.13.8"
 val sparkVersion = "3.2.1"
@@ -38,7 +38,3 @@ publishTo := sonatypePublishToBundle.value
 
 Global / useGpgPinentry := true
 
-// sbt-ghpages plugin: https://github.com/sbt/sbt-ghpages
-enablePlugins(SiteScaladocPlugin)
-enablePlugins(GhpagesPlugin)
-git.remoteRepo := "git@github.com:MrPowers/spark-daria.git"
