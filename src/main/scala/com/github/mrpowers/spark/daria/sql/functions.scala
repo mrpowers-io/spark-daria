@@ -3,6 +3,7 @@ package com.github.mrpowers.spark.daria.sql
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
 
 import scala.reflect.runtime.universe._
 
@@ -751,4 +752,21 @@ object functions {
     excelEpochToDate(col(colName))
   }
 
+  def randLaplace(mu: Any, beta: Any, seed: Long): Column = {
+    val mu_ = mu match {
+      case m: Column => m
+      case m: Int | Double => lit(m).cast(DoubleType)
+      case _ => lit(rand(seed))
+    }
+    val beta_ = beta match {
+      case b: Column => b
+      case b: Int => lit(b).cast(DoubleType)
+      case _ => lit(rand(seed))
+    }
+
+    val u = rand(seed)
+    when(u < 0.5, mu_ + beta_ * log(lit(2) * u))
+      .otherwise(mu_ - beta_ * log(lit(2) * (lit(1) - u)))
+      .alias("laplace_random")
+  }
 }
