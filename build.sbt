@@ -12,7 +12,7 @@ val sparkVersion = "3.2.1"
 libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided"
 libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "1.1.0"      % "test"
-libraryDependencies += "com.lihaoyi"         %% "utest"            % "0.7.11"      % "test"
+libraryDependencies += "com.lihaoyi"         %% "utest"            % "0.7.11"     % "test"
 libraryDependencies += "com.lihaoyi"         %% "os-lib"           % "0.8.0"      % "test"
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 

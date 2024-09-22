@@ -750,5 +750,4 @@ object functions {
   def excelEpochToDate(colName: String): Column = {
     excelEpochToDate(col(colName))
   }
-
 }
