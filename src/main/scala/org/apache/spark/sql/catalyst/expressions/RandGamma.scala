@@ -59,7 +59,7 @@ case class RandGamma(child: Expression, shape: Expression, scale: Expression, hi
 
   override def freshCopy(): RandGamma = RandGamma(child, shape, scale, hideSeed)
 
-  override def flatArguments: Iterator[Any] = Iterator(child)
+  override def flatArguments: Iterator[Any] = Iterator(child, shape, scale)
 
   override def prettyName: String = "rand_gamma"
 
