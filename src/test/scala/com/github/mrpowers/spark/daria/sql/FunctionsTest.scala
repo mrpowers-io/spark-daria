@@ -1,12 +1,12 @@
 package com.github.mrpowers.spark.daria.sql
 
 import java.sql.{Date, Timestamp}
-
 import utest._
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import SparkSessionExt._
+import com.github.mrpowers.spark.daria.sql.functions.arrayConcat
 
 object FunctionsTest extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
@@ -1427,6 +1427,82 @@ object FunctionsTest extends TestSuite with DataFrameComparer with ColumnCompare
           expectedDF
         )
       }
+    }
+
+    "arrayConcat" - {
+      "arrayConcat array of string type" - {
+
+        val actualDF = spark
+          .createDF(
+            List(
+              Array(
+                "snake",
+                "rat"
+              ),
+              null,
+              Array(
+                "cat",
+                "crazy"
+              )
+            ),
+            List(("array", ArrayType(StringType), true))
+          )
+          .agg(arrayConcat(col("array")).as("array"))
+
+        val expectedDF = spark
+          .createDF(
+            List(
+              Array(
+                "snake",
+                "rat",
+                "cat",
+                "crazy"
+              )
+            ),
+            List(("array", ArrayType(StringType), true))
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF,
+          ignoreNullable = true
+        )
+
+      }
+
+      "arrayConcat array of Int type" - {
+
+        val actualDF = spark
+          .createDF(
+            List(
+              Array(
+                1,
+                2
+              ),
+              null,
+              Array(
+                3,
+                4
+              )
+            ),
+            List(("array", ArrayType(IntegerType), true))
+          )
+          .agg(arrayConcat(col("array")).as("array"))
+
+        val expectedDF = spark
+          .createDF(
+            List(Array(1, 2, 3, 4)),
+            List(("array", ArrayType(IntegerType), true))
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
+          expectedDF,
+          ignoreNullable = true
+        )
+
+      }
+
     }
 
   }

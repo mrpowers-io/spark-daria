@@ -1,8 +1,10 @@
 package com.github.mrpowers.spark.daria.sql.udafs
 
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
-import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
+import scala.reflect.runtime.universe.TypeTag
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
+import org.apache.spark.sql.{Encoder, Row}
+import org.apache.spark.sql.expressions.{Aggregator, MutableAggregationBuffer, UserDefinedAggregateFunction}
+import org.apache.spark.sql.types._
 
 class ArrayConcat(elementSchema: DataType, nullable: Boolean = true) extends UserDefinedAggregateFunction {
 
@@ -42,4 +44,28 @@ class ArrayConcat(elementSchema: DataType, nullable: Boolean = true) extends Use
   override def evaluate(buffer: Row): Any = {
     buffer.getAs[Seq[Any]](0)
   }
+}
+
+case class ArrayConcatAggregator[T: TypeTag]() extends Aggregator[Seq[T], Seq[T], Seq[T]] {
+  override def zero: Seq[T] = Seq.empty[T]
+
+  override def reduce(b: Seq[T], a: Seq[T]): Seq[T] = {
+    if (a == null) {
+      return b
+    }
+    b ++ a
+  }
+
+  override def merge(b1: Seq[T], b2: Seq[T]): Seq[T] = {
+    if (b2 == null) {
+      return b1
+    }
+    b1 ++ b2
+  }
+
+  override def finish(reduction: Seq[T]): Seq[T] = reduction
+
+  override def bufferEncoder: Encoder[Seq[T]] = ExpressionEncoder[Seq[T]]()
+
+  override def outputEncoder: Encoder[Seq[T]] = ExpressionEncoder[Seq[T]]()
 }
