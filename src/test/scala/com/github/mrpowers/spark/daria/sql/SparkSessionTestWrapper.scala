@@ -5,7 +5,7 @@ import org.apache.spark.sql.SparkSession
 trait SparkSessionTestWrapper {
 
   lazy val spark: SparkSession = {
-    SparkSession
+    val session = SparkSession
       .builder()
       .master("local")
       .appName("spark session")
@@ -14,6 +14,8 @@ trait SparkSessionTestWrapper {
         "1"
       )
       .getOrCreate()
+    session.sparkContext.setLogLevel("ERROR")
+    session
   }
 
 }
