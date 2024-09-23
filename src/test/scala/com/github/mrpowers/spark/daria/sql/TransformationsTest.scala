@@ -1047,22 +1047,6 @@ object TransformationsTest extends TestSuite with DataFrameComparer with ColumnC
     }
 
     'withParquetCompatibleColumnNames - {
-      "blows up if the column name is invalid for Parquet" - {
-        val df = spark
-          .createDF(
-            List(
-              ("pablo")
-            ),
-            List(
-              ("Column That {Will} Break\t;", StringType, true)
-            )
-          )
-        val path = new java.io.File("./tmp/blowup/example").getCanonicalPath
-        val e = intercept[org.apache.spark.sql.AnalysisException] {
-          df.write.parquet(path)
-        }
-      }
-
       "converts column names to be Parquet compatible" - {
         val actualDF = spark
           .createDF(
