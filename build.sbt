@@ -4,10 +4,21 @@ organization := "com.github.mrpowers"
 name := "spark-daria"
 
 version := "1.2.3"
-crossScalaVersions := Seq("2.12.15", "2.13.8")
-scalaVersion := "2.12.15"
-//scalaVersion := "2.13.8"
-val sparkVersion = "3.2.1"
+
+val versionRegex = """^(.*)\.(.*)\.(.*)$""".r
+
+val scala2_13 = "2.13.14"
+val scala2_12 = "2.12.20"
+
+val sparkVersion = System.getProperty("spark.testVersion", "3.3.4")
+crossScalaVersions := {
+  sparkVersion match {
+    case versionRegex("3", m, _) if m.toInt >= 2 => Seq(scala2_12, scala2_13)
+    case versionRegex("3", _, _) => Seq(scala2_12)
+  }
+}
+
+scalaVersion := crossScalaVersions.value.head
 
 libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided"

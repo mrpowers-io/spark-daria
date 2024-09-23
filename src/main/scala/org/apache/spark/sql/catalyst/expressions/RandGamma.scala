@@ -9,27 +9,28 @@ import org.apache.spark.sql.catalyst.expressions.codegen.{CodeGenerator, Codegen
 import org.apache.spark.sql.types._
 import org.apache.spark.util.random.XORShiftRandomAdapted
 
-case class RandGamma(child: Expression, shape: Expression, scale: Expression, hideSeed: Boolean = false) extends TernaryExpression
-  with ExpectsInputTypes
-  with Stateful
-  with ExpressionWithRandomSeed {
+case class RandGamma(child: Expression, shape: Expression, scale: Expression, hideSeed: Boolean = false)
+    extends TernaryExpression
+    with ExpectsInputTypes
+    with Stateful
+    with ExpressionWithRandomSeed {
 
   override def seedExpression: Expression = child
 
   @transient protected lazy val seed: Long = seedExpression match {
     case e if e.dataType == IntegerType => e.eval().asInstanceOf[Int]
-    case e if e.dataType == LongType => e.eval().asInstanceOf[Long]
+    case e if e.dataType == LongType    => e.eval().asInstanceOf[Long]
   }
 
   @transient protected lazy val shapeVal: Double = shape.dataType match {
-    case IntegerType => shape.eval().asInstanceOf[Int]
-    case LongType => shape.eval().asInstanceOf[Long]
+    case IntegerType            => shape.eval().asInstanceOf[Int]
+    case LongType               => shape.eval().asInstanceOf[Long]
     case FloatType | DoubleType => shape.eval().asInstanceOf[Double]
   }
 
   @transient protected lazy val scaleVal: Double = scale.dataType match {
-    case IntegerType => scale.eval().asInstanceOf[Int]
-    case LongType => scale.eval().asInstanceOf[Long]
+    case IntegerType            => scale.eval().asInstanceOf[Int]
+    case LongType               => scale.eval().asInstanceOf[Long]
     case FloatType | DoubleType => scale.eval().asInstanceOf[Double]
   }
 
@@ -48,13 +49,13 @@ case class RandGamma(child: Expression, shape: Expression, scale: Expression, hi
 
   override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = {
     val distributionClassName = classOf[GammaDistribution].getName
-    val rngClassName = classOf[XORShiftRandomAdapted].getName
-    val disTerm = ctx.addMutableState(distributionClassName, "distribution")
+    val rngClassName          = classOf[XORShiftRandomAdapted].getName
+    val disTerm               = ctx.addMutableState(distributionClassName, "distribution")
     ctx.addPartitionInitializationStatement(
-      s"$disTerm = new $distributionClassName(new $rngClassName(${seed}L + partitionIndex), $shapeVal, $scaleVal);")
+      s"$disTerm = new $distributionClassName(new $rngClassName(${seed}L + partitionIndex), $shapeVal, $scaleVal);"
+    )
     ev.copy(code = code"""
-      final ${CodeGenerator.javaType(dataType)} ${ev.value} = $disTerm.sample();""",
-      isNull = FalseLiteral)
+      final ${CodeGenerator.javaType(dataType)} ${ev.value} = $disTerm.sample();""", isNull = FalseLiteral)
   }
 
   override def freshCopy(): RandGamma = RandGamma(child, shape, scale, hideSeed)
@@ -80,5 +81,6 @@ case class RandGamma(child: Expression, shape: Expression, scale: Expression, hi
 }
 
 object RandGamma {
-  def apply(seed: Long, shape: Double, scale: Double): RandGamma = RandGamma(Literal(seed, LongType), Literal(shape, DoubleType), Literal(scale, DoubleType))
+  def apply(seed: Long, shape: Double, scale: Double): RandGamma =
+    RandGamma(Literal(seed, LongType), Literal(shape, DoubleType), Literal(scale, DoubleType))
 }

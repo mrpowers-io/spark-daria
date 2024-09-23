@@ -4,19 +4,19 @@ on:
   push:
     branches:
     - main
+  pull_request:
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        scala: ["2.12.12"]
-        spark: ["3.0.1"]
+        spark: ["3.0.1", "3.1.3", "3.2.4", "3.3.4"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: olafurpg/setup-scala@v10
       - name: Test
-        run: sbt -Dspark.testVersion=${{ matrix.spark }} ++${{ matrix.scala }} test
+        run: sbt -Dspark.testVersion=${{ matrix.spark }} +test
       - name: Code Quality
         run: sbt scalafmtCheckAll

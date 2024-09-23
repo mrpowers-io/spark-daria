@@ -14,7 +14,7 @@ class XORShiftRandomAdapted(init: Long) extends java.util.Random(init: Long) wit
     nextSeed ^= (nextSeed >>> 35)
     nextSeed ^= (nextSeed << 4)
     seed = nextSeed
-    (nextSeed & ((1L << bits) -1)).asInstanceOf[Int]
+    (nextSeed & ((1L << bits) - 1)).asInstanceOf[Int]
   }
 
   override def setSeed(s: Long): Unit = {
@@ -29,4 +29,3 @@ class XORShiftRandomAdapted(init: Long) extends java.util.Random(init: Long) wit
     this.seed = XORShiftRandom.hashSeed(RandomGeneratorFactory.convertToLong(seed))
   }
 }
-
