@@ -18,7 +18,7 @@ case class RandGamma(child: Expression, shape: Expression, scale: Expression, hi
     with Stateful
     with ExpressionWithRandomSeed {
 
-  override def seedExpression: Expression = child
+  def seedExpression: Expression = child
 
   @transient protected lazy val seed: Long = seedExpression match {
     case e if e.dataType == IntegerType => e.eval().asInstanceOf[Int]
