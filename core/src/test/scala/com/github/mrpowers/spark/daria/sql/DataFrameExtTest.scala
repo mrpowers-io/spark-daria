@@ -961,6 +961,199 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
     }
 
+    'selectSortedCols - {
+
+      "select col with all field sorted" - {
+
+        val data = Seq(
+          Row(
+            Row(
+              "bayVal",
+              "baxVal",
+              Row("this", "yoVal"),
+              "is"
+            ),
+            Seq(
+              Row("yVal", "xVal"),
+              Row("yVal1", "xVal1")
+            ),
+            "something",
+            "cool",
+            ";)"
+          )
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "bay",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bax",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        ),
+                        StructField(
+                          "yoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    )
+                  ),
+                  StructField(
+                    "baz",
+                    StringType,
+                    true
+                  ),
+                )
+              ),
+              true
+            ),
+            StructField(
+              "w",
+              ArrayType(StructType(Seq(StructField("y", StringType, true), StructField("x", StringType, true)))),
+              true
+            ),
+            StructField(
+              "x",
+              StringType,
+              true
+            ),
+            StructField(
+              "y",
+              StringType,
+              true
+            ),
+            StructField(
+              "z",
+              StringType,
+              true
+            )
+          )
+        )
+
+        val df = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(data),
+            StructType(schema)
+          )
+          .selectSortedCols
+
+        val expectedData = Seq(
+          Row(
+            Row(
+              Row("yoVal", "this"),
+              "baxVal",
+              "bayVal",
+              "is"
+            ),
+            Seq(
+              Row("xVal", "yVal"),
+              Row("xVal1", "yVal1")
+            ),
+            "something",
+            "cool",
+            ";)"
+          )
+        )
+
+        val expectedSchema = StructType(
+          Seq(
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "yoo",
+                          StringType,
+                          true
+                        ),
+                        StructField(
+                          "zoo",
+                          StringType,
+                          true
+                        )
+                      )
+                    ),
+                    false
+                  ),
+                  StructField(
+                    "bax",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "bay",
+                    StringType,
+                    true
+                  ),
+                  StructField(
+                    "baz",
+                    StringType,
+                    true
+                  )
+                )
+              ),
+              false
+            ),
+            StructField(
+              "w",
+              ArrayType(StructType(Seq(StructField("x", StringType, true), StructField("y", StringType, true))), false),
+              true
+            ),
+            StructField(
+              "x",
+              StringType,
+              true
+            ),
+            StructField(
+              "y",
+              StringType,
+              true
+            ),
+            StructField(
+              "z",
+              StringType,
+              true
+            )
+          )
+        )
+
+        val expectedDF = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(expectedData),
+            StructType(expectedSchema)
+          )
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          ignoreNullable = true
+        )
+      }
+
+    }
+
     'structureSchema - {
       "structure schema with default delimiter" - {
         val data = Seq(
@@ -1125,6 +1318,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
       }
     }
+
     'composeTrans - {
 
       def withCountry()(df: DataFrame): DataFrame = {

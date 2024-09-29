@@ -2,7 +2,7 @@ package com.github.mrpowers.spark.daria.sql.types
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.ScalaReflection
-import org.apache.spark.sql.types.{DataType, StructField, StructType}
+import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.functions._
 
 import scala.reflect.runtime.universe._
@@ -21,21 +21,32 @@ object StructTypeHelpers {
     }
   }
 
-  def flattenSchema(schema: StructType, prefix: String = ""): Array[Column] = {
-    schema.fields.flatMap(structField => {
-      val codeColName =
-        if (prefix.isEmpty) structField.name
-        else prefix + "." + structField.name
-
-      structField.dataType match {
-        case st: StructType =>
-          flattenSchema(
-            schema = st,
-            prefix = codeColName
-          )
-        case _ => Array(col(codeColName))
+  def flattenSchema(schema: StructType, baseField: String = "", sortFields: Boolean = false): Seq[Column] = {
+    val fields  = if (sortFields) schema.fields.sortBy(_.name) else schema.fields
+    fields.foldLeft(Seq.empty[Column]) { case(acc, field) =>
+      val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
+      field.dataType match {
+        case t: StructType =>
+          acc ++ flattenSchema(t, baseField = colName, sortFields = sortFields)
+        case _ =>
+          acc :+ col(colName)
       }
-    })
+    }
+  }
+
+  def schemaToSortedSelectExpr(schema: StructType, baseField: String = ""): Seq[Column] = {
+    val result = schema.fields.sortBy(_.name).sortBy(_.name).foldLeft(Seq.empty[Column]) { case(acc, field) =>
+      val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
+      field.dataType match {
+        case t: StructType =>
+          acc :+ struct(schemaToSortedSelectExpr(t, baseField = colName): _*).as(field.name)
+        case ArrayType(t: StructType, _) =>
+          acc :+ arrays_zip(schemaToSortedSelectExpr(t, baseField = colName): _*).as(field.name)
+        case _ =>
+          acc :+ col(colName)
+      }
+    }
+    result
   }
 
   /**
