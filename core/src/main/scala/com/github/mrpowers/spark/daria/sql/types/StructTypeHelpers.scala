@@ -21,13 +21,14 @@ object StructTypeHelpers {
     }
   }
 
-  def flattenSchema(schema: StructType, baseField: String = "", sortFields: Boolean = false): Seq[Column] = {
-    val fields  = if (sortFields) schema.fields.sortBy(_.name) else schema.fields
-    fields.foldLeft(Seq.empty[Column]) { case(acc, field) =>
+  def flattenSchema(schema: StructType, baseField: String = "", flattenArrayType: Boolean = false): Seq[Column] = {
+    schema.fields.foldLeft(Seq.empty[Column]) { case(acc, field) =>
       val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
       field.dataType match {
         case t: StructType =>
-          acc ++ flattenSchema(t, baseField = colName, sortFields = sortFields)
+          acc ++ flattenSchema(t, colName)
+        case ArrayType(t: StructType, _) if flattenArrayType =>
+          acc ++ flattenSchema(t, colName)
         case _ =>
           acc :+ col(colName)
       }
