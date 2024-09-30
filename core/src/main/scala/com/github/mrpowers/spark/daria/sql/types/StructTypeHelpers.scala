@@ -67,13 +67,6 @@ object StructTypeHelpers {
     }
   }
 
-  @tailrec
-  private def getInnerMostType(dType: DataType, nDim: Int = 0): (DataType, Int) =
-    dType match {
-      case at: ArrayType => getInnerMostType(at.elementType, nDim + 1)
-      case t             => (t, nDim)
-    }
-
   /**
    * gets a StructType from a Scala type and
    * transforms field names from camel case to snake case
