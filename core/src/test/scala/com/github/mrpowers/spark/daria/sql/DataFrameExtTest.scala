@@ -963,7 +963,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
     'selectSortedCols - {
 
-      "select col with all field sorted" - {
+      "select col with all field sorted by name" - {
 
         val data = Seq(
           Row(
@@ -972,6 +972,11 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               "baxVal",
               Row("this", "yoVal"),
               "is"
+            ),
+            Seq(
+              Seq(
+                Row("yVal", "xVal"),
+                Row("yVal1", "xVal1")),
             ),
             Seq(
               Row("yVal", "xVal"),
@@ -1026,6 +1031,11 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               true
             ),
             StructField(
+              "v",
+              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType, true), StructField("v1", StringType, true))))),
+              true
+            ),
+            StructField(
               "w",
               ArrayType(StructType(Seq(StructField("y", StringType, true), StructField("x", StringType, true)))),
               true
@@ -1062,6 +1072,12 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               "baxVal",
               "bayVal",
               "is"
+            ),
+            Seq(
+              Seq(
+                Row("xVal", "yVal"),
+                Row("xVal1", "yVal1")
+              )
             ),
             Seq(
               Row("xVal", "yVal"),
@@ -1117,6 +1133,11 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               false
             ),
             StructField(
+              "v",
+              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, true), StructField("v2", StringType, true))), false)),
+              true
+            ),
+            StructField(
               "w",
               ArrayType(StructType(Seq(StructField("x", StringType, true), StructField("y", StringType, true))), false),
               true
@@ -1147,6 +1168,37 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
 
         assertSmallDataFrameEquality(
           df,
+          expectedDF,
+          ignoreNullable = true
+        )
+      }
+
+      "select col with all field sorted by custom dataType ordering" - {
+
+        val actualDF =
+          spark.createDF(
+            List(("this", 1, 1L, 1.0)),
+            List(
+              ("a", StringType, true),
+              ("b", IntegerType, true),
+              ("c", LongType, true),
+              ("d", DoubleType, true),
+            )
+          ).sortColumnsBy(_.dataType)(Ordering.by(_.json))
+
+        val expectedDF =
+          spark.createDF(
+            List((1.0, 1, 1L, "this")),
+            List(
+              ("d", DoubleType, true),
+              ("b", IntegerType, true),
+              ("c", LongType, true),
+              ("a", StringType, true),
+            )
+          )
+
+        assertSmallDataFrameEquality(
+          actualDF,
           expectedDF,
           ignoreNullable = true
         )

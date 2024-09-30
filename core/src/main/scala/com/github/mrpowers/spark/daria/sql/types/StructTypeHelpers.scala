@@ -5,6 +5,7 @@ import org.apache.spark.sql.catalyst.ScalaReflection
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.functions._
 
+import scala.annotation.tailrec
 import scala.reflect.runtime.universe._
 
 object StructTypeHelpers {
@@ -39,19 +40,39 @@ object StructTypeHelpers {
   }
 
   private def schemaToSortedSelectExpr[A](schema: StructType, f: StructField => A, baseField: String = "")(implicit ord: Ordering[A]): Seq[Column] = {
+    def handleDataType(t: DataType, colName: String, simpleName: String): Column =
+      t match {
+        case st: StructType =>
+          struct(schemaToSortedSelectExpr(st, f, colName): _*).as(simpleName)
+        case ArrayType(_, _) =>
+          handleArrayType(t, col(colName), simpleName).as(simpleName)
+        case _ =>
+          col(colName)
+      }
+
+    // For handling reordering of nested arrays
+    def handleArrayType(t: DataType, innerCol: Column, simpleName: String): Column =
+      t match {
+        case ArrayType(innerType: ArrayType, _) => transform(innerCol, outer => handleArrayType(innerType, outer, simpleName))
+        case ArrayType(innerType: StructType, _) =>
+          val cols = schemaToSortedSelectExpr(innerType, f)
+          transform(innerCol, innerCol1 => struct(cols.map(c => innerCol1.getField(c.toString).as(c.toString)): _*)).as(simpleName)
+        case _ => innerCol
+      }
+
     schema.fields.sortBy(f).foldLeft(Seq.empty[Column]) {
       case (acc, field) =>
         val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
-        field.dataType match {
-          case t: StructType =>
-            acc :+ struct(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
-          case ArrayType(t: StructType, _) =>
-            acc :+ arrays_zip(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
-          case _ =>
-            acc :+ col(colName)
-        }
+        acc :+ handleDataType(field.dataType, colName, field.name)
     }
   }
+
+  @tailrec
+  private def getInnerMostType(dType: DataType, nDim: Int = 0): (DataType, Int) =
+    dType match {
+      case at: ArrayType => getInnerMostType(at.elementType, nDim + 1)
+      case t             => (t, nDim)
+    }
 
   /**
    * gets a StructType from a Scala type and
@@ -66,8 +87,6 @@ object StructTypeHelpers {
   }
 
   implicit class StructTypeOps(schema: StructType) {
-    def toSortedSelectExpr[A](f: StructField => A)(implicit ord: Ordering[A]): Seq[Column] = {
-      schemaToSortedSelectExpr(schema, f)
-    }
+    def toSortedSelectExpr[A](f: StructField => A)(implicit ord: Ordering[A]): Seq[Column] = schemaToSortedSelectExpr(schema, f)
   }
 }
