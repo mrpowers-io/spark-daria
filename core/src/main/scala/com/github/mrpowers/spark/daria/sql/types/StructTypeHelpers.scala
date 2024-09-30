@@ -22,30 +22,32 @@ object StructTypeHelpers {
   }
 
   def flattenSchema(schema: StructType, baseField: String = "", flattenArrayType: Boolean = false): Seq[Column] = {
-    schema.fields.foldLeft(Seq.empty[Column]) { case(acc, field) =>
-      val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
-      field.dataType match {
-        case t: StructType =>
-          acc ++ flattenSchema(t, colName)
-        case ArrayType(t: StructType, _) if flattenArrayType =>
-          acc ++ flattenSchema(t, colName)
-        case _ =>
-          acc :+ col(colName)
-      }
+    schema.fields.foldLeft(Seq.empty[Column]) {
+      case (acc, field) =>
+        val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
+        field.dataType match {
+          case t: StructType =>
+            acc ++ flattenSchema(t, colName)
+          case ArrayType(t: StructType, _) if flattenArrayType =>
+            acc ++ flattenSchema(t, colName)
+          case _ =>
+            acc :+ col(colName)
+        }
     }
   }
 
   private def schemaToSortedSelectExpr[A](schema: StructType, f: StructField => A, baseField: String = "")(implicit ord: Ordering[A]): Seq[Column] = {
-    schema.fields.sortBy(f).foldLeft(Seq.empty[Column]) { case(acc, field) =>
-      val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
-      field.dataType match {
-        case t: StructType =>
-          acc :+ struct(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
-        case ArrayType(t: StructType, _) =>
-          acc :+ arrays_zip(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
-        case _ =>
-          acc :+ col(colName)
-      }
+    schema.fields.sortBy(f).foldLeft(Seq.empty[Column]) {
+      case (acc, field) =>
+        val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
+        field.dataType match {
+          case t: StructType =>
+            acc :+ struct(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
+          case ArrayType(t: StructType, _) =>
+            acc :+ arrays_zip(schemaToSortedSelectExpr(t, f, colName): _*).as(field.name)
+          case _ =>
+            acc :+ col(colName)
+        }
     }
   }
 
