@@ -21,19 +21,21 @@ object StructTypeHelpers {
     }
   }
 
-  def flattenSchema(schema: StructType, baseField: String = "", flattenArrayType: Boolean = false): Seq[Column] = {
-    schema.fields.foldLeft(Seq.empty[Column]) {
-      case (acc, field) =>
-        val colName = if (baseField.isEmpty) field.name else s"$baseField.${field.name}"
-        field.dataType match {
-          case t: StructType =>
-            acc ++ flattenSchema(t, colName)
-          case ArrayType(t: StructType, _) if flattenArrayType =>
-            acc ++ flattenSchema(t, colName)
-          case _ =>
-            acc :+ col(colName)
-        }
-    }
+  def flattenSchema(schema: StructType, prefix: String = ""): Array[Column] = {
+    schema.fields.flatMap(structField => {
+      val codeColName =
+        if (prefix.isEmpty) structField.name
+        else prefix + "." + structField.name
+
+      structField.dataType match {
+        case st: StructType =>
+          flattenSchema(
+            schema = st,
+            prefix = codeColName
+          )
+        case _ => Array(col(codeColName))
+      }
+    })
   }
 
   private def schemaToSortedSelectExpr[A](schema: StructType, f: StructField => A, baseField: String = "")(implicit ord: Ordering[A]): Seq[Column] = {
