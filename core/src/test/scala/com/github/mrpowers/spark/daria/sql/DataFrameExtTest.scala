@@ -1053,7 +1053,7 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             spark.sparkContext.parallelize(data),
             StructType(schema)
           )
-          .selectSortedCols
+          .sortColumnsBy(_.name)
 
         val expectedData = Seq(
           Row(

@@ -1,6 +1,7 @@
 package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
+import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers.StructTypeOps
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
@@ -410,7 +411,24 @@ object DataFrameExt {
       )
     }
 
-    def selectSortedCols: DataFrame = df
-      .select(StructTypeHelpers.schemaToSortedSelectExpr(df.schema): _*)
+    /** Sorts this DataFrame columns order according to the Ordering which results from transforming
+   *  an implicitly given Ordering with a transformation function.
+   *  @see [[scala.math.Ordering]]
+   *  @param   f the transformation function mapping elements of type [[StructField]]
+   *           to some other domain `A`.
+   *  @param   ord the ordering assumed on domain `A`.
+   *  @tparam  A the target type of the transformation `f`, and the type where
+   *           the ordering `ord` is defined.
+   *  @return  a DataFrame consisting of the fields of this DataFrame
+   *           sorted according to the ordering where `x < y` if
+   *           `ord.lt(f(x), f(y))`.
+   *
+   *  @example {{{
+   *    // this works because scala.Ordering will implicitly provide an Ordering[String]
+   *    df.sortColumnsBy(_.name)
+   *  }}}
+   */
+    def sortColumnsBy[A](f: StructField => A)(implicit ord: Ordering[A]): DataFrame = df
+      .select(df.schema.toSortedSelectExpr(f): _*)
   }
 }
