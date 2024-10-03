@@ -56,7 +56,7 @@ object StructTypeHelpers {
         case ArrayType(innerType: ArrayType, _) => transform(innerCol, outer => handleArrayType(innerType, outer, simpleName))
         case ArrayType(innerType: StructType, _) =>
           val cols = schemaToSortedSelectExpr(innerType, f)
-          transform(innerCol, innerCol1 => struct(cols.map(c => innerCol1.getField(c.toString).as(c.toString)): _*)).as(simpleName)
+          transform(innerCol, innerCol1 => struct(cols.map(c => innerCol1.getField(c.toString).as(c.toString)): _*))
         case _ => innerCol
       }
 
