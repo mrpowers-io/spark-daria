@@ -32,6 +32,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided",
     "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided",
+    "com.github.mrpowers" %% "spark-fast-tests" % "1.1.0"      % "test",
     "com.lihaoyi"         %% "utest"            % "0.7.11"     % "test",
     "com.lihaoyi"         %% "os-lib"           % "0.8.0"      % "test"
   ),
