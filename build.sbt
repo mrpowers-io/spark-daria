@@ -1,9 +1,12 @@
-scalafmtOnCompile in Compile := true
+Compile / scalafmtOnCompile := true
 
 organization := "com.github.mrpowers"
 name := "spark-daria"
 
 version := "1.2.3"
+
+crossScalaVersions := Seq("2.12.15", "2.13.8")
+scalaVersion := "2.12.15"
 
 val versionRegex = """^(.*)\.(.*)\.(.*)$""".r
 
@@ -50,7 +53,7 @@ testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFrame
 
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
-fork in Test := true
+Test / fork := true
 
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 

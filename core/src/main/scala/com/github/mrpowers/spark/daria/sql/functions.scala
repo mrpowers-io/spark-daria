@@ -1,5 +1,6 @@
 package com.github.mrpowers.spark.daria.sql
 
+import com.github.mrpowers.spark.daria.sql.udafs.ArrayConcatAggregator
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions._
@@ -749,5 +750,9 @@ object functions {
    */
   def excelEpochToDate(colName: String): Column = {
     excelEpochToDate(col(colName))
+  }
+
+  def arrayConcat(col: Column): Column = {
+    flatten(collect_list(col))
   }
 }
