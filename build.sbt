@@ -1,4 +1,4 @@
-scalafmtOnCompile in Compile := true
+Compile / scalafmtOnCompile := true
 
 organization := "com.github.mrpowers"
 name := "spark-daria"
@@ -6,7 +6,7 @@ name := "spark-daria"
 version := "1.2.3"
 crossScalaVersions := Seq("2.12.15", "2.13.8")
 scalaVersion := "2.12.15"
-//scalaVersion := "2.13.8"
+
 val sparkVersion = "3.2.1"
 
 libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
@@ -18,7 +18,7 @@ testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFrame
 
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
-fork in Test := true
+Test / fork := true
 
 javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled", "-Duser.timezone=GMT")
 
