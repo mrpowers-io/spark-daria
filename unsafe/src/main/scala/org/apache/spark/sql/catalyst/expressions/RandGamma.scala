@@ -88,8 +88,9 @@ object RandGamma {
   def apply(seed: Long, shape: Double, scale: Double): RandGamma =
     RandGamma(Literal(seed, LongType), Literal(shape, DoubleType), Literal(scale, DoubleType))
 
-  def defaultSeedExpression: Expression = Try(Class.forName("org.apache.spark.sql.catalyst.analysis.UnresolvedSeed")) match {
-    case Success(clazz) => clazz.getConstructor().newInstance().asInstanceOf[Expression]
-    case _ => Literal(Utils.random.nextLong(), LongType)
-  }
+  def defaultSeedExpression: Expression =
+    Try(Class.forName("org.apache.spark.sql.catalyst.analysis.UnresolvedSeed")) match {
+      case Success(clazz) => clazz.getConstructor().newInstance().asInstanceOf[Expression]
+      case _              => Literal(Utils.random.nextLong(), LongType)
+    }
 }
