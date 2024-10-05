@@ -1,0 +1,22 @@
+name: unsafe-ci
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        spark: ["3.2.4", "3.3.4"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: olafurpg/setup-scala@v10
+      - name: Test
+        run: sbt -Dspark.testVersion=${{ matrix.spark }} +"project unsafe" test
+      - name: Code Quality
+        run: sbt "project unsafe" scalafmtCheckAll

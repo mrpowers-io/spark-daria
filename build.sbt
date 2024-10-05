@@ -20,22 +20,42 @@ crossScalaVersions := {
 
 scalaVersion := crossScalaVersions.value.head
 
-libraryDependencies += "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided"
-libraryDependencies += "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided"
-libraryDependencies += "com.github.mrpowers" %% "spark-fast-tests" % "1.1.0"      % "test"
-libraryDependencies += "com.lihaoyi"         %% "utest"            % "0.7.11"     % "test"
-libraryDependencies += "com.lihaoyi"         %% "os-lib"           % "0.8.0"      % "test"
+lazy val commonSettings = Seq(
+  javaOptions ++= {
+    Seq("-Xms512M", "-Xmx2048M", "-Duser.timezone=GMT") ++ (if (System.getProperty("java.version").startsWith("1.8.0"))
+      Seq("-XX:+CMSClassUnloadingEnabled")
+    else Seq.empty)
+  },
+  libraryDependencies ++= Seq(
+    "org.apache.spark"    %% "spark-sql"        % sparkVersion % "provided",
+    "org.apache.spark"    %% "spark-mllib"      % sparkVersion % "provided",
+    "com.lihaoyi"         %% "utest"            % "0.7.11"     % "test",
+    "com.lihaoyi"         %% "os-lib"           % "0.8.0"      % "test"
+  ),
+)
+
+lazy val core = (project in file("core"))
+  .settings(
+    commonSettings,
+    name := "core",
+  )
+
+lazy val unsafe = (project in file("unsafe"))
+  .settings(
+    commonSettings,
+    name := "unsafe",
+  )
+
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 
 credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 fork in Test := true
 
-javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:+CMSClassUnloadingEnabled", "-Duser.timezone=GMT")
-
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 homepage := Some(url("https://github.com/MrPowers/spark-daria"))
+
 developers ++= List(
   Developer("MrPowers", "Matthew Powers", "@MrPowers", url("https://github.com/MrPowers"))
 )
