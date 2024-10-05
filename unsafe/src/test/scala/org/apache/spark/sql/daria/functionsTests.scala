@@ -1,6 +1,5 @@
 package org.apache.spark.sql.daria
 
-import com.github.mrpowers.spark.daria.sql.SparkSessionTestWrapper
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.daria.functions._
 import org.apache.spark.sql.functions._
