@@ -447,7 +447,6 @@ object DataFrameExt {
      * }}}
      */
     def sortColumnsBy[A](f: StructField => A)(implicit ord: Ordering[A]): DataFrame =
-      df
-        .select(df.schema.toSortedSelectExpr(f): _*)
+      df.select(df.schema.toSortedSelectExpr(f): _*)
   }
 }

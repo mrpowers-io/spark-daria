@@ -1185,14 +1185,14 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             Seq(
               Row("yVal", "xVal"),
               Row("yVal1", "xVal1")
+            ),
+            Seq(
+              Row(
+                Seq(
+                  Row("x4Val", "x3Val")
+                )
+              )
             )
-//            Seq(
-//              Row(
-//                Seq(
-//                  Row("x4Val", "x3Val")
-//                )
-//              )
-//            )
           )
         )
 
@@ -1220,12 +1220,16 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               "w",
               ArrayType(StructType(Seq(StructField("y", StringType, true), StructField("x", StringType, true)))),
               true
+            ),
+            StructField(
+              "x",
+              ArrayType(
+                StructType(
+                  Seq(StructField("x1", ArrayType(StructType(Seq(StructField("b", StringType, true), StructField("a", StringType, true)))), true))
+                )
+              ),
+              true
             )
-//            StructField(
-//              "x",
-//              ArrayType(StructType(Seq(StructField("x1", ArrayType(StructType(Seq(StructField("x4", StringType, true), StructField("x3", StringType, true)))), true)))),
-//              true
-//            ),
           )
         )
 
@@ -1252,14 +1256,14 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
             Seq(
               Row("xVal", "yVal"),
               Row("xVal1", "yVal1")
+            ),
+            Seq(
+              Row(
+                Seq(
+                  Row("x3Val", "x4Val")
+                )
+              )
             )
-//            Seq(
-//              Row(
-//                Seq(
-//                  Row("x3Val", "x4Val")
-//                )
-//              )
-//            )
           )
         )
 
@@ -1287,12 +1291,19 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
               "w",
               ArrayType(StructType(Seq(StructField("x", StringType, true), StructField("y", StringType, true))), false),
               true
+            ),
+            StructField(
+              "x",
+              ArrayType(
+                StructType(
+                  Seq(
+                    StructField("x1", ArrayType(StructType(Seq(StructField("a", StringType, true), StructField("b", StringType, true))), false), true)
+                  )
+                ),
+                false
+              ),
+              true
             )
-//            StructField(
-//              "x",
-//              ArrayType(StructType(Seq(StructField("x1", ArrayType(StructType(Seq(StructField("x3", StringType, true), StructField("x4", StringType, true)))), true)))),
-//              true
-//            )
           )
         )
 
