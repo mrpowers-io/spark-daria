@@ -1,3 +1,5 @@
+import scala.language.postfixOps
+
 Compile / scalafmtOnCompile := true
 
 organization := "com.github.mrpowers"
@@ -48,6 +50,18 @@ lazy val unsafe = (project in file("unsafe"))
   .settings(
     commonSettings,
     name := "unsafe",
+    Compile / unmanagedSourceDirectories ++= {
+      sparkVersion match {
+        case versionRegex(mayor, minor, _) =>
+          (Compile / sourceDirectory).value ** s"*spark_*$mayor.$minor*" / "scala" get
+      }
+    },
+    Test / unmanagedSourceDirectories ++= {
+      sparkVersion match {
+        case versionRegex(mayor, minor, _) =>
+          (Compile / sourceDirectory).value ** s"*spark_*$mayor.$minor*" / "scala" get
+      }
+    },
   )
 
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
