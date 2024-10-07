@@ -57,7 +57,7 @@ object StructTypeHelpers {
                 ).as(field.name)
               ): _*
           ).as(childFieldName)
-        case ArrayType(innerType, _)  =>
+        case ArrayType(innerType, _) =>
           transform(parentCol, childCol => childFieldToCol(innerType, childFieldName, childCol)).as(childFieldName)
         case _ if firstLevel  => parentCol
         case _ if !firstLevel => parentCol(childFieldName)
