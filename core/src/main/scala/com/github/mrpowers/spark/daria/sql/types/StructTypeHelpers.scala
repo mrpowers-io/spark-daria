@@ -63,10 +63,7 @@ object StructTypeHelpers {
         case _ if !firstLevel => parentCol(childFieldName)
       }
 
-    schema.fields.sortBy(f).foldLeft(Seq.empty[Column]) {
-      case (acc, field) =>
-        acc :+ childFieldToCol(field.dataType, field.name, col(field.name), firstLevel = true)
-    }
+    schema.fields.sortBy(f).map(field => childFieldToCol(field.dataType, field.name, col(field.name), firstLevel = true))
   }
 
   /**
