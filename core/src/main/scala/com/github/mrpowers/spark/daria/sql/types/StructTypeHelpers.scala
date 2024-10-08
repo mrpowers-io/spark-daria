@@ -2,9 +2,10 @@ package com.github.mrpowers.spark.daria.sql.types
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.ScalaReflection
-import org.apache.spark.sql.types.{DataType, StructField, StructType}
+import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.functions._
 
+import scala.annotation.tailrec
 import scala.reflect.runtime.universe._
 
 object StructTypeHelpers {
@@ -38,6 +39,33 @@ object StructTypeHelpers {
     })
   }
 
+  private def schemaToSortedSelectExpr[A](schema: StructType, f: StructField => A)(implicit ord: Ordering[A]): Seq[Column] = {
+    def childFieldToCol(childFieldType: DataType, childFieldName: String, parentCol: Column, firstLevel: Boolean = false): Column =
+      childFieldType match {
+        case st: StructType =>
+          struct(
+            st.fields
+              .sortBy(f)
+              .map(field =>
+                childFieldToCol(
+                  field.dataType,
+                  field.name,
+                  field.dataType match {
+                    case StructType(_) | ArrayType(_: StructType, _) => parentCol(field.name)
+                    case _                                           => parentCol
+                  }
+                ).as(field.name)
+              ): _*
+          ).as(childFieldName)
+        case ArrayType(innerType, _) =>
+          transform(parentCol, childCol => childFieldToCol(innerType, childFieldName, childCol)).as(childFieldName)
+        case _ if firstLevel  => parentCol
+        case _ if !firstLevel => parentCol(childFieldName)
+      }
+
+    schema.fields.sortBy(f).map(field => childFieldToCol(field.dataType, field.name, col(field.name), firstLevel = true))
+  }
+
   /**
    * gets a StructType from a Scala type and
    * transforms field names from camel case to snake case
@@ -50,4 +78,7 @@ object StructTypeHelpers {
     })
   }
 
+  implicit class StructTypeOps(schema: StructType) {
+    def toSortedSelectExpr[A](f: StructField => A)(implicit ord: Ordering[A]): Seq[Column] = schemaToSortedSelectExpr(schema, f)
+  }
 }

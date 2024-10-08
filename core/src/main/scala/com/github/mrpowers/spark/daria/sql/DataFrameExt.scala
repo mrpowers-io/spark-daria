@@ -1,10 +1,13 @@
 package com.github.mrpowers.spark.daria.sql
 
 import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
+import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers.StructTypeOps
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
+
+import scala.collection.mutable
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
@@ -407,6 +410,43 @@ object DataFrameExt {
         StructType(loop(df.schema))
       )
     }
-  }
 
+    /**
+     * Sorts this DataFrame columns order according to the Ordering which results from transforming
+     * an implicitly given Ordering with a transformation function.
+     * This function will also sort [[StructType]] columns and [[ArrayType]]([[StructType]]) columns.
+     *  @see [[scala.math.Ordering]]
+     *  @param   f the transformation function mapping elements of type [[StructField]]
+     *           to some other domain `A`.
+     *  @param   ord the ordering assumed on domain `A`.
+     *  @tparam  A the target type of the transformation `f`, and the type where
+     *           the ordering `ord` is defined.
+     *  @return  a DataFrame consisting of the fields of this DataFrame
+     *           sorted according to the ordering where `x < y` if
+     *           `ord.lt(f(x), f(y))`.
+     *
+     * @example {{{
+     *   // Example DataFrame
+     *   val df = spark.createDataFrame(
+     *     Seq(
+     *       ("John", 30, 2000.0),
+     *       ("Jane", 25, 3000.0)
+     *     )
+     *   ).toDF("name", "age", "salary")
+     *
+     *   // Sort columns by name
+     *   val sortedByNameDF = df.sortColumnsBy(_.name)
+     *   sortedByNameDF.show()
+     *   // Output:
+     *   // +---+----+------+
+     *   // |age|name|salary|
+     *   // +---+----+------+
+     *   // | 30|John|2000.0|
+     *   // | 25|Jane|3000.0|
+     *   // +---+----+------+
+     * }}}
+     */
+    def sortColumnsBy[A](f: StructField => A)(implicit ord: Ordering[A]): DataFrame =
+      df.select(df.schema.toSortedSelectExpr(f): _*)
+  }
 }
