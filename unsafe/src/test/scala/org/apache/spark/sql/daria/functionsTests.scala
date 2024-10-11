@@ -27,6 +27,28 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(math.abs(gammaMean - 4.0) < 0.5)
         assert(math.abs(gammaStddev - math.sqrt(8.0)) < 0.5)
       }
+
+      "has correct mean and standard deviation from shape/scale column" - {
+        val sourceDF = spark
+          .range(100000)
+          .withColumn("shape", lit(2.0))
+          .withColumn("scale", lit(2.0))
+          .select(randGamma(col("shape"), col("shape")))
+        val stats = sourceDF
+          .agg(
+            mean("gamma_random").as("mean"),
+            stddev("gamma_random").as("stddev")
+          )
+          .collect()(0)
+
+        val gammaMean   = stats.getAs[Double]("mean")
+        val gammaStddev = stats.getAs[Double]("stddev")
+
+        // Gamma distribution with shape=2.0 and scale=2.0 has mean=4.0 and stddev=sqrt(8.0)
+        assert(gammaMean > 0)
+        assert(math.abs(gammaMean - 4.0) < 0.5)
+        assert(math.abs(gammaStddev - math.sqrt(8.0)) < 0.5)
+      }
     }
 
     'rand_laplace - {
