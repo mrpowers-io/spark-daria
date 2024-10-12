@@ -15,7 +15,7 @@ object functions {
    *
    * @note The function is non-deterministic in general case.
    */
-  def rand_gamma(seed: Long, shape: Double, scale: Double): Column   = withExpr(RandGamma(seed, shape, scale)).alias("gamma_random")
+  def rand_gamma(seed: Long, shape: Double, scale: Double): Column = withExpr(RandGamma(seed, shape, scale)).alias("gamma_random")
 
   /**
    * Generate a column with independent and identically distributed (i.i.d.) samples
@@ -39,7 +39,7 @@ object functions {
    *
    * @note The function is non-deterministic in general case.
    */
-  def rand_gamma(shape: Column, scale: Column): Column               = rand_gamma(lit(Utils.random.nextLong), shape, scale)
+  def rand_gamma(shape: Column, scale: Column): Column = rand_gamma(lit(Utils.random.nextLong), shape, scale)
 
   /**
    * Generate a column with independent and identically distributed (i.i.d.) samples
@@ -58,7 +58,7 @@ object functions {
    * @note The function is non-deterministic in general case.
    */
   def rand_laplace(seed: Long, mu: Column, beta: Column): Column = {
-    val u     = F.rand(seed) - lit(0.5)
+    val u = F.rand(seed) - lit(0.5)
     mu - beta * signum(u) * log(lit(1) - (lit(2) * F.abs(u)))
   }
 

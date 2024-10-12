@@ -61,19 +61,20 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
           )
           .collect()(0)
 
-        val laplaceMean   = stats.getAs[Double]("mean")
-        val laplaceStdDev = stats.getAs[Double]("std_dev")
+        val laplaceMean    = stats.getAs[Double]("mean")
+        val laplaceStdDev  = stats.getAs[Double]("std_dev")
         val expectedStdDev = math.sqrt(2)
 
-        // Laplace distribution with mean=0.0 and scale=1.0 has mean=0.0 and stddev=sqrt(2.0)
+        // Laplace distribution with mean=0.0 and scale=1.0 has mean=0.0 and stddev=sqrt(2.0) * beta (1.0 by default)
         assert(math.abs(laplaceMean) <= 0.1)
         assert(math.abs(laplaceStdDev - expectedStdDev) <= 0.1)
       }
 
       "has correct mean and standard deviation with custom mean and scale" - {
-        val mu = 1.0
+        val mu   = 1.0
         val beta = 2.0
-        val sourceDF = spark.range(100000)
+        val sourceDF = spark
+          .range(100000)
           .withColumn("mu", lit(mu))
           .withColumn("beta", lit(beta))
           .select(rand_laplace(F.col("mu"), F.col("beta")).alias("laplace_random"))
@@ -84,11 +85,11 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
           )
           .collect()(0)
 
-        val laplaceMean   = stats.getAs[Double]("mean")
-        val laplaceStdDev = stats.getAs[Double]("std_dev")
+        val laplaceMean    = stats.getAs[Double]("mean")
+        val laplaceStdDev  = stats.getAs[Double]("std_dev")
         val expectedStdDev = beta * math.sqrt(2)
 
-        // Laplace distribution with mean=0.0 and scale=1.0 has mean=0.0 and stddev=sqrt(2.0)
+        // Laplace distribution should have same mean as mu input and standard deviation = sqrt(2) * beta
         assert(math.abs(laplaceMean - mu) <= 0.1)
         assert(math.abs(laplaceStdDev - expectedStdDev) <= 0.1)
       }
@@ -114,9 +115,10 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       }
 
       "has correct min and max using min max column" - {
-        val min      = 5
-        val max      = 10
-        val sourceDF = spark.range(100000)
+        val min = 5
+        val max = 10
+        val sourceDF = spark
+          .range(100000)
           .withColumn("min", lit(min))
           .withColumn("max", lit(max))
           .select(rand_range(F.col("min"), F.col("max")).as("rand_min_max"))
@@ -157,7 +159,8 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       "has correct mean and variance using mean and variance column" - {
         val mean     = 1.0
         val variance = 2.0
-        val sourceDF = spark.range(100000)
+        val sourceDF = spark
+          .range(100000)
           .withColumn("mean", lit(mean))
           .withColumn("variance", lit(variance))
           .select(randn(mean, variance).as("rand_normal"))
