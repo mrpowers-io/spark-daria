@@ -7,7 +7,9 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
+import scala.annotation.tailrec
 import scala.collection.mutable
+import scala.util.matching.Regex
 
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
@@ -268,11 +270,30 @@ object DataFrameExt {
      * Converts all the StructType columns to regular columns
      * This StackOverflow answer provides a detailed description how to use flattenSchema: https://stackoverflow.com/a/50402697/1125159
      */
-    def flattenSchema(delimiter: String = "."): DataFrame = {
-      val renamedCols: Array[Column] = StructTypeHelpers
-        .flattenSchema(df.schema)
-        .map(name => col(name.toString).as(name.toString.replace(".", delimiter)))
-      df.select(renamedCols: _*)
+    def flattenSchema(
+        delimiter: String = ".",
+        flattenArrayType: Boolean = false
+    ): DataFrame = {
+      if (delimiter == "." && flattenArrayType) {
+        throw new IllegalArgumentException("Cannot use '.' as delimiter when flattening ArrayType columns")
+      }
+
+      @tailrec
+      def flatten(df: DataFrame): DataFrame = {
+        if (StructTypeHelpers.containComplexFields(df.schema)) {
+          val renamedCols = StructTypeHelpers
+            .flattenSchema(df.schema, "", flattenArrayType)
+            .map { case (c, n) => c.as(sanitizeColName(n, delimiter)) }
+          val flattened = df.select(renamedCols: _*)
+          flatten(flattened)
+        } else df
+      }
+      flatten(df)
+    }
+
+    private def sanitizeColName(name: String, rc: String = "_"): String = {
+      val pattern: Regex = "[^a-zA-Z0-9_]".r
+      pattern.replaceAllIn(name, rc)
     }
 
     /**

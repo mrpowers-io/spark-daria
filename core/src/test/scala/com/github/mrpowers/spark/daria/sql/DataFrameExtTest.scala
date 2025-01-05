@@ -5,6 +5,7 @@ import SparkSessionExt._
 import org.apache.spark.sql.types.{StructType, _}
 import org.apache.spark.sql.{DataFrame, Row}
 import DataFrameExt._
+import com.github.mrpowers.spark.daria.sql.types.StructTypeHelpers
 import com.github.mrpowers.spark.fast.tests.DataFrameComparer
 import org.apache.spark.sql.functions._
 
@@ -957,6 +958,98 @@ object DataFrameExtTest extends TestSuite with DataFrameComparer with SparkSessi
           df,
           expectedDF
         )
+      }
+
+      "flatten dataframe with nested array" - {
+
+        val data = Seq(
+          Row(
+            Seq(
+              Seq(Row("vVal", "vVal1"), Row("vVal2", "vVal3")),
+              Seq(Row("vVal4", "vVal5"), Row("vVal6", "vVal7"))
+            ),
+            Seq(
+              Row("wVal1", "wVal2"),
+              Row("wVal3", "wVal4")
+            )
+          )
+        )
+
+        val schema = StructType(
+          Seq(
+            StructField(
+              "v",
+              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType, true), StructField("v1", StringType, true))))),
+              true
+            ),
+            StructField(
+              "w",
+              ArrayType(StructType(Seq(StructField("y", StringType, true), StructField("x", StringType, true)))),
+              true
+            )
+          )
+        )
+
+        val df = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(data),
+            StructType(schema)
+          )
+
+        val actualDf = df.flattenSchema("_", flattenArrayType = true)
+
+        val expectedData = Seq(
+          Row("vVal", "vVal1", "wVal1", "wVal2"),
+          Row("vVal", "vVal3", "wVal1", "wVal2"),
+          Row("vVal2", "vVal1", "wVal1", "wVal2"),
+          Row("vVal2", "vVal3", "wVal1", "wVal2"),
+          Row("vVal", "vVal1", "wVal1", "wVal4"),
+          Row("vVal", "vVal3", "wVal1", "wVal4"),
+          Row("vVal2", "vVal1", "wVal1", "wVal4"),
+          Row("vVal2", "vVal3", "wVal1", "wVal4"),
+          Row("vVal", "vVal1", "wVal3", "wVal2"),
+          Row("vVal", "vVal3", "wVal3", "wVal2"),
+          Row("vVal2", "vVal1", "wVal3", "wVal2"),
+          Row("vVal2", "vVal3", "wVal3", "wVal2"),
+          Row("vVal", "vVal1", "wVal3", "wVal4"),
+          Row("vVal", "vVal3", "wVal3", "wVal4"),
+          Row("vVal2", "vVal1", "wVal3", "wVal4"),
+          Row("vVal2", "vVal3", "wVal3", "wVal4"),
+          Row("vVal4", "vVal5", "wVal1", "wVal2"),
+          Row("vVal4", "vVal7", "wVal1", "wVal2"),
+          Row("vVal6", "vVal5", "wVal1", "wVal2"),
+          Row("vVal6", "vVal7", "wVal1", "wVal2"),
+          Row("vVal4", "vVal5", "wVal1", "wVal4"),
+          Row("vVal4", "vVal7", "wVal1", "wVal4"),
+          Row("vVal6", "vVal5", "wVal1", "wVal4"),
+          Row("vVal6", "vVal7", "wVal1", "wVal4"),
+          Row("vVal4", "vVal5", "wVal3", "wVal2"),
+          Row("vVal4", "vVal7", "wVal3", "wVal2"),
+          Row("vVal6", "vVal5", "wVal3", "wVal2"),
+          Row("vVal6", "vVal7", "wVal3", "wVal2"),
+          Row("vVal4", "vVal5", "wVal3", "wVal4"),
+          Row("vVal4", "vVal7", "wVal3", "wVal4"),
+          Row("vVal6", "vVal5", "wVal3", "wVal4"),
+          Row("vVal6", "vVal7", "wVal3", "wVal4")
+        )
+
+        val expectedSchema = StructType(
+          Seq(
+            StructField("v_v2", StringType, true),
+            StructField("v_v1", StringType, true),
+            StructField("w_y", StringType, true),
+            StructField("w_x", StringType, true)
+          )
+        )
+
+        val expectedDF = spark.createDataFrame(spark.sparkContext.parallelize(expectedData), expectedSchema)
+
+        assertSmallDataFrameEquality(
+          actualDf,
+          expectedDF,
+          ignoreNullable = true
+        )
+
       }
 
     }
