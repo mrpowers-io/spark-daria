@@ -280,7 +280,7 @@ object DataFrameExt {
 
       @tailrec
       def flatten(df: DataFrame): DataFrame = {
-        if (StructTypeHelpers.containComplexFields(df.schema)) {
+        if (StructTypeHelpers.containComplexFields(df.schema, flattenArrayType)) {
           val renamedCols = StructTypeHelpers
             .flattenSchema(df.schema, "", flattenArrayType)
             .map { case (c, n) => c.as(sanitizeColName(n, delimiter)) }

@@ -41,11 +41,11 @@ object StructTypeHelpers {
     }
   }
 
-  def containComplexFields(schema: StructType): Boolean = {
+  def containComplexFields(schema: StructType, isArrayComplex: Boolean): Boolean = {
     schema.fields.exists {
-      case StructField(_, _: StructType, _, _) => true
-      case StructField(_, _: ArrayType, _, _)  => true
-      case _                                   => false
+      case StructField(_, _: StructType, _, _)                   => true
+      case StructField(_, _: ArrayType, _, _) if isArrayComplex  => true
+      case _                                                     => false
     }
   }
 
