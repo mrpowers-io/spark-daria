@@ -6,6 +6,8 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.stddev
 import utest._
 
+import scala.util.Try
+
 object functionsTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
   val tests = Tests {
@@ -67,6 +69,26 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         // Laplace distribution with mean=0.0 and scale=1.0 has mean=0.0 and stddev=sqrt(2.0)
         assert(math.abs(laplaceMean) <= 0.1)
         assert(math.abs(laplaceStdDev - math.sqrt(2.0)) < 0.5)
+      }
+    }
+
+    'assertNotNull - {
+      "update schema to not null" - {
+        val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
+        val actualDF = sourceDF.select(assertNotNull(col("col1")))
+        assert(!actualDF.schema.head.nullable)
+      }
+
+      "success when column does not contain null" - {
+        val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
+        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
+        assert(actualResult.isSuccess)
+      }
+
+      "fail when column does not contain null" - {
+        val sourceDF = spark.range(10).select(when(col("id") % 2 === 0, col("id")).otherwise(null).as("col1"))
+        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
+        assert(actualResult.isFailure)
       }
     }
   }

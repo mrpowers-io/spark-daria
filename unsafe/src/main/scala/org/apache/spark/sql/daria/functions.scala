@@ -1,6 +1,7 @@
 package org.apache.spark.sql.daria
 
 import org.apache.spark.sql.Column
+import org.apache.spark.sql.catalyst.expressions.objects.AssertNotNull
 import org.apache.spark.sql.catalyst.expressions.{Expression, RandGamma}
 import org.apache.spark.sql.functions.{lit, log, rand, when}
 import org.apache.spark.util.Utils
@@ -25,4 +26,10 @@ object functions {
 
   def randLaplace(mu: Double, beta: Double): Column = randLaplace(Utils.random.nextLong, mu, beta)
   def randLaplace(): Column                         = randLaplace(0.0, 1.0)
+
+  /**
+   * Asserts that the column is not null. If the column is null, it will throw an exception.
+   * This will also update the nullability of the column to false.
+   * */
+  def assertNotNull(column: Column): Column = withExpr(AssertNotNull(column.expr))
 }
