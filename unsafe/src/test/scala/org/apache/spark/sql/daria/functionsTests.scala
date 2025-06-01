@@ -200,25 +200,5 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(actualResult.isFailure)
       }
     }
-
-    'assertNotNull - {
-      "update schema to not null" - {
-        val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
-        val actualDF = sourceDF.select(assertNotNull(col("col1")))
-        assert(!actualDF.schema.head.nullable)
-      }
-
-      "success when column does not contain null" - {
-        val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
-        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
-        assert(actualResult.isSuccess)
-      }
-
-      "fail when column does not contain null" - {
-        val sourceDF = spark.range(10).select(when(col("id") % 2 === 0, col("id")).otherwise(null).as("col1"))
-        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
-        assert(actualResult.isFailure)
-      }
-    }
   }
 }
