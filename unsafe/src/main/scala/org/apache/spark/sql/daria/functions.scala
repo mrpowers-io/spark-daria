@@ -318,12 +318,12 @@ object functions {
   /**
    * Asserts that the column is not null. If the column is null, it will throw an exception.
    * This will also update the nullability of the column to false.
-   * */
+   */
   def assertNotNull(column: Column): Column = withExpr(AssertNotNull(column.expr))
 
   /**
    * Asserts that the column is not null. If the column is null, it will throw an exception.
    * This will also update the nullability of the column to false.
-   * */
+   */
   def assert_not_null(column: Column): Column = assertNotNull(column)
 }

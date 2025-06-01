@@ -12,7 +12,7 @@ import org.apache.spark.util.random.XORShiftRandomAdapted
 case class RandGamma(child: Expression, shape: Expression, scale: Expression, hideSeed: Boolean = false)
     extends TernaryExpression
     with ExpectsInputTypes
-      with Nondeterministic
+    with Nondeterministic
     with ExpressionWithRandomSeed {
 
   def seedExpression: Expression = child
