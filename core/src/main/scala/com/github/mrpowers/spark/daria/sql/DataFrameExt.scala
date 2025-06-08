@@ -7,8 +7,6 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
-import scala.collection.mutable
-
 case class DataFrameColumnsException(smth: String) extends Exception(smth)
 
 object DataFrameExt {
