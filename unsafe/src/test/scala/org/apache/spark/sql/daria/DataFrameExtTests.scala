@@ -50,6 +50,187 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
+              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false), containsNull = false),
+            ),
+            StructField(
+              "w",
+              ArrayType(StructType(Seq(StructField("x", StringType), StructField("y", StringType)))),
+            ),
+            StructField(
+              "x",
+              StringType,
+            ),
+            StructField(
+              "y",
+              StringType,
+            ),
+            StructField(
+              "z",
+              StringType,
+            )
+          )
+        )
+
+        val expectedSchema = StructType(
+          Seq(
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "yoo",
+                          StringType,
+                          nullable = false
+                        ),
+                        StructField(
+                          "zoo",
+                          StringType,
+                          nullable = false
+
+                        )
+                      )
+                    ),
+                    nullable = false
+                  ),
+                  StructField(
+                    "bax",
+                    StringType,
+                    nullable = false
+                  ),
+                  StructField(
+                    "bay",
+                    StringType,
+                    nullable = false
+                  ),
+                  StructField(
+                    "baz",
+                    StringType,
+                    nullable = false
+                  )
+                )
+              ),
+              nullable = false
+            ),
+            StructField(
+              "v",
+              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))), containsNull = false), containsNull = false),
+              nullable = false
+            ),
+            StructField(
+              "w",
+              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              nullable = false
+            ),
+            StructField(
+              "x",
+              StringType,
+              nullable = false
+            ),
+            StructField(
+              "y",
+              StringType,
+              nullable = false
+            ),
+            StructField(
+              "z",
+              StringType,
+              nullable = false
+            )
+          )
+        )
+
+        val expectedData = Seq(
+          Row(
+            Row(
+              Row("yoVal", "this"),
+              "baxVal",
+              "bayVal",
+              "is"
+            ),
+            Seq(
+              Seq(
+                Row("xVal", "yVal"),
+                Row("xVal1", "yVal1")
+              )
+            ),
+            Seq(
+              Row("xVal", "yVal"),
+              Row("xVal1", "yVal1")
+            ),
+            "something",
+            "cool",
+            ";)"
+          )
+        )
+
+        val df = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(expectedData),
+            schema
+          ).toSchemaWithNullabilityAligned(expectedSchema)
+
+        val expectedDF = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(expectedData),
+            expectedSchema
+          )
+        df.printSchema()
+        df.select("v").printSchema()
+        expectedDF.select("v").printSchema()
+        df.select("v").show(false)
+        expectedDF.select("v").show(false)
+
+        assertSmallDataFrameEquality(
+          df,
+          expectedDF,
+          ignoreNullable = false
+        )
+      }
+
+      "align from nullable to non nullable from of nested schema when order field different" - {
+        val schema = StructType(
+          Seq(
+            StructField(
+              "foo",
+              StructType(
+                Seq(
+                  StructField(
+                    "bar",
+                    StructType(
+                      Seq(
+                        StructField(
+                          "yoo",
+                          StringType
+                        ),
+                        StructField(
+                          "zoo",
+                          StringType
+
+                        )
+                      )
+                    )
+                  ),
+                  StructField(
+                    "bax",
+                    StringType
+                  ),
+                  StructField(
+                    "bay",
+                    StringType
+                  ),
+                  StructField(
+                    "baz",
+                    StringType
+                  )
+                )
+              ),
+            ),
+            StructField(
+              "v",
               ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType))), containsNull = false), containsNull = false),
             ),
             StructField(
