@@ -67,14 +67,12 @@ object DataFrameExt {
      * for each column where the original nullability does not match the target nullability.
      *
      * @param targetSchema The target schema to convert to.
-     * @param alignToNullable by default if original column is not nullable and target column is nullable, it will not make it nullable.
+     * @param alignNotNullToNullable by default if original column is not nullable and target column is nullable, it will not make it nullable.
      *                        If set to true, it will align target Dataframe column to nullable.
      * @return A new DataFrame with the specified schema.
      */
     def toSchemaWithNullabilityAligned(targetSchema: StructType, alignNotNullToNullable: Boolean = false): DataFrame = {
       val columns = alignSchemaNullability(df.schema, targetSchema, alignNotNullToNullable)
-      df.select(columns: _*).show(false)
-      df.select(columns: _*).printSchema()
       df.select(columns: _*).to(targetSchema)
     }
   }

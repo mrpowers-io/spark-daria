@@ -11,28 +11,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
   val tests = Tests {
     'toSchemaWithNullabilityAligned - {
       "align from nullable to non nullable from of nested schema" - {
-
-        val data = Seq(
-          Row(
-            Row(
-              "bayVal",
-              "baxVal",
-              Row("this", "yoVal"),
-              "is"
-            ),
-            Seq(
-              Seq(Row("yVal", "xVal"), Row("yVal1", "xVal1"))
-            ),
-            Seq(
-              Row("yVal", "xVal"),
-              Row("yVal1", "xVal1")
-            ),
-            "something",
-            "cool",
-            ";)"
-          )
-        )
-
         val schema = StructType(
           Seq(
             StructField(
@@ -40,31 +18,32 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
               StructType(
                 Seq(
                   StructField(
-                    "bay",
-                    StringType,
-                  ),
-                  StructField(
-                    "bax",
-                    StringType,
-                  ),
-                  StructField(
                     "bar",
                     StructType(
                       Seq(
                         StructField(
-                          "zoo",
-                          StringType,
+                          "yoo",
+                          StringType
                         ),
                         StructField(
-                          "yoo",
-                          StringType,
+                          "zoo",
+                          StringType
+
                         )
                       )
                     )
                   ),
                   StructField(
+                    "bax",
+                    StringType
+                  ),
+                  StructField(
+                    "bay",
+                    StringType
+                  ),
+                  StructField(
                     "baz",
-                    StringType,
+                    StringType
                   )
                 )
               ),
@@ -164,12 +143,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           )
         )
 
-        val df = spark
-          .createDataFrame(
-            spark.sparkContext.parallelize(data),
-            StructType(schema)
-          ).toSchemaWithNullabilityAligned(expectedSchema)
-
         val expectedData = Seq(
           Row(
             Row(
@@ -194,11 +167,22 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           )
         )
 
+        val df = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(expectedData),
+            schema
+          ).toSchemaWithNullabilityAligned(expectedSchema)
+
         val expectedDF = spark
           .createDataFrame(
             spark.sparkContext.parallelize(expectedData),
-            StructType(expectedSchema)
+            expectedSchema
           )
+        df.printSchema()
+        df.select("v").printSchema()
+        expectedDF.select("v").printSchema()
+        df.select("v").show(false)
+        expectedDF.select("v").show(false)
 
         assertSmallDataFrameEquality(
           df,
@@ -361,28 +345,26 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             spark.sparkContext.parallelize(data),
             StructType(schema)
           )
-        inputDf.printSchema()
+
         inputDf.show(false)
 
-        val df = inputDf.toSchemaWithNullabilityAligned(expectedSchema)
+        val df = inputDf.toSchemaWithNullabilityAligned(expectedSchema, alignNotNullToNullable = true)
+        df.show(false)
 
         val expectedData = Seq(
           Row(
             Row(
-              Row("yoVal", "this"),
-              "baxVal",
               "bayVal",
+              "baxVal",
+              Row("this", "yoVal"),
               "is"
             ),
             Seq(
-              Seq(
-                Row("xVal", "yVal"),
-                Row("xVal1", "yVal1")
-              )
+              Seq(Row("yVal", "xVal"), Row("yVal1", "xVal1"))
             ),
             Seq(
-              Row("xVal", "yVal"),
-              Row("xVal1", "yVal1")
+              Row("yVal", "xVal"),
+              Row("yVal1", "xVal1")
             ),
             "something",
             "cool",
@@ -404,30 +386,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
       }
 
       "align from nullable to non nullable for nested array of struct" - {
-        val data = Seq(
-          Row(
-            Row(
-              Seq(
-                Row("a4Val", "a2Val")
-              )
-            ),
-            Seq(
-              Seq(Row("yVal", "xVal"), Row("yVal1", "xVal1"))
-            ),
-            Seq(
-              Row("yVal", "xVal"),
-              Row("yVal1", "xVal1")
-            ),
-            Seq(
-              Row(
-                Seq(
-                  Row("x4Val", "x3Val")
-                )
-              )
-            )
-          )
-        )
-
         val schema = StructType(
           Seq(
             StructField(
@@ -436,31 +394,31 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "a2",
-                    ArrayType(StructType(Seq(StructField("a4", StringType), StructField("a2", StringType))), containsNull = false),
+                    ArrayType(StructType(Seq(StructField("a2", StringType), StructField("a4", StringType))), containsNull = false),
                   )
                 )
               ),
-              nullable = false
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType))), containsNull = false), containsNull = false),
-              nullable = true
+              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false), containsNull = false),
+              nullable = false
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("y", StringType), StructField("x", StringType)))),
-              nullable = true
+              ArrayType(StructType(Seq(StructField("x", StringType), StructField("y", StringType))), containsNull = false),
+              nullable = false
             ),
             StructField(
               "x",
               ArrayType(
                 StructType(
-                  Seq(StructField("x1", ArrayType(StructType(Seq(StructField("b", StringType), StructField("a", StringType))), containsNull = false), nullable = true))
+                  Seq(
+                    StructField("x1", ArrayType(StructType(Seq(StructField("a", StringType), StructField("b", StringType))), containsNull = false))
+                  )
                 ),
                 containsNull = false
               ),
-              nullable = true
             )
           )
         )
@@ -505,12 +463,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           )
         )
 
-        val df = spark
-          .createDataFrame(
-            spark.sparkContext.parallelize(data),
-            StructType(schema)
-          ).toSchemaWithNullabilityAligned(expectedSchema)
-
         val expectedData = Seq(
           Row(
             Row(
@@ -537,6 +489,12 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             )
           )
         )
+
+        val df = spark
+          .createDataFrame(
+            spark.sparkContext.parallelize(expectedData),
+            schema
+          ).toSchemaWithNullabilityAligned(expectedSchema)
 
         val expectedDF = spark
           .createDataFrame(
@@ -656,7 +614,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           .createDataFrame(
             spark.sparkContext.parallelize(data),
             StructType(schema)
-          ).toSchemaWithNullabilityAligned(expectedSchema)
+          ).toSchemaWithNullabilityAligned(expectedSchema, alignNotNullToNullable = true)
 
         val expectedData = Seq(
           Row(
