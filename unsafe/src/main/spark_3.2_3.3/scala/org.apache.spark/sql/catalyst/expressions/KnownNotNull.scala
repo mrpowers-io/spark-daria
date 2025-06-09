@@ -1,10 +1,11 @@
-﻿package org.apache.spark.sql.catalyst.expressions
+package org.apache.spark.sql.daria
 
 import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.catalyst.expressions.{Expression, UnaryExpression}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode, FalseLiteral}
 import org.apache.spark.sql.types.DataType
 
-case class KnownNotNull(child: Expression) extends TaggingExpression {
+case class KnownNotNull(child: Expression) extends UnaryExpression {
   override def dataType: DataType = child.dataType
 
   override def nullable: Boolean = false
