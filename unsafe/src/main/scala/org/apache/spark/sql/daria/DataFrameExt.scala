@@ -1,6 +1,6 @@
 package org.apache.spark.sql.daria
 import org.apache.spark.sql.daria.functions.{assertNotNull, knownNotNull, knownNullable}
-import org.apache.spark.sql.functions.{col, lit, struct, transform, when}
+import org.apache.spark.sql.functions.{col, struct, transform}
 import org.apache.spark.sql.types.{ArrayType, StructField, StructType}
 import org.apache.spark.sql.{Column, DataFrame}
 
