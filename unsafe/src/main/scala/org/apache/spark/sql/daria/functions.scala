@@ -327,7 +327,6 @@ object functions {
    */
   def assert_not_null(column: Column): Column = assertNotNull(column)
 
-
   /**
    * Changes the nullability of the column to true, indicating that the column can contain null values.
    */

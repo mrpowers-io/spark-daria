@@ -28,7 +28,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                         StructField(
                           "zoo",
                           StringType
-
                         )
                       )
                     )
@@ -46,27 +45,30 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                     StringType
                   )
                 )
-              ),
+              )
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false),
+                containsNull = false
+              )
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType), StructField("y", StringType)))),
+              ArrayType(StructType(Seq(StructField("x", StringType), StructField("y", StringType))))
             ),
             StructField(
               "x",
-              StringType,
+              StringType
             ),
             StructField(
               "y",
-              StringType,
+              StringType
             ),
             StructField(
               "z",
-              StringType,
+              StringType
             )
           )
         )
@@ -90,7 +92,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                           "zoo",
                           StringType,
                           nullable = false
-
                         )
                       )
                     ),
@@ -117,7 +118,13 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(
+                  StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))),
+                  containsNull = false
+                ),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -171,7 +178,8 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           .createDataFrame(
             spark.sparkContext.parallelize(expectedData),
             schema
-          ).toSchemaWithNullabilityAligned(expectedSchema)
+          )
+          .toSchemaWithNullabilityAligned(expectedSchema)
 
         val expectedDF = spark
           .createDataFrame(
@@ -191,7 +199,31 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
         )
       }
 
-      "align from nullable to non nullable from of nested schema when order field different" - {
+      "align from nullable to not null when order field different" - {
+        val data = Seq(
+          Row(
+            Row(
+              Row("yoVal", "this"),
+              "baxVal",
+              "bayVal",
+              "is"
+            ),
+            Seq(
+              Seq(
+                Row("yVal", "xVal"),
+                Row("yVal1", "xVal1")
+              )
+            ),
+            Seq(
+              Row("yVal", "xVal"),
+              Row("yVal1", "xVal1")
+            ),
+            ";)",
+            "cool",
+            "something"
+          )
+        )
+
         val schema = StructType(
           Seq(
             StructField(
@@ -209,7 +241,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                         StructField(
                           "zoo",
                           StringType
-
                         )
                       )
                     )
@@ -227,27 +258,30 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                     StringType
                   )
                 )
-              ),
+              )
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType))), containsNull = false),
+                containsNull = false
+              )
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("y", StringType), StructField("x", StringType)))),
-            ),
-            StructField(
-              "x",
-              StringType,
-            ),
-            StructField(
-              "y",
-              StringType,
+              ArrayType(StructType(Seq(StructField("y", StringType), StructField("x", StringType))))
             ),
             StructField(
               "z",
-              StringType,
+              StringType
+            ),
+            StructField(
+              "y",
+              StringType
+            ),
+            StructField(
+              "x",
+              StringType
             )
           )
         )
@@ -271,7 +305,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                           "zoo",
                           StringType,
                           nullable = false
-
                         )
                       )
                     ),
@@ -298,7 +331,13 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(
+                  StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))),
+                  containsNull = false
+                ),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -350,9 +389,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
 
         val df = spark
           .createDataFrame(
-            spark.sparkContext.parallelize(expectedData),
+            spark.sparkContext.parallelize(data),
             schema
-          ).toSchemaWithNullabilityAligned(expectedSchema)
+          )
+          .toSchemaWithNullabilityAligned(expectedSchema)
 
         val expectedDF = spark
           .createDataFrame(
@@ -416,11 +456,11 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                       Seq(
                         StructField(
                           "zoo",
-                          StringType,
+                          StringType
                         ),
                         StructField(
                           "yoo",
-                          StringType,
+                          StringType
                         )
                       )
                     ),
@@ -432,11 +472,11 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                     nullable = false
                   )
                 )
-              ),
+              )
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType, nullable = false), StructField("v1", StringType, nullable = false))))),
+              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType, nullable = false), StructField("v1", StringType, nullable = false)))))
             ),
             StructField(
               "w",
@@ -469,11 +509,11 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "bay",
-                    StringType,
+                    StringType
                   ),
                   StructField(
                     "bax",
-                    StringType,
+                    StringType
                   ),
                   StructField(
                     "bar",
@@ -481,18 +521,18 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                       Seq(
                         StructField(
                           "zoo",
-                          StringType,
+                          StringType
                         ),
                         StructField(
                           "yoo",
-                          StringType,
+                          StringType
                         )
                       )
                     )
                   ),
                   StructField(
                     "baz",
-                    StringType,
+                    StringType
                   )
                 )
               ),
@@ -500,28 +540,28 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType))))),
+              ArrayType(ArrayType(StructType(Seq(StructField("v2", StringType), StructField("v1", StringType)))))
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("y", StringType), StructField("x", StringType)))),
+              ArrayType(StructType(Seq(StructField("y", StringType), StructField("x", StringType))))
             ),
             StructField(
               "x",
-              StringType,
+              StringType
             ),
             StructField(
               "y",
-              StringType,
+              StringType
             ),
             StructField(
               "z",
-              StringType,
+              StringType
             )
           )
         )
 
-        val inputDf =  spark
+        val inputDf = spark
           .createDataFrame(
             spark.sparkContext.parallelize(data),
             StructType(schema)
@@ -575,14 +615,17 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "a2",
-                    ArrayType(StructType(Seq(StructField("a2", StringType), StructField("a4", StringType))), containsNull = false),
+                    ArrayType(StructType(Seq(StructField("a2", StringType), StructField("a4", StringType))), containsNull = false)
                   )
                 )
-              ),
+              )
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(StructType(Seq(StructField("v1", StringType), StructField("v2", StringType))), containsNull = false),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -599,7 +642,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                   )
                 ),
                 containsNull = false
-              ),
+              )
             )
           )
         )
@@ -612,7 +655,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "a2",
-                    ArrayType(StructType(Seq(StructField("a2", StringType, nullable = false), StructField("a4", StringType, nullable = false))), containsNull = false),
+                    ArrayType(
+                      StructType(Seq(StructField("a2", StringType, nullable = false), StructField("a4", StringType, nullable = false))),
+                      containsNull = false
+                    ),
                     nullable = false
                   )
                 )
@@ -621,7 +667,13 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(
+                  StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))),
+                  containsNull = false
+                ),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -634,7 +686,14 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
               ArrayType(
                 StructType(
                   Seq(
-                    StructField("x1", ArrayType(StructType(Seq(StructField("a", StringType, nullable = false), StructField("b", StringType, nullable = false))), containsNull = false), nullable = false)
+                    StructField(
+                      "x1",
+                      ArrayType(
+                        StructType(Seq(StructField("a", StringType, nullable = false), StructField("b", StringType, nullable = false))),
+                        containsNull = false
+                      ),
+                      nullable = false
+                    )
                   )
                 ),
                 containsNull = false
@@ -675,7 +734,8 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           .createDataFrame(
             spark.sparkContext.parallelize(expectedData),
             schema
-          ).toSchemaWithNullabilityAligned(expectedSchema)
+          )
+          .toSchemaWithNullabilityAligned(expectedSchema)
 
         val expectedDF = spark
           .createDataFrame(
@@ -723,7 +783,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "a2",
-                    ArrayType(StructType(Seq(StructField("a2", StringType, nullable = false), StructField("a4", StringType, nullable = false))), containsNull = false),
+                    ArrayType(
+                      StructType(Seq(StructField("a2", StringType, nullable = false), StructField("a4", StringType, nullable = false))),
+                      containsNull = false
+                    ),
                     nullable = false
                   )
                 )
@@ -732,7 +795,13 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "v",
-              ArrayType(ArrayType(StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))), containsNull = false), containsNull = false),
+              ArrayType(
+                ArrayType(
+                  StructType(Seq(StructField("v1", StringType, nullable = false), StructField("v2", StringType, nullable = false))),
+                  containsNull = false
+                ),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -745,7 +814,14 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
               ArrayType(
                 StructType(
                   Seq(
-                    StructField("x1", ArrayType(StructType(Seq(StructField("a", StringType, nullable = false), StructField("b", StringType, nullable = false))), containsNull = false), nullable = false)
+                    StructField(
+                      "x1",
+                      ArrayType(
+                        StructType(Seq(StructField("a", StringType, nullable = false), StructField("b", StringType, nullable = false))),
+                        containsNull = false
+                      ),
+                      nullable = false
+                    )
                   )
                 ),
                 containsNull = false
@@ -763,7 +839,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
                 Seq(
                   StructField(
                     "a2",
-                    ArrayType(StructType(Seq(StructField("a4", StringType), StructField("a2", StringType)))),
+                    ArrayType(StructType(Seq(StructField("a4", StringType), StructField("a2", StringType))))
                   )
                 )
               ),
@@ -784,7 +860,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
               ArrayType(
                 StructType(
                   Seq(StructField("x1", ArrayType(StructType(Seq(StructField("b", StringType), StructField("a", StringType)))), nullable = true))
-                ),
+                )
               ),
               nullable = true
             )
@@ -795,7 +871,8 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
           .createDataFrame(
             spark.sparkContext.parallelize(data),
             StructType(schema)
-          ).toSchemaWithNullabilityAligned(expectedSchema, alignNotNullToNullable = true)
+          )
+          .toSchemaWithNullabilityAligned(expectedSchema, alignNotNullToNullable = true)
 
         val expectedData = Seq(
           Row(

@@ -17,14 +17,15 @@ object DataFrameExt {
         case (orgStruct: StructType, tarStruct: StructType) =>
           val fields = orgStruct.map { orgField =>
             tarStruct.find(_.name == orgField.name) match {
-              case Some(tarField) => childFieldToCol(
-                orgField,
-                tarField,
-                orgField.dataType match {
-                  case StructType(_) | ArrayType(_: StructType, _) => parentCol(orgField.name)
-                  case _                                           => parentCol
-                }
-              ).as(orgField.name)
+              case Some(tarField) =>
+                childFieldToCol(
+                  orgField,
+                  tarField,
+                  orgField.dataType match {
+                    case StructType(_) | ArrayType(_: StructType, _) => parentCol(orgField.name)
+                    case _                                           => parentCol
+                  }
+                ).as(orgField.name)
               case None => parentCol(orgField.name).as(orgField.name)
             }
           }
