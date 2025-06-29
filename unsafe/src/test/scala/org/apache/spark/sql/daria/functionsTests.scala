@@ -2,9 +2,11 @@ package org.apache.spark.sql.daria
 
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
 import org.apache.spark.sql.daria.functions._
-import org.apache.spark.sql.functions.lit
+import org.apache.spark.sql.functions.{col, lit, when}
 import org.apache.spark.sql.{functions => F}
 import utest._
+
+import scala.util.Try
 
 object functionsTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
@@ -176,6 +178,26 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
 
         assert(math.abs(normalMean - mean) <= 0.1)
         assert(math.abs(normalVariance - variance) <= 0.1)
+      }
+    }
+
+    'assertNotNull - {
+      "update schema to not null" - {
+        val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
+        val actualDF = sourceDF.select(assertNotNull(col("col1")))
+        assert(!actualDF.schema.head.nullable)
+      }
+
+      "success when column does not contain null" - {
+        val sourceDF     = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
+        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
+        assert(actualResult.isSuccess)
+      }
+
+      "fail when column does not contain null" - {
+        val sourceDF     = spark.range(10).select(when(col("id") % 2 === 0, col("id")).otherwise(null).as("col1"))
+        val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
+        assert(actualResult.isFailure)
       }
     }
   }

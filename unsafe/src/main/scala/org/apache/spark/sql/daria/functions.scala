@@ -1,6 +1,7 @@
 package org.apache.spark.sql.daria
 
 import org.apache.spark.sql.Column
+import org.apache.spark.sql.catalyst.expressions.objects.AssertNotNull
 import org.apache.spark.sql.catalyst.expressions.{Expression, RandGamma}
 import org.apache.spark.sql.functions.{lit, log, signum}
 import org.apache.spark.sql.{functions => F}
@@ -313,4 +314,16 @@ object functions {
   def randn(mean: Column, variance: Column): Column = {
     randn(Utils.random.nextLong, mean, variance)
   }
+
+  /**
+   * Asserts that the column is not null. If the column is null, it will throw an exception.
+   * This will also update the nullability of the column to false.
+   */
+  def assertNotNull(column: Column): Column = withExpr(AssertNotNull(column.expr))
+
+  /**
+   * Asserts that the column is not null. If the column is null, it will throw an exception.
+   * This will also update the nullability of the column to false.
+   */
+  def assert_not_null(column: Column): Column = assertNotNull(column)
 }
