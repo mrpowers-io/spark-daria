@@ -186,11 +186,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             spark.sparkContext.parallelize(expectedData),
             expectedSchema
           )
-        df.printSchema()
-        df.select("v").printSchema()
-        expectedDF.select("v").printSchema()
-        df.select("v").show(false)
-        expectedDF.select("v").show(false)
 
         assertSmallDataFrameEquality(
           df,
@@ -399,11 +394,6 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             spark.sparkContext.parallelize(expectedData),
             expectedSchema
           )
-        df.printSchema()
-        df.select("v").printSchema()
-        expectedDF.select("v").printSchema()
-        df.select("v").show(false)
-        expectedDF.select("v").show(false)
 
         assertSmallDataFrameEquality(
           df,
@@ -567,10 +557,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             StructType(schema)
           )
 
-        inputDf.show(false)
-
         val df = inputDf.toSchemaWithNullabilityAligned(expectedSchema, alignNotNullToNullable = true)
-        df.show(false)
 
         val expectedData = Seq(
           Row(
