@@ -2,8 +2,8 @@ name: core-ci
 
 on:
   push:
-    branches:
-    - main
+    branches: ['main']
+    paths-ignore: ['unsafe/**']
   pull_request:
 
 jobs:

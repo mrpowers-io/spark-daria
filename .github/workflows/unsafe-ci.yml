@@ -2,8 +2,8 @@ name: unsafe-ci
 
 on:
   push:
-    branches:
-    - main
+    branches: ['main']
+    paths-ignore: ['core/**']
   pull_request:
 
 jobs:
