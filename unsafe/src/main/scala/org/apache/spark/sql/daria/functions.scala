@@ -2,7 +2,7 @@ package org.apache.spark.sql.daria
 
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.catalyst.expressions.objects.AssertNotNull
-import org.apache.spark.sql.catalyst.expressions.{Expression, RandGamma}
+import org.apache.spark.sql.catalyst.expressions.{Expression, KnownNotNull, KnownNullable, RandGamma}
 import org.apache.spark.sql.functions.{lit, log, signum}
 import org.apache.spark.sql.{functions => F}
 import org.apache.spark.util.Utils
@@ -326,4 +326,14 @@ object functions {
    * This will also update the nullability of the column to false.
    */
   def assert_not_null(column: Column): Column = assertNotNull(column)
+
+  /**
+   * Changes the nullability of the column to true, indicating that the column can contain null values.
+   */
+  private[daria] def knownNullable(column: Column): Column = withExpr(KnownNullable(column.expr))
+
+  /**
+   * Changes the nullability of the column to false, indicating that the column can contain null values.
+   */
+  private[daria] def knownNotNull(column: Column): Column = withExpr(KnownNotNull(column.expr))
 }
