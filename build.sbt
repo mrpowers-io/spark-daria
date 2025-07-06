@@ -73,6 +73,7 @@ lazy val extension = (project in file("unsafe"))
           (Compile / sourceDirectory).value ** s"*spark_*$mayor.$minor*" / "scala" get
       }
     },
+    noPublish
   )
 lazy val root = (project in file("."))
   .settings(
