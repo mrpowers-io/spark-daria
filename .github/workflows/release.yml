@@ -1,0 +1,18 @@
+﻿name: Release
+on:
+  push:
+    tags: [ "*" ]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: coursier/setup-action@v1
+        with:
+          jvm: zulu:8
+      - run: sbt -Dsun.net.client.defaultReadTimeout=60000 -Dsun.net.client.defaultConnectTimeout=60000 -Dspark.version=3.5.3 -v ci-release
+        env:
+          PGP_PASSPHRASE: ${{secrets.PGP_PASSPHRASE}}
+          PGP_SECRET: ${{secrets.PGP_LONG_ID}}
+          SONATYPE_PASSWORD: ${{secrets.MAVEN_PASSWORD}}
+          SONATYPE_USERNAME: ${{secrets.MAVEN_USERNAME}}
