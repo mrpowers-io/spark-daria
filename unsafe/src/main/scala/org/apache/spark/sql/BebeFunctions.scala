@@ -174,7 +174,7 @@ object BebeFunctions {
    */
   def bebe_left(col: Column, len: Column): Column =
     withExpr {
-      BebeLeft(col.expr, len.expr)
+      BebeLeft(col, len)
     }
 
   /**
@@ -290,7 +290,7 @@ object BebeFunctions {
    */
   def bebe_right(col: Column, len: Column): Column =
     withExpr {
-      BebeRight(col.expr, len.expr)
+      BebeRight(col, len)
     }
 
   /**
