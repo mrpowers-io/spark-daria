@@ -40,7 +40,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
 
   val tests: Tests = Tests {
 
-    test("approx_percentile, single percentile value") {
+    "approx_percentile, single percentile value" - {
       val table = (1 to 1000).toDF("col")
       checkAnswer(
         table.select(
@@ -56,7 +56,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile, the first element satisfies small percentages") {
+    "approx_percentile, the first element satisfies small percentages" - {
       val table = (1 to 10).toDF("col")
       checkAnswer(
         table
@@ -65,7 +65,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile, array of percentile value") {
+    "approx_percentile, array of percentile value" - {
       val table = (1 to 1000).toDF("col")
       checkAnswer(
         table
@@ -79,7 +79,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile, different column types") {
+    "approx_percentile, different column types" - {
       val intSeq = 1 to 1000
       val data: Seq[(java.math.BigDecimal, Date, Timestamp)] = intSeq.map { i =>
         (new java.math.BigDecimal(i), DateTimeUtils.toJavaDate(i), DateTimeUtils.toJavaTimestamp(i))
@@ -101,7 +101,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile, multiple records with the minimum value in a partition") {
+    "approx_percentile, multiple records with the minimum value in a partition" - {
       val table = spark.sparkContext.makeRDD(Seq(1, 1, 2, 1, 1, 3, 1, 1, 4, 1, 1, 5), 4).toDF("col")
       checkAnswer(
         table.select(bebe_approx_percentile(col("col"), array(lit(0.5)))),
@@ -109,7 +109,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile, with different accuracies") {
+    "approx_percentile, with different accuracies" - {
       val tableCount          = 1000
       val table               = (1 to tableCount).toDF("col")
       val accuracies          = Array(1, 10, 100, 1000, 10000)
@@ -131,7 +131,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       }
     }
 
-    test("approx_percentile(), aggregation on empty input table, no group by") {
+    "approx_percentile(), aggregation on empty input table, no group by" - {
       val table = Seq.empty[Int].toDF("col")
       checkAnswer(
         table.select(sum(col("col")), bebe_approx_percentile(col("col"), lit(0.5))),
@@ -139,7 +139,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile(), aggregation on empty input table, with group by") {
+    "approx_percentile(), aggregation on empty input table, with group by" - {
       val table = Seq.empty[Int].toDF("col")
       checkAnswer(
         table.groupBy("col").agg(sum(col("col")), bebe_approx_percentile(col("col"), lit(0.5))),
@@ -147,7 +147,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile(null), aggregation with group by") {
+    "approx_percentile(null), aggregation with group by" - {
       val table = (1 to 1000).map(x => (x % 3, x)).toDF("key", "value")
       val df = table
         .groupBy("key")
@@ -172,7 +172,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       assertSmallDataFrameEquality(df, expected, orderedComparison = false, ignoreNullable = true)
     }
 
-    test("approx_percentile(null), aggregation without group by") {
+    "approx_percentile(null), aggregation without group by" - {
       val table = (1 to 1000).map(x => (x % 3, x)).toDF("key", "value")
       checkAnswer(
         table.select(
@@ -184,7 +184,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile(col, ...), input rows contains null, with out group by") {
+    "approx_percentile(col, ...), input rows contains null, with out group by" - {
       val table = (1 to 1000).map(Integer.valueOf).flatMap(Seq(null: Integer, _)).toDF("col")
       checkAnswer(
         table.select(
@@ -196,7 +196,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile(col, ...), input rows contains null, with group by") {
+    "approx_percentile(col, ...), input rows contains null, with group by" - {
       val rand = new java.util.Random()
       val table = (1 to 1000)
         .map(Integer.valueOf)
@@ -221,7 +221,7 @@ object ApproxPercentileSpec extends TestSuite with SparkSessionTestWrapper with 
       )
     }
 
-    test("approx_percentile(col, ...) works in window function") {
+    "approx_percentile(col, ...) works in window function" - {
       val data  = (1 to 10).map(v => (v % 2, v))
       val table = data.toDF("key", "value")
       val windowSpec = Window

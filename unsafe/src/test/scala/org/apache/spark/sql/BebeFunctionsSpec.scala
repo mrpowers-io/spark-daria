@@ -32,13 +32,13 @@ object BebeFunctionsSpec extends TestSuite with SparkSessionTestWrapper with Col
             0,
             ZoneId.of(zone)
           )
-          .toInstant
+          .toInstant()
     }
   }
 
-  override def tests: Tests =
+  override def tests =
     Tests {
-      test("beginningOfDay - returns the beginning of the day") {
+      "beginningOfDay - returns the beginning of the day" - {
         val df = Seq(
           (Timestamp.valueOf("2020-01-15 08:01:32"), Timestamp.valueOf("2020-01-15 00:00:00")),
           (Timestamp.valueOf("2020-01-20 23:03:22"), Timestamp.valueOf("2020-01-20 00:00:00")),
@@ -48,9 +48,9 @@ object BebeFunctionsSpec extends TestSuite with SparkSessionTestWrapper with Col
         assertColumnEquality(resDF, "actual", "expected")
       }
 
-      test("beginningOfDay - returns the beginning of the day in a specific timezone") {
+      "beginningOfDay - returns the beginning of the day in a specific timezone" - {
         val testTimezone         = "America/Bahia"
-        val defaultTimezone      = TimeZone.getDefault
+        val defaultTimezone      = TimeZone.getDefault()
         val sparkDefaultTimezone = spark.conf.get("spark.sql.session.timeZone")
         TimeZone.setDefault(TimeZone.getTimeZone(testTimezone))
         spark.conf.set("spark.sql.session.timeZone", testTimezone)
@@ -76,7 +76,7 @@ object BebeFunctionsSpec extends TestSuite with SparkSessionTestWrapper with Col
       // convert to test("foo - bar") { ... } in uTest.
 
       // Example for 'beginningOfMonth':
-      test("beginningOfMonth - gets the beginning of the month of a date column") {
+      "beginningOfMonth - gets the beginning of the month of a date column" - {
         val df = Seq(
           (Date.valueOf("2020-01-15"), Date.valueOf("2020-01-01")),
           (Date.valueOf("2020-01-20"), Date.valueOf("2020-01-01")),
@@ -93,8 +93,7 @@ object BebeFunctionsSpec extends TestSuite with SparkSessionTestWrapper with Col
 
       // For exception tests, use intercept[ExceptionType] { ... }
       // For example:
-      test("bebe_character_length - errors on wrong column type") {
-        import spark.implicits._
+      "bebe_character_length - errors on wrong column type" - {
         val df = spark
           .createDataFrame(
             spark.sparkContext.parallelize(

@@ -11,8 +11,8 @@ import scala.util.Try
 object functionsTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
   val tests: Tests = Tests {
-    test("rand_gamma") {
-      test("has correct mean and standard deviation") {
+    'rand_gamma - {
+      "has correct mean and standard deviation" - {
         val sourceDF = spark.range(100000).select(rand_gamma(2.0, 2.0))
         val stats = sourceDF
           .agg(
@@ -30,7 +30,7 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(math.abs(gammaStddev - math.sqrt(8.0)) < 0.5)
       }
 
-      test("has correct mean and standard deviation from shape/scale column") {
+      "has correct mean and standard deviation from shape/scale column" - {
         val sourceDF = spark
           .range(100000)
           .withColumn("shape", F.lit(2.0))
@@ -53,8 +53,8 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       }
     }
 
-    test("rand_laplace") {
-      test("has correct mean and standard deviation") {
+    'rand_laplace - {
+      "has correct mean and standard deviation" - {
         val sourceDF = spark.range(100000).select(rand_laplace().alias("laplace_random"))
         val stats = sourceDF
           .agg(
@@ -72,7 +72,7 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(math.abs(laplaceStdDev - expectedStdDev) <= 0.1)
       }
 
-      test("has correct mean and standard deviation with custom mean and scale") {
+      "has correct mean and standard deviation with custom mean and scale" - {
         val mu   = 1.0
         val beta = 2.0
         val sourceDF = spark
@@ -97,8 +97,8 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       }
     }
 
-    test("rand") - {
-      test("has correct min and max") {
+    'rand - {
+      "has correct min and max" - {
         val min      = 5
         val max      = 10
         val sourceDF = spark.range(100000).select(rand_range(min, max).as("rand_min_max"))
@@ -116,7 +116,7 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(uniformMax <= max)
       }
 
-      test("has correct min and max using min max column") {
+      "has correct min and max using min max column" - {
         val min = 5
         val max = 10
         val sourceDF = spark
@@ -139,8 +139,8 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       }
     }
 
-    test("randn") {
-      test("has correct mean and variance") {
+    'randn - {
+      "has correct mean and variance" - {
         val mean     = 1.0
         val variance = 2.0
         val sourceDF = spark.range(100000).select(randn(mean, variance).as("rand_normal"))
@@ -158,7 +158,7 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
         assert(math.abs(normalVariance - variance) <= 0.1)
       }
 
-      test("has correct mean and variance using mean and variance column") {
+      "has correct mean and variance using mean and variance column" - {
         val mean     = 1.0
         val variance = 2.0
         val sourceDF = spark
@@ -181,20 +181,20 @@ object functionsTests extends TestSuite with DataFrameComparer with ColumnCompar
       }
     }
 
-    test("assertNotNull") {
-      test("update schema to not null") {
+    'assertNotNull - {
+      "update schema to not null" - {
         val sourceDF = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
         val actualDF = sourceDF.select(assertNotNull(col("col1")))
         assert(!actualDF.schema.head.nullable)
       }
 
-      test("success when column does not contain null") {
+      "success when column does not contain null" - {
         val sourceDF     = spark.range(10).select(when(col("id") % 1 === 0, col("id")).otherwise(null).as("col1"))
         val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
         assert(actualResult.isSuccess)
       }
 
-      test("fail when column does not contain null") {
+      "fail when column does not contain null" - {
         val sourceDF     = spark.range(10).select(when(col("id") % 2 === 0, col("id")).otherwise(null).as("col1"))
         val actualResult = Try(sourceDF.select(assertNotNull(col("col1"))).collect())
         assert(actualResult.isFailure)
