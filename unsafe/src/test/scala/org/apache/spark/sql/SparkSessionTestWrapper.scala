@@ -1,6 +1,4 @@
-package org.apache.spark.sql.daria
-
-import org.apache.spark.sql.SparkSession
+package org.apache.spark.sql
 
 trait SparkSessionTestWrapper {
 

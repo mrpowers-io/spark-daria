@@ -73,6 +73,7 @@ lazy val extension = (project in file("unsafe"))
           (Compile / sourceDirectory).value ** s"*spark_*$mayor.$minor*" / "scala" get
       }
     },
+    libraryDependencies += "com.github.mrpowers" %% "spark-daria"      % "1.0.0" % "test"
   )
 lazy val root = (project in file("."))
   .settings(

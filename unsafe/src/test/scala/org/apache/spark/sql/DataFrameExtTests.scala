@@ -1,16 +1,15 @@
-package org.apache.spark.sql.daria
+package org.apache.spark.sql
 
-import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer, SchemaComparer}
-import DataFrameExt.DataFrameMethods
-import org.apache.spark.sql.Row
+import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
+import org.apache.spark.sql.DataFrameExt.DataFrameMethods
 import org.apache.spark.sql.types._
 import utest._
 
 object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
-  val tests = Tests {
-    'toSchemaWithNullabilityAligned - {
-      "align from nullable to non nullable from of nested schema" - {
+  val tests: Tests = Tests {
+    test("toSchemaWithNullabilityAligned") {
+      test("align from nullable to non nullable from of nested schema") {
         val schema = StructType(
           Seq(
             StructField(
@@ -129,7 +128,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), containsNull = false),
               nullable = false
             ),
             StructField(
@@ -194,7 +193,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
         )
       }
 
-      "align from nullable to not null when order field different" - {
+      test("align from nullable to not null when order field different") {
         val data = Seq(
           Row(
             Row(
@@ -337,7 +336,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), containsNull = false),
               nullable = false
             ),
             StructField(
@@ -402,7 +401,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
         )
       }
 
-      "align from non nullable to nullable from of nested schema" - {
+      test("align from non nullable to nullable from of nested schema") {
         val data = Seq(
           Row(
             Row(
@@ -593,7 +592,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
         )
       }
 
-      "align from nullable to non nullable for nested array of struct" - {
+      test("align from nullable to non nullable for nested array of struct") {
         val schema = StructType(
           Seq(
             StructField(
@@ -665,7 +664,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), containsNull = false),
               nullable = false
             ),
             StructField(
@@ -737,7 +736,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
         )
       }
 
-      "align from non nullable to nullable for nested array of struct" - {
+      test("align from non nullable to nullable for nested array of struct") {
         val data = Seq(
           Row(
             Row(
@@ -793,7 +792,7 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), containsNull = false),
               nullable = false
             ),
             StructField(
