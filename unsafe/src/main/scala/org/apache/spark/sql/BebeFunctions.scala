@@ -6,6 +6,7 @@ import org.apache.spark.sql.catalyst.expressions.objects.AssertNotNull
 import org.apache.spark.sql.{functions => F}
 import org.apache.spark.sql.functions.{expr, lit, when}
 import org.apache.spark.util.Utils
+import org.apache.spark.sql.classic.ShimColumnConversions.ShimColumnConversionsOps
 
 /**
  * @groupname string_funcs String Functions
@@ -27,17 +28,17 @@ object BebeFunctions {
 
   def beginningOfDay(col: Column): Column =
     withExpr {
-      TruncTimestamp(lit("day").expr, col.expr, None)
+      TruncTimestamp(lit("day").toExpression, col.toExpression, None)
     }
 
   def beginningOfDay(col: Column, timeZoneId: String): Column =
     withExpr {
-      TruncTimestamp(lit("day").expr, col.expr, Some(timeZoneId))
+      TruncTimestamp(lit("day").toExpression, col.toExpression, Some(timeZoneId))
     }
 
   def beginningOfMonth(col: Column): Column =
     withExpr {
-      BeginningOfMonth(col.expr)
+      BeginningOfMonth(col.toExpression)
     }
 
   def endOfDay(col: Column): Column =
@@ -49,15 +50,15 @@ object BebeFunctions {
   def endOfDay(col: Column, timeZoneId: Option[String] = None): Column =
     withExpr {
       val startOfNextDay =
-        TruncTimestamp(lit("day").expr, DateAdd(col.expr, lit(1).expr), timeZoneId)
+        TruncTimestamp(lit("day").toExpression, DateAdd(col.toExpression, lit(1).toExpression), timeZoneId)
       // 1 second before end-of-day to match Rails: https://apidock.com/rails/DateTime/end_of_day
-      TimeAdd(startOfNextDay, expr("interval -1 second").expr, timeZoneId)
+      TimeAdd(startOfNextDay, expr("interval -1 second").toExpression, timeZoneId)
     }
 
   def endOfMonth(col: Column): Column =
     withExpr {
-      val startOfNextMonth = TruncTimestamp(lit("month").expr, AddMonths(col.expr, lit(1).expr))
-      DateAdd(startOfNextMonth, lit(-1).expr)
+      val startOfNextMonth = TruncTimestamp(lit("month").toExpression, AddMonths(col.toExpression, lit(1).toExpression))
+      DateAdd(startOfNextMonth, lit(-1).toExpression)
     }
 
   // FUNCTIONS MISSING IN SCALA API
@@ -76,7 +77,7 @@ object BebeFunctions {
    */
   def bebe_approx_percentile(col: Column, percentage: Column, accuracy: Column): Column =
     withAggregateFunction {
-      new ApproximatePercentile(col.expr, percentage.expr, accuracy.expr)
+      new ApproximatePercentile(col.toExpression, percentage.toExpression, accuracy.toExpression)
     }
 
   /**
@@ -91,7 +92,7 @@ object BebeFunctions {
    */
   def bebe_approx_percentile(col: Column, percentage: Column): Column =
     withAggregateFunction {
-      new ApproximatePercentile(col.expr, percentage.expr)
+      new ApproximatePercentile(col.toExpression, percentage.toExpression)
     }
 
   /**
@@ -103,14 +104,14 @@ object BebeFunctions {
    *
    * @group collection_funcs
    */
-  def bebe_cardinality(col: Column): Column = withExpr { Size(col.expr) }
+  def bebe_cardinality(col: Column): Column = withExpr { Size(col.toExpression) }
 
   /**
    * Returns the cotangent of `expr`, as if computed by `java.lang.Math.cot`.
    *
    * @param col the column of which to compute the cotangent
    */
-  def bebe_cot(col: Column): Column = withExpr(Cot(col.expr))
+  def bebe_cot(col: Column): Column = withExpr(Cot(col.toExpression))
 
   /**
    * Returns the number of `TRUE` values for the expression.
@@ -121,7 +122,7 @@ object BebeFunctions {
    */
   def bebe_count_if(col: Column): Column =
     withAggregateFunction {
-      CountIf(col.expr)
+      CountIf(col.toExpression)
     }
 
   /**
@@ -131,7 +132,7 @@ object BebeFunctions {
    */
   def bebe_character_length(col: Column): Column =
     withExpr {
-      Length(col.expr)
+      Length(col.toExpression)
     }
 
   /**
@@ -141,7 +142,7 @@ object BebeFunctions {
    *
    * @group string_funcs
    */
-  def bebe_chr(col: Column): Column = withExpr { Chr(col.expr) }
+  def bebe_chr(col: Column): Column = withExpr { Chr(col.toExpression) }
 
   /**
    * Returns Euler's number, e
@@ -153,7 +154,7 @@ object BebeFunctions {
    */
   def bebe_if_null(col1: Column, col2: Column): Column =
     withExpr {
-      Coalesce(Seq(col1.expr, col2.expr))
+      Coalesce(Seq(col1.toExpression, col2.toExpression))
     }
 
   /**
@@ -161,13 +162,13 @@ object BebeFunctions {
    */
   def bebe_inline(col: Column): Column =
     withExpr {
-      Inline(col.expr)
+      Inline(col.toExpression)
     }
 
   /**
    * True if the current expression is NOT null.
    */
-  def bebe_is_not_null(col: Column): Column = withExpr { IsNotNull(col.expr) }
+  def bebe_is_not_null(col: Column): Column = withExpr { IsNotNull(col.toExpression) }
 
   /**
    * left(str, len) - Returns the leftmost len(len can be string type) characters from the string str, if len is less or equal than 0 the result is an empty string.
@@ -182,7 +183,7 @@ object BebeFunctions {
    */
   def bebe_like(col: Column, sqlLike: Column): Column =
     withExpr {
-      Like(col.expr, sqlLike.expr, '\\')
+      Like(col.toExpression, sqlLike.toExpression, '\\')
     }
 
   /**
@@ -196,7 +197,7 @@ object BebeFunctions {
    */
   def bebe_make_date(year: Column, month: Column, day: Column): Column =
     withExpr {
-      MakeDate(year.expr, month.expr, day.expr)
+      MakeDate(year.toExpression, month.toExpression, day.toExpression)
     }
 
   /**
@@ -221,7 +222,7 @@ object BebeFunctions {
       sec: Column
   ): Column =
     withExpr {
-      MakeTimestamp(year.expr, month.expr, day.expr, hour.expr, min.expr, sec.expr)
+      MakeTimestamp(year.toExpression, month.toExpression, day.toExpression, hour.toExpression, min.toExpression, sec.toExpression)
     }
 
   /**
@@ -229,7 +230,7 @@ object BebeFunctions {
    */
   def bebe_nvl2(col1: Column, col2: Column, col3: Column): Column =
     withExpr {
-      Nvl2(col1.expr, col2.expr, col3.expr, If(IsNotNull(col1.expr), col2.expr, col3.expr))
+      Nvl2(col1.toExpression, col2.toExpression, col3.toExpression, If(IsNotNull(col1.toExpression), col2.toExpression, col3.toExpression))
     }
 
   /**
@@ -237,7 +238,7 @@ object BebeFunctions {
    */
   def bebe_octet_length(col: Column): Column =
     withExpr {
-      OctetLength(col.expr)
+      OctetLength(col.toExpression)
     }
 
   /**
@@ -245,7 +246,7 @@ object BebeFunctions {
    */
   def bebe_stack(col: Column, cols: Column*): Column =
     withExpr {
-      Stack(col.expr +: cols.map(_.expr))
+      Stack(col.toExpression +: cols.map(_.toExpression))
     }
 
   /**
@@ -253,7 +254,7 @@ object BebeFunctions {
    */
   def bebe_parse_url(col: Column, partToExtract: Column): Column =
     withExpr {
-      ParseUrl(Seq(col.expr, partToExtract.expr))
+      ParseUrl(Seq(col.toExpression, partToExtract.toExpression))
     }
 
   /**
@@ -261,7 +262,7 @@ object BebeFunctions {
    */
   def bebe_parse_url(col: Column, partToExtract: Column, urlParamKey: Column): Column =
     withExpr {
-      ParseUrl(Seq(col.expr, partToExtract.expr, urlParamKey.expr))
+      ParseUrl(Seq(col.toExpression, partToExtract.toExpression, urlParamKey.toExpression))
     }
 
   /**
@@ -271,7 +272,7 @@ object BebeFunctions {
    */
   def bebe_percentile(col: Column, percentage: Column): Column =
     withAggregateFunction {
-      Percentile(col.expr, percentage.expr, Literal(1L))
+      Percentile(col.toExpression, percentage.toExpression, Literal(1L))
     }
 
   /**
@@ -282,7 +283,7 @@ object BebeFunctions {
    */
   def bebe_regexp_extract_all(col: Column, regex: Column, groupIndex: Column): Column =
     withExpr {
-      RegExpExtractAll(col.expr, regex.expr, groupIndex.expr)
+      RegExpExtractAll(col.toExpression, regex.toExpression, groupIndex.toExpression)
     }
 
   /**
@@ -298,7 +299,7 @@ object BebeFunctions {
    */
   def bebe_sentences(col: Column): Column =
     withExpr {
-      Sentences(col.expr, Literal(""), Literal(""))
+      Sentences(col.toExpression, Literal(""), Literal(""))
     }
 
   /**
@@ -306,7 +307,7 @@ object BebeFunctions {
    */
   def bebe_space(col: Column): Column =
     withExpr {
-      StringSpace(col.expr)
+      StringSpace(col.toExpression)
     }
 
   /**
@@ -314,7 +315,7 @@ object BebeFunctions {
    */
   def bebe_substr(col: Column, pos: Column): Column =
     withExpr {
-      Substring(col.expr, pos.expr, Literal(Integer.MAX_VALUE))
+      Substring(col.toExpression, pos.toExpression, Literal(Integer.MAX_VALUE))
     }
 
   /**
@@ -322,7 +323,7 @@ object BebeFunctions {
    */
   def bebe_substr(col: Column, pos: Column, len: Column): Column =
     withExpr {
-      Substring(col.expr, pos.expr, len.expr)
+      Substring(col.toExpression, pos.toExpression, len.toExpression)
     }
 
   /**
@@ -338,7 +339,7 @@ object BebeFunctions {
    */
   def bebe_weekday(col: Column): Column =
     withExpr {
-      WeekDay(col.expr)
+      WeekDay(col.toExpression)
     }
 
   /**
@@ -385,7 +386,8 @@ object BebeFunctions {
    *
    * @note The function is non-deterministic in general case.
    */
-  def randGamma(seed: Column, shape: Column, scale: Column): Column = withExpr(RandGamma(seed.expr, shape.expr, scale.expr)).alias("gamma_random")
+  def randGamma(seed: Column, shape: Column, scale: Column): Column =
+    withExpr(RandGamma(seed.toExpression, shape.toExpression, scale.toExpression)).alias("gamma_random")
 
   /**
    * Generate a column with independent and identically distributed (i.i.d.) samples
@@ -680,7 +682,7 @@ object BebeFunctions {
    * Asserts that the column is not null. If the column is null, it will throw an exception.
    * This will also update the nullability of the column to false.
    */
-  def assertNotNull(column: Column): Column = withExpr(AssertNotNull(column.expr))
+  def assertNotNull(column: Column): Column = withExpr(AssertNotNull(column.toExpression))
 
   /**
    * Asserts that the column is not null. If the column is null, it will throw an exception.
@@ -691,10 +693,10 @@ object BebeFunctions {
   /**
    * Changes the nullability of the column to true, indicating that the column can contain null values.
    */
-  private[sql] def knownNullable(column: Column): Column = withExpr(KnownNullable(column.expr))
+  private[sql] def knownNullable(column: Column): Column = withExpr(KnownNullable(column.toExpression))
 
   /**
    * Changes the nullability of the column to false, indicating that the column can contain null values.
    */
-  private[sql] def knownNotNull(column: Column): Column = withExpr(KnownNotNull(column.expr))
+  private[sql] def knownNotNull(column: Column): Column = withExpr(KnownNotNull(column.toExpression))
 }
