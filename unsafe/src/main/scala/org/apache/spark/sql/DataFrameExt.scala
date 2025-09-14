@@ -1,9 +1,8 @@
-package org.apache.spark.sql.daria
+package org.apache.spark.sql
 
-import org.apache.spark.sql.daria.functions.{assertNotNull, knownNotNull, knownNullable}
+import org.apache.spark.sql.BebeFunctions.{assertNotNull, knownNotNull, knownNullable}
 import org.apache.spark.sql.functions.{col, struct, transform}
 import org.apache.spark.sql.types.{ArrayType, StructField, StructType}
-import org.apache.spark.sql.{Column, DataFrame}
 
 object DataFrameExt {
 

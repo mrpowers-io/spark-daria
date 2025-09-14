@@ -54,10 +54,10 @@ lazy val core = (project in file("core"))
     Compile / packageDoc / publishArtifact := true
   )
 
-lazy val extension = (project in file("unsafe"))
+lazy val bebe = (project in file("unsafe"))
   .settings(
     commonSettings,
-    moduleName                             := "spark-daria-ext",
+    moduleName                             := "bebe",
     name                                   := moduleName.value,
     Compile / packageSrc / publishArtifact := true,
     Compile / packageDoc / publishArtifact := true,
@@ -73,15 +73,14 @@ lazy val extension = (project in file("unsafe"))
           (Compile / sourceDirectory).value ** s"*spark_*$mayor.$minor*" / "scala" get
       }
     },
-    noPublish
-  )
+  ).dependsOn(core % "test->test")
 lazy val root = (project in file("."))
   .settings(
     name := "spark-daria-root",
     commonSettings,
     noPublish
   )
-  .aggregate(core, extension)
+  .aggregate(core, bebe)
 
 testFrameworks += new TestFramework("com.github.mrpowers.spark.daria.CustomFramework")
 

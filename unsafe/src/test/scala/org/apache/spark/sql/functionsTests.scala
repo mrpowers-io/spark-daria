@@ -1,7 +1,7 @@
-package org.apache.spark.sql.daria
+package org.apache.spark.sql
 
 import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
-import org.apache.spark.sql.daria.functions._
+import org.apache.spark.sql.BebeFunctions._
 import org.apache.spark.sql.functions.{col, lit, when}
 import org.apache.spark.sql.{functions => F}
 import utest._
@@ -10,7 +10,7 @@ import scala.util.Try
 
 object functionsTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
-  val tests = Tests {
+  val tests: Tests = Tests {
     'rand_gamma - {
       "has correct mean and standard deviation" - {
         val sourceDF = spark.range(100000).select(rand_gamma(2.0, 2.0))

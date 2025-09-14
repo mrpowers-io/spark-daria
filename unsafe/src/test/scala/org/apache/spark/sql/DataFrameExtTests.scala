@@ -1,15 +1,14 @@
-package org.apache.spark.sql.daria
+package org.apache.spark.sql
 
-import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer, SchemaComparer}
-import DataFrameExt.DataFrameMethods
-import org.apache.spark.sql.Row
+import com.github.mrpowers.spark.fast.tests.{ColumnComparer, DataFrameComparer}
+import org.apache.spark.sql.DataFrameExt.DataFrameMethods
 import org.apache.spark.sql.types._
 import utest._
 
 object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnComparer with SparkSessionTestWrapper {
 
-  val tests = Tests {
-    'toSchemaWithNullabilityAligned - {
+  val tests: Tests = Tests {
+    "toSchemaWithNullabilityAligned" - {
       "align from nullable to non nullable from of nested schema" - {
         val schema = StructType(
           Seq(
@@ -129,7 +128,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(
+                StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -337,7 +339,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(
+                StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -665,7 +670,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(
+                StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
@@ -793,7 +801,10 @@ object DataFrameExtTests extends TestSuite with DataFrameComparer with ColumnCom
             ),
             StructField(
               "w",
-              ArrayType(StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))), false),
+              ArrayType(
+                StructType(Seq(StructField("x", StringType, nullable = false), StructField("y", StringType, nullable = false))),
+                containsNull = false
+              ),
               nullable = false
             ),
             StructField(
