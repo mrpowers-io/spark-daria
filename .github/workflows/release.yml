@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: coursier/setup-action@v1
         with:
-          jvm: zulu:11
+          jvm: zulu:17
           apps: sbt scala scalafmt
       - run: sbt -Dsun.net.client.defaultReadTimeout=60000 -Dsun.net.client.defaultConnectTimeout=60000 -Dspark.version=3.5.3 -v ci-release
         env:
