@@ -6,13 +6,13 @@ on:
       - main
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: coursier/setup-action@v1
         with:
           jvm: zulu:11
-          apps: sbt scala scalafmt
+          apps: sbt:1.11.0 scala scalafmt
       - run: sbt -Dsun.net.client.defaultReadTimeout=60000 -Dsun.net.client.defaultConnectTimeout=60000 -Dspark.version=3.5.3 -v ci-release
         env:
           PGP_PASSPHRASE: ${{secrets.PGP_PASSPHRASE}}
