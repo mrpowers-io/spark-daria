@@ -3,7 +3,7 @@ import scala.language.postfixOps
 val versionRegex = """^(.*)\.(.*)\.(.*)$""".r
 val scala2_13 = "2.13.15"
 val scala2_12 = "2.12.20"
-val sparkVersion = System.getProperty("spark.testVersion", "3.3.4")
+val sparkVersion = sys.props.get("spark.testVersion").orElse(sys.props.get("spark.version")).getOrElse("3.3.4")
 val noPublish = Seq(
   (publish / skip) := true,
   publishArtifact  := false
