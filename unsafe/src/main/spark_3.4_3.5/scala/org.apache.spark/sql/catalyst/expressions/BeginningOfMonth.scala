@@ -6,8 +6,8 @@ import org.apache.spark.sql.types.{AbstractDataType, DataType, DateType}
 import org.apache.spark.unsafe.types.UTF8String
 
 /**
-  * Returns the first day of the month which the date belongs to.
-  */
+ * Returns the first day of the month which the date belongs to.
+ */
 @ExpressionDescription(
   usage = "_FUNC_(date) - Returns the first day of the month which the date belongs to.",
   examples = """
@@ -18,9 +18,7 @@ import org.apache.spark.unsafe.types.UTF8String
   group = "datetime_funcs",
   since = "0.0.2"
 )
-case class BeginningOfMonth(startDate: Expression)
-    extends UnaryExpression
-    with ImplicitCastInputTypes {
+case class BeginningOfMonth(startDate: Expression) extends UnaryExpression with ImplicitCastInputTypes {
   override def child: Expression = startDate
 
   override def inputTypes: Seq[AbstractDataType] = Seq(DateType)
